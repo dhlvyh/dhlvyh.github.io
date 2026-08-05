@@ -51,6 +51,7 @@
         let isNormalizing = false;
         let suppressClickOnce = false;
         let suppressClickResetId = null;
+        let pressedItem = null;
 
         renderLoopedTrack();
         syncLoopMetrics(true);
@@ -203,6 +204,7 @@
 
             clearSuppressClickReset();
             suppressClickOnce = false;
+            pressedItem = resolveClosestItem(event.target, track, config.itemSelector);
             railDragState = {
                 startX: point.x,
                 startY: point.y,
@@ -279,7 +281,9 @@
         }
 
         track.addEventListener("click", function (event) {
-            const item = event.target.closest(config.itemSelector);
+            const item = resolveActivatedItem(event, track, config.itemSelector, pressedItem);
+
+            pressedItem = null;
 
             if (!item || !track.contains(item)) {
                 return;
@@ -393,6 +397,34 @@
         };
     }
 
+    function resolveActivatedItem(event, track, selector, fallbackItem) {
+        const directItem = resolveClosestItem(event && event.target, track, selector);
+
+        if (directItem) {
+            return directItem;
+        }
+
+        if (fallbackItem && track.contains(fallbackItem)) {
+            return fallbackItem;
+        }
+
+        return null;
+    }
+
+    function resolveClosestItem(target, track, selector) {
+        if (!target || typeof target.closest !== "function") {
+            return null;
+        }
+
+        const item = target.closest(selector);
+
+        if (!item || !track.contains(item)) {
+            return null;
+        }
+
+        return item;
+    }
+
     function rootHasGalleryUtils() {
         return typeof window !== "undefined" && window.GalleryUtils;
     }
@@ -400,6 +432,7 @@
     return {
         initGalleryViewer,
         collectSourceItems,
-        deriveLoopMetrics
+        deriveLoopMetrics,
+        resolveActivatedItem
     };
 }));
