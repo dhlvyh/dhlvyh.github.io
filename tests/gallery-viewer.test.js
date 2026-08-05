@@ -76,6 +76,19 @@ test("buildViewerTrackMarkup returns one fullscreen slide per source item", () =
     assert.match(markup, /images\/pic3\.jpeg/);
 });
 
+test("buildViewerTrackMarkup escapes image metadata before interpolating HTML", () => {
+    const markup = buildViewerTrackMarkup([
+        {fullSrc: 'images/" onerror="alert(1).jpeg', alt: '<script>alert(1)</script>'}
+    ]);
+
+    assert.equal(
+        markup,
+        '<figure class="gallery-viewer-slide" data-gallery-viewer-slide-index="0">' +
+        '<img src="images/&quot; onerror=&quot;alert(1).jpeg" alt="&lt;script&gt;alert(1)&lt;/script&gt;"/>' +
+        "</figure>"
+    );
+});
+
 test("resolveActivatedItem falls back to the pressed card when pointer capture retargets the click", () => {
     const card = {id: "gallery-card-1"};
     const track = {

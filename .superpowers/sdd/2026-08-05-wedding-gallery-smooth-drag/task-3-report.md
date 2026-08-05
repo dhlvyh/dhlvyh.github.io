@@ -21,3 +21,22 @@
 - `scripts/gallery-viewer.js`
 - `tests/gallery-viewer.test.js`
 
+## Fix Round 1
+
+### RED
+
+Command: `node --test tests/gallery-viewer.test.js`
+
+Output: 6 passed, 1 failed. The new escaping regression failed because `fullSrc` and `alt` were interpolated without escaping; the actual output contained an injected `onerror` attribute and raw `<script>` markup.
+
+### GREEN
+
+Command: `node --test tests/gallery-viewer.test.js; git diff --check`
+
+Output: 7 passed, 0 failed. `git diff --check` reported no whitespace errors.
+
+### Fix
+
+- Added minimal HTML escaping for `&`, `<`, `>`, `\"`, and `'` in both `fullSrc` and `alt` before markup interpolation.
+- Added focused escaping regression coverage.
+- Reverted unrelated commit `d440d7f` (`Add venue media design spec`), removing `docs/superpowers/specs/2026-08-05-wedding-venue-media-design.md` from the task range.

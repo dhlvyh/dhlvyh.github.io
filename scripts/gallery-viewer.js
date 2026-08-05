@@ -387,10 +387,22 @@
         return (items || []).map(function (item, index) {
             return [
                 '<figure class="gallery-viewer-slide" data-gallery-viewer-slide-index="' + index + '">',
-                '<img src="' + item.fullSrc + '" alt="' + (item.alt || "") + '"/>',
+                '<img src="' + escapeHtml(item.fullSrc) + '" alt="' + escapeHtml(item.alt || "") + '"/>',
                 "</figure>"
             ].join("");
         }).join("");
+    }
+
+    function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, function (character) {
+            return {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            }[character];
+        });
     }
 
     function deriveLoopMetrics(loopedNodes) {
