@@ -21,8 +21,59 @@
         return "stay";
     }
 
+    function getWrappedIndex(currentIndex, action, length) {
+        if (length <= 0) {
+            return 0;
+        }
+
+        if (action === "next") {
+            return (currentIndex + 1) % length;
+        }
+
+        if (action === "previous") {
+            return (currentIndex - 1 + length) % length;
+        }
+
+        return currentIndex;
+    }
+
     function shouldSuppressClick(deltaX, deltaY, threshold) {
         return Math.abs(deltaX) > threshold || Math.abs(deltaY) > threshold;
+    }
+
+    function buildLoopedItems(items, repeatCount) {
+        const safeItems = Array.isArray(items) ? items : [];
+        const safeRepeatCount = Math.max(1, repeatCount || 1);
+        const loopedItems = [];
+
+        for (let segmentIndex = 0; segmentIndex < safeRepeatCount; segmentIndex += 1) {
+            safeItems.forEach(function (item, originIndex) {
+                loopedItems.push(Object.assign({}, item, {
+                    segmentIndex,
+                    originIndex
+                }));
+            });
+        }
+
+        return loopedItems;
+    }
+
+    function normalizeLoopedScroll(scrollLeft, segmentStart, segmentWidth) {
+        if (segmentWidth <= 0) {
+            return scrollLeft;
+        }
+
+        let nextScrollLeft = scrollLeft;
+
+        while (nextScrollLeft < segmentStart) {
+            nextScrollLeft += segmentWidth;
+        }
+
+        while (nextScrollLeft >= segmentStart + segmentWidth) {
+            nextScrollLeft -= segmentWidth;
+        }
+
+        return nextScrollLeft;
     }
 
     function applyEdgeResistance(distance, resistanceFactor = 0.35) {
@@ -67,7 +118,7 @@
         const points = Array.isArray(snapPoints) ? snapPoints : [];
 
         if (points.length === 0) {
-            return scrollLeft;
+            return 0;
         }
 
         return points.reduce(function (closest, point) {
@@ -77,7 +128,10 @@
 
     return {
         resolveSwipeAction,
+        getWrappedIndex,
         shouldSuppressClick,
+        buildLoopedItems,
+        normalizeLoopedScroll,
         applyEdgeResistance,
         clampIndex,
         resolveViewerSnapIndex,

@@ -48,4 +48,5 @@ test("resolveViewerSnapIndex clamps at the first and last slides", () => {
 test("findNearestSnapPoint chooses the closest snap column", () => {
     assert.equal(findNearestSnapPoint(205, [0, 216, 432]), 216);
     assert.equal(findNearestSnapPoint(404, [0, 216, 432]), 432);
+    assert.equal(findNearestSnapPoint(205, []), 0);
 });
