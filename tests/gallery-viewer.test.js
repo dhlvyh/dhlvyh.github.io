@@ -6,7 +6,8 @@ const path = require("node:path");
 const {
     initGalleryViewer,
     collectSourceItems,
-    deriveLoopMetrics,
+    collectRailSnapPoints,
+    buildViewerTrackMarkup,
     resolveActivatedItem
 } = require("../scripts/gallery-viewer");
 
@@ -52,17 +53,27 @@ test("collectSourceItems reads full image data from the original gallery items",
     ]);
 });
 
-test("deriveLoopMetrics keeps the middle segment as the seamless home range", () => {
-    const metrics = deriveLoopMetrics([
-        {dataset: {gallerySegmentIndex: "0"}, offsetLeft: 24},
-        {dataset: {gallerySegmentIndex: "1"}, offsetLeft: 324},
-        {dataset: {gallerySegmentIndex: "2"}, offsetLeft: 624}
+test("collectRailSnapPoints deduplicates repeated column offsets", () => {
+    const points = collectRailSnapPoints([
+        {offsetLeft: 0},
+        {offsetLeft: 0},
+        {offsetLeft: 216},
+        {offsetLeft: 216},
+        {offsetLeft: 432}
     ]);
 
-    assert.deepEqual(metrics, {
-        segmentStart: 300,
-        segmentWidth: 300
-    });
+    assert.deepEqual(points, [0, 216, 432]);
+});
+
+test("buildViewerTrackMarkup returns one fullscreen slide per source item", () => {
+    const markup = buildViewerTrackMarkup([
+        {fullSrc: "images/pic2.jpeg", alt: "gallery image a"},
+        {fullSrc: "images/pic3.jpeg", alt: "gallery image b"}
+    ]);
+
+    assert.match(markup, /data-gallery-viewer-slide-index="0"/);
+    assert.match(markup, /data-gallery-viewer-slide-index="1"/);
+    assert.match(markup, /images\/pic3\.jpeg/);
 });
 
 test("resolveActivatedItem falls back to the pressed card when pointer capture retargets the click", () => {

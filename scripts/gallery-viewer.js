@@ -367,6 +367,32 @@
         }).filter(Boolean);
     }
 
+    function collectRailSnapPoints(itemNodes) {
+        const points = [];
+
+        (itemNodes || []).forEach(function (node) {
+            if (!node || typeof node.offsetLeft !== "number") {
+                return;
+            }
+
+            if (points[points.length - 1] !== node.offsetLeft) {
+                points.push(node.offsetLeft);
+            }
+        });
+
+        return points;
+    }
+
+    function buildViewerTrackMarkup(items) {
+        return (items || []).map(function (item, index) {
+            return [
+                '<figure class="gallery-viewer-slide" data-gallery-viewer-slide-index="' + index + '">',
+                '<img src="' + item.fullSrc + '" alt="' + (item.alt || "") + '"/>',
+                "</figure>"
+            ].join("");
+        }).join("");
+    }
+
     function deriveLoopMetrics(loopedNodes) {
         if (!Array.isArray(loopedNodes) || loopedNodes.length === 0) {
             return null;
@@ -440,6 +466,8 @@
     return {
         initGalleryViewer,
         collectSourceItems,
+        collectRailSnapPoints,
+        buildViewerTrackMarkup,
         deriveLoopMetrics,
         resolveActivatedItem
     };
