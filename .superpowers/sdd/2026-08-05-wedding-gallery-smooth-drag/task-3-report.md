@@ -40,3 +40,20 @@ Output: 7 passed, 0 failed. `git diff --check` reported no whitespace errors.
 - Added minimal HTML escaping for `&`, `<`, `>`, `\"`, and `'` in both `fullSrc` and `alt` before markup interpolation.
 - Added focused escaping regression coverage.
 - Reverted unrelated commit `d440d7f` (`Add venue media design spec`), removing `docs/superpowers/specs/2026-08-05-wedding-venue-media-design.md` from the task range.
+
+## Fix Round 2
+
+The report itself was tracked in the Task 3 range despite being an execution artifact outside the two-file implementation scope. It remains available on disk but is no longer tracked.
+
+Command: `git diff --name-status a115e284316522aba88e9d0f30bc69772fa0049a..HEAD`
+
+Output after untracking the report:
+
+```text
+M scripts/gallery-viewer.js
+M tests/gallery-viewer.test.js
+```
+
+Command: `git diff --name-status a115e284316522aba88e9d0f30bc69772fa0049a..HEAD -- docs/superpowers/specs/2026-08-05-wedding-venue-media-design.md`
+
+Output: empty.
