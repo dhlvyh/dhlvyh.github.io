@@ -1,6 +1,6 @@
 # 안용현과 안다혜의 결혼식 모바일 청첩장
 
-![메인사진](https://github.com/AndersonChoi/wedding-card/raw/master/docs/images/pic2.jpeg)
+![메인사진](https://github.com/dhlvyh/dhlvyh.github.io/blob/main/images/main.jpg)
 
 ## 예식정보
 

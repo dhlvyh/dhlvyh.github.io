@@ -76,8 +76,8 @@
         }
 
         function updateViewerButtons() {
-            prev.disabled = activeIndex === 0;
-            next.disabled = activeIndex === sourceItems.length - 1;
+            prev.disabled = sourceItems.length <= 1;
+            next.disabled = sourceItems.length <= 1;
         }
 
         function goToViewerIndex(index, useTransition) {
