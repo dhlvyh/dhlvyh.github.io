@@ -32,7 +32,15 @@
             return;
         }
 
-        const image = viewer.querySelector("#gallery-viewer-image");
+        const viewerTrack = viewer.querySelector("#gallery-viewer-track");
+        let image = viewer.querySelector("#gallery-viewer-image");
+
+        if (!image && viewerTrack) {
+            image = document.createElement("img");
+            image.id = "gallery-viewer-image";
+            viewerTrack.appendChild(image);
+        }
+
         const count = viewer.querySelector("#gallery-viewer-count");
         const prev = viewer.querySelector("#gallery-viewer-prev");
         const next = viewer.querySelector("#gallery-viewer-next");
