@@ -10315,7 +10315,7 @@ body {
 .gallery-viewer-count {
     position: absolute;
     left: 50%;
-    bottom: -1.25rem;
+    bottom: 1rem;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
     padding: 0.6rem 0.95rem;
