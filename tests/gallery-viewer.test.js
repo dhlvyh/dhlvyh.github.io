@@ -15,7 +15,7 @@ test("gallery-viewer supports the fullscreen track mount", () => {
     const source = fs.readFileSync(path.resolve(__dirname, "../scripts/gallery-viewer.js"), "utf8");
 
     assert.match(source, /gallery-viewer-track/);
-    assert.match(source, /viewerTrack\.appendChild\(image\)/);
+    assert.match(source, /viewerTrack\.innerHTML = buildViewerTrackMarkup\(sourceItems\)/);
 });
 
 test("gallery-viewer exports initGalleryViewer", () => {

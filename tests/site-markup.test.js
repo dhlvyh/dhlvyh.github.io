@@ -20,6 +20,23 @@ test("index.html includes the gallery helper scripts before main.js", () => {
     assert.match(html, /scripts\/gallery-viewer\.js/);
 });
 
+test("index.html adds a venue preview block inside the invitation card", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.match(html, /class="event-venue-preview"/);
+    assert.match(html, /class="event-venue-image"[^>]+src="images\/hall\.jpg"/);
+    assert.match(html, /href="https:\/\/thenewwed\.kr\/"/);
+    assert.match(html, /target="_blank"/);
+    assert.match(html, /rel="noopener noreferrer"/);
+
+    const venuePreviewIndex = html.indexOf('class="event-venue-preview"');
+    const metaListIndex = html.indexOf('class="event-meta"');
+
+    assert.notEqual(venuePreviewIndex, -1, "expected venue preview block");
+    assert.notEqual(metaListIndex, -1, "expected event metadata list");
+    assert.ok(venuePreviewIndex < metaListIndex, "expected venue preview before event metadata");
+});
+
 test("index.html embeds Google Maps for 더뉴컨벤션웨딩", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
     const iframeMatch = html.match(/<iframe[^>]+src="([^"]+)"/);
