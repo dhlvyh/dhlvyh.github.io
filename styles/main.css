@@ -9752,6 +9752,8 @@ a.text-dark:hover, a.text-dark:focus {
 
 body {
     font-family: "Dosis", sans-serif;
+    word-break: keep-all;
+    overflow-wrap: break-word;
 }
 
 /* Home Page Style */
@@ -9760,6 +9762,7 @@ body {
     background-size: cover;
     background-position: 50%;
     height: 100vh;
+    height: 100svh;
     min-height: 480px;
 }
 
