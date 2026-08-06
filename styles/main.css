@@ -9815,7 +9815,20 @@ body {
 }
 
 .ww-home-page .ww-wedding-announcement .ww-couple-name {
+    position: relative;
+    padding-top: 1.5rem;
     font-size: 70px;
+}
+
+.ww-home-page .ww-wedding-announcement .ww-couple-name::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 64px;
+    height: 1px;
+    background: rgba(176, 141, 87, 0.6);
 }
 
 @media (max-width: 576px) {
@@ -9837,6 +9850,19 @@ body {
 }
 
 /* Nav Bar Style */
+.ww-nav-bar {
+    background-color: var(--ww-paper) !important;
+}
+
+.ww-nav-bar .nav-link {
+    color: var(--ww-ink);
+}
+
+.ww-nav-bar .nav-link:hover,
+.ww-nav-bar .nav-link:focus {
+    color: var(--ww-gold);
+}
+
 .ww-nav-bar .heart {
     fill: #f26147;
     position: relative;
