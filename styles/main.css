@@ -10108,8 +10108,9 @@ body {
 }
 
 .couple-card img {
-    border-radius: 24px;
-    box-shadow: 0 24px 50px rgba(43, 33, 29, 0.12);
+    border-radius: 14px;
+    border: 1px solid var(--ww-card-border);
+    box-shadow: var(--ww-card-shadow);
 }
 
 .event-section-lead {
@@ -10122,18 +10123,18 @@ body {
 .event-card {
     height: 100%;
     padding: 2rem;
-    background: #fff;
-    border: 1px solid rgba(245, 138, 119, 0.22);
-    border-radius: 28px;
-    box-shadow: 0 20px 45px rgba(52, 40, 35, 0.08);
+    background: var(--ww-card-bg);
+    border: 1px solid var(--ww-card-border);
+    border-radius: 14px;
+    box-shadow: var(--ww-card-shadow);
 }
 
 .event-card-copy {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 246, 242, 0.98));
+    background: var(--ww-card-bg);
 }
 
 .event-card-calendar {
-    background: linear-gradient(180deg, rgba(255, 251, 249, 1), rgba(255, 255, 255, 1));
+    background: var(--ww-card-bg);
 }
 
 .event-kicker {
@@ -10162,18 +10163,17 @@ body {
 
 .event-venue-preview {
     padding: 1rem;
-    border-radius: 24px;
-    background: rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(242, 97, 71, 0.12);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    border-radius: 14px;
+    background: var(--ww-paper);
+    border: 1px solid var(--ww-card-border);
 }
 
 .event-venue-image {
     display: block;
     width: 100%;
     height: auto;
-    border-radius: 20px;
-    box-shadow: 0 18px 34px rgba(42, 31, 26, 0.14);
+    border-radius: 10px;
+    box-shadow: var(--ww-card-shadow);
 }
 
 .event-venue-note {
@@ -10221,24 +10221,24 @@ body {
     padding: 0;
     border: 0;
     background: transparent;
-    border-radius: 24px;
+    border-radius: 14px;
     overflow: hidden;
     scroll-snap-align: start;
-    box-shadow: 0 18px 36px rgba(42, 31, 26, 0.12);
+    box-shadow: var(--ww-card-shadow);
     transition: -webkit-transform 0.25s ease, box-shadow 0.25s ease;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     transition: transform 0.25s ease, box-shadow 0.25s ease, -webkit-transform 0.25s ease;
 }
 
 .gallery-card:focus {
-    outline: 2px solid rgba(242, 97, 71, 0.45);
+    outline: 2px solid rgba(180, 123, 107, 0.55);
     outline-offset: 4px;
 }
 
 .gallery-card:hover {
     -webkit-transform: translateY(-4px);
     transform: translateY(-4px);
-    box-shadow: 0 26px 48px rgba(42, 31, 26, 0.16);
+    box-shadow: 0 10px 28px rgba(51, 48, 44, 0.12);
 }
 
 .gallery-card img {
@@ -10461,9 +10461,9 @@ body.gallery-viewer-open {
 
 .calendar-card {
     padding: 1.5rem;
-    border-radius: 24px;
-    background: #fffaf8;
-    border: 1px solid rgba(242, 97, 71, 0.12);
+    border-radius: 14px;
+    background: var(--ww-paper);
+    border: 1px solid var(--ww-card-border);
 }
 
 .calendar-header {
@@ -10518,11 +10518,11 @@ body.gallery-viewer-open {
     -ms-flex-align: center;
     align-items: center;
     min-height: 46px;
-    border-radius: 14px;
-    background: #fff;
-    color: #5d4e48;
+    border-radius: 10px;
+    background: var(--ww-card-bg);
+    color: var(--ww-ink);
     font-weight: 600;
-    box-shadow: inset 0 0 0 1px rgba(242, 97, 71, 0.08);
+    box-shadow: inset 0 0 0 1px var(--ww-card-border);
 }
 
 .calendar-day.is-empty {
@@ -10531,9 +10531,9 @@ body.gallery-viewer-open {
 }
 
 .calendar-day.is-wedding-day {
-    background: #f26147;
+    background: var(--ww-ink);
     color: #fff;
-    box-shadow: 0 14px 24px rgba(242, 97, 71, 0.2);
+    box-shadow: 0 0 0 1px var(--ww-gold);
 }
 
 .map-copy {
@@ -10667,10 +10667,10 @@ body.gallery-viewer-open {
 .account-card {
     height: 100%;
     padding: 1.75rem;
-    background: #fff;
-    border: 1px solid rgba(245, 138, 119, 0.22);
-    border-radius: 28px;
-    box-shadow: 0 20px 45px rgba(52, 40, 35, 0.08);
+    background: var(--ww-card-bg);
+    border: 1px solid var(--ww-card-border);
+    border-radius: 14px;
+    box-shadow: var(--ww-card-shadow);
     text-align: center;
 }
 
