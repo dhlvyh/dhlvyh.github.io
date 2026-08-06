@@ -294,77 +294,82 @@
                     <p class="account-section-lead" style="font-family: 'Noto Serif KR', serif;">
                         축하의 마음을 전해주시면 소중히 전달하겠습니다.
                     </p>
-                    <button class="account-reveal-btn" type="button" data-account-reveal-toggle aria-expanded="false" aria-controls="account-reveal-content">
-                        계좌번호 보기
-                    </button>
                 </div>
-                <div class="account-reveal-content" id="account-reveal-content" data-account-reveal-content hidden>
-                <div class="account-toggle" role="tablist" aria-label="신랑측 신부측 계좌 전환">
-                    <button class="account-toggle-btn is-active" data-account-toggle="groom" type="button" role="tab" aria-selected="true">신랑측</button>
-                    <button class="account-toggle-btn" data-account-toggle="bride" type="button" role="tab" aria-selected="false">신부측</button>
-                </div>
-                <div class="account-group" data-account-group="groom">
-                    <div class="row">
-                        <div class="col-md-4 mb-4">
-                            <div class="account-card">
-                                <span class="account-relation">신랑</span>
-                                <p class="account-name">안용현</p>
-                                <p class="account-bank">OO은행</p>
-                                <p class="account-number">000-0000-0000000</p>
-                                <button class="account-copy-btn" type="button" data-copy-bank="OO은행" data-copy-account="000-0000-0000000" data-copy-holder="안용현">복사</button>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <div class="account-card">
-                                <span class="account-relation">신랑 아버지</span>
-                                <p class="account-name">예금주 성함</p>
-                                <p class="account-bank">OO은행</p>
-                                <p class="account-number">000-0000-0000000</p>
-                                <button class="account-copy-btn" type="button" data-copy-bank="OO은행" data-copy-account="000-0000-0000000" data-copy-holder="예금주 성함">복사</button>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <div class="account-card">
-                                <span class="account-relation">신랑 어머니</span>
-                                <p class="account-name">예금주 성함</p>
-                                <p class="account-bank">OO은행</p>
-                                <p class="account-number">000-0000-0000000</p>
-                                <button class="account-copy-btn" type="button" data-copy-bank="OO은행" data-copy-account="000-0000-0000000" data-copy-holder="예금주 성함">복사</button>
+                <div class="account-accordion">
+                    <div class="account-accordion-item">
+                        <button class="account-accordion-toggle" type="button" data-accordion-toggle aria-expanded="false" aria-controls="account-panel-groom">
+                            <span>신랑측</span>
+                            <i class="fa fa-angle-down account-accordion-icon" aria-hidden="true"></i>
+                        </button>
+                        <div class="account-accordion-panel" id="account-panel-groom" hidden>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    <div class="account-card">
+                                        <span class="account-relation">신랑</span>
+                                        <p class="account-name">안용현</p>
+                                        <p class="account-bank">OO은행</p>
+                                        <p class="account-number">000-0000-0000000</p>
+                                        <button class="account-copy-btn" type="button" data-copy-bank="OO은행" data-copy-account="000-0000-0000000" data-copy-holder="안용현">복사</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="account-card">
+                                        <span class="account-relation">신랑 아버지</span>
+                                        <p class="account-name">예금주 성함</p>
+                                        <p class="account-bank">OO은행</p>
+                                        <p class="account-number">000-0000-0000000</p>
+                                        <button class="account-copy-btn" type="button" data-copy-bank="OO은행" data-copy-account="000-0000-0000000" data-copy-holder="예금주 성함">복사</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="account-card">
+                                        <span class="account-relation">신랑 어머니</span>
+                                        <p class="account-name">예금주 성함</p>
+                                        <p class="account-bank">OO은행</p>
+                                        <p class="account-number">000-0000-0000000</p>
+                                        <button class="account-copy-btn" type="button" data-copy-bank="OO은행" data-copy-account="000-0000-0000000" data-copy-holder="예금주 성함">복사</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="account-group" data-account-group="bride" hidden>
-                    <div class="row">
-                        <div class="col-md-4 mb-4">
-                            <div class="account-card">
-                                <span class="account-relation">신부</span>
-                                <p class="account-name">안다혜</p>
-                                <p class="account-bank">OO은행</p>
-                                <p class="account-number">000-0000-0000000</p>
-                                <button class="account-copy-btn" type="button" data-copy-bank="OO은행" data-copy-account="000-0000-0000000" data-copy-holder="안다혜">복사</button>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <div class="account-card">
-                                <span class="account-relation">신부 아버지</span>
-                                <p class="account-name">예금주 성함</p>
-                                <p class="account-bank">OO은행</p>
-                                <p class="account-number">000-0000-0000000</p>
-                                <button class="account-copy-btn" type="button" data-copy-bank="OO은행" data-copy-account="000-0000-0000000" data-copy-holder="예금주 성함">복사</button>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <div class="account-card">
-                                <span class="account-relation">신부 어머니</span>
-                                <p class="account-name">예금주 성함</p>
-                                <p class="account-bank">OO은행</p>
-                                <p class="account-number">000-0000-0000000</p>
-                                <button class="account-copy-btn" type="button" data-copy-bank="OO은행" data-copy-account="000-0000-0000000" data-copy-holder="예금주 성함">복사</button>
+                    <div class="account-accordion-item">
+                        <button class="account-accordion-toggle" type="button" data-accordion-toggle aria-expanded="false" aria-controls="account-panel-bride">
+                            <span>신부측</span>
+                            <i class="fa fa-angle-down account-accordion-icon" aria-hidden="true"></i>
+                        </button>
+                        <div class="account-accordion-panel" id="account-panel-bride" hidden>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    <div class="account-card">
+                                        <span class="account-relation">신부</span>
+                                        <p class="account-name">안다혜</p>
+                                        <p class="account-bank">OO은행</p>
+                                        <p class="account-number">000-0000-0000000</p>
+                                        <button class="account-copy-btn" type="button" data-copy-bank="OO은행" data-copy-account="000-0000-0000000" data-copy-holder="안다혜">복사</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="account-card">
+                                        <span class="account-relation">신부 아버지</span>
+                                        <p class="account-name">예금주 성함</p>
+                                        <p class="account-bank">OO은행</p>
+                                        <p class="account-number">000-0000-0000000</p>
+                                        <button class="account-copy-btn" type="button" data-copy-bank="OO은행" data-copy-account="000-0000-0000000" data-copy-holder="예금주 성함">복사</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="account-card">
+                                        <span class="account-relation">신부 어머니</span>
+                                        <p class="account-name">예금주 성함</p>
+                                        <p class="account-bank">OO은행</p>
+                                        <p class="account-number">000-0000-0000000</p>
+                                        <button class="account-copy-btn" type="button" data-copy-bank="OO은행" data-copy-account="000-0000-0000000" data-copy-holder="예금주 성함">복사</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 </div>
             </div>
         </div>

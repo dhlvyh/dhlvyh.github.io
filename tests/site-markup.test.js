@@ -57,14 +57,14 @@ test("index.html adds the account info nav link", () => {
     assert.match(html, /href="#account-info">마음 전하실 곳<\/a>/);
 });
 
-test("index.html exposes the account info section and toggle groups", () => {
+test("index.html exposes the account info section as independent accordions", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
     assert.match(html, /id="account-info"/);
-    assert.match(html, /data-account-toggle="groom"/);
-    assert.match(html, /data-account-toggle="bride"/);
-    assert.match(html, /data-account-group="groom"/);
-    assert.match(html, /data-account-group="bride"/);
+    assert.match(html, /data-accordion-toggle[^>]+aria-controls="account-panel-groom"/);
+    assert.match(html, /data-accordion-toggle[^>]+aria-controls="account-panel-bride"/);
+    assert.match(html, /id="account-panel-groom"/);
+    assert.match(html, /id="account-panel-bride"/);
 
     const copyButtons = html.match(/class="account-copy-btn"/g) || [];
 

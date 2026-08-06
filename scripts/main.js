@@ -26,11 +26,8 @@ $(document).ready(function () {
 
     if (window.AccountInfo) {
         window.AccountInfo.initAccountInfo({
-            toggleSelector: "[data-account-toggle]",
-            groupSelector: "[data-account-group]",
-            copySelector: ".account-copy-btn",
-            revealToggleSelector: "[data-account-reveal-toggle]",
-            revealContentSelector: "[data-account-reveal-content]"
+            accordionToggleSelector: "[data-accordion-toggle]",
+            copySelector: ".account-copy-btn"
         });
     }
 

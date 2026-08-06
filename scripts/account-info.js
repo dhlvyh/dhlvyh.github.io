@@ -24,38 +24,24 @@
             return;
         }
 
-        const toggles = Array.from(document.querySelectorAll(config.toggleSelector));
-        const groups = Array.from(document.querySelectorAll(config.groupSelector));
+        const accordionToggles = Array.from(document.querySelectorAll(config.accordionToggleSelector));
         const copyButtons = Array.from(document.querySelectorAll(config.copySelector));
-        const revealToggle = document.querySelector(config.revealToggleSelector);
-        const revealContent = document.querySelector(config.revealContentSelector);
 
-        if (revealToggle && revealContent) {
-            revealToggle.addEventListener("click", function () {
-                const isOpen = !revealContent.hidden;
+        accordionToggles.forEach(function (toggle) {
+            const panel = document.getElementById(toggle.getAttribute("aria-controls"));
 
-                revealContent.hidden = isOpen;
-                revealToggle.setAttribute("aria-expanded", String(!isOpen));
-                revealToggle.textContent = isOpen ? "계좌번호 보기" : "계좌번호 닫기";
+            if (!panel) {
+                return;
+            }
+
+            toggle.addEventListener("click", function () {
+                const isOpen = !panel.hidden;
+
+                panel.hidden = isOpen;
+                toggle.setAttribute("aria-expanded", String(!isOpen));
+                toggle.classList.toggle("is-open", !isOpen);
             });
-        }
-
-        if (toggles.length === 0 || groups.length === 0) {
-            return;
-        }
-
-        function setActiveSide(side) {
-            toggles.forEach(function (toggle) {
-                const isActive = toggle.dataset.accountToggle === side;
-
-                toggle.classList.toggle("is-active", isActive);
-                toggle.setAttribute("aria-selected", String(isActive));
-            });
-
-            groups.forEach(function (group) {
-                group.hidden = group.dataset.accountGroup !== side;
-            });
-        }
+        });
 
         function showCopyFeedback(button, label) {
             const originalLabel = button.dataset.originalLabel || button.textContent;
@@ -83,12 +69,6 @@
                     showCopyFeedback(button, "복사 실패");
                 });
         }
-
-        toggles.forEach(function (toggle) {
-            toggle.addEventListener("click", function () {
-                setActiveSide(toggle.dataset.accountToggle);
-            });
-        });
 
         copyButtons.forEach(function (button) {
             button.addEventListener("click", function () {
