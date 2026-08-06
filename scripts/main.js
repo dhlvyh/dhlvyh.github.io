@@ -6,6 +6,15 @@ const WEDDING_DAY = 1;
 const NAV_COLLAPSED_HEIGHT = $(".ww-nav-bar").outerHeight() || 0;
 
 $(document).ready(function () {
+    if (window.AOS) {
+        window.AOS.init({
+            duration: 700,
+            easing: "ease-out-cubic",
+            offset: 80,
+            once: true
+        });
+    }
+
     if (window.WeddingUtils) {
         const countdown = window.WeddingUtils.buildCountdown(WEDDING_DATE);
         const weeks = window.WeddingUtils.buildCalendarWeeks(WEDDING_YEAR, WEDDING_MONTH_INDEX);
