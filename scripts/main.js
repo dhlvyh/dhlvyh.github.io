@@ -3,6 +3,8 @@ const WEDDING_YEAR = 2026;
 const WEDDING_MONTH_INDEX = 10;
 const WEDDING_DAY = 1;
 
+const NAV_COLLAPSED_HEIGHT = $(".ww-nav-bar").outerHeight() || 0;
+
 $(document).ready(function () {
     if (window.WeddingUtils) {
         const countdown = window.WeddingUtils.buildCountdown(WEDDING_DATE);
@@ -48,9 +50,12 @@ $("a.smooth-scroll").click(function (event) {
 
         if (target.length) {
             event.preventDefault();
+
+            $("#ww-navbarNav").removeClass("show");
+
             $("html, body").animate(
                 {
-                    scrollTop: target.offset().top
+                    scrollTop: target.offset().top - NAV_COLLAPSED_HEIGHT
                 },
                 1000,
                 function () {
