@@ -22,6 +22,14 @@ $(document).ready(function () {
         });
     }
 
+    if (window.AccountInfo) {
+        window.AccountInfo.initAccountInfo({
+            toggleSelector: "[data-account-toggle]",
+            groupSelector: "[data-account-group]",
+            copySelector: ".account-copy-btn"
+        });
+    }
+
     $("#go-to-top").click(function () {
         $("html,body").animate({scrollTop: 0}, 400);
         return false;

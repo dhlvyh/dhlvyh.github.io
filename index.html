@@ -54,6 +54,7 @@
                             <li class="nav-item"><a class="nav-link smooth-scroll" href="#events">예식 안내</a></li>
                             <li class="nav-item"><a class="nav-link smooth-scroll" href="#gallery">갤러리</a></li>
                             <li class="nav-item"><a class="nav-link smooth-scroll" href="#map">오시는 길</a></li>
+                            <li class="nav-item"><a class="nav-link smooth-scroll" href="#account-info">마음 전하실 곳</a></li>
                         </ul>
                     </div>
                 </div>
@@ -104,7 +105,7 @@
                             <ul class="event-meta">
                                 <li>
                                     <span class="event-meta-label">일시</span>
-                                    <span>2026. 11. 1. 11:00 AM</span>
+                                    <span>2026년 11월 1일 일요일 11:00 AM</span>
                                 </li>
                                 <li>
                                     <span class="event-meta-label">주소</span>
@@ -266,6 +267,83 @@
             </div>
         </div>
 
+        <div class="ww-section bg-light" id="account-info">
+            <div class="container ww-account-info">
+                <div class="text-center mb-5">
+                    <h2 class="h1 pb-3 ww-title" style="font-family: 'Noto Serif KR', serif;">마음 전하실 곳</h2>
+                    <p class="account-section-lead" style="font-family: 'Noto Serif KR', serif;">
+                        축하의 마음을 전해주시면 소중히 전달하겠습니다.
+                    </p>
+                </div>
+                <div class="account-toggle" role="tablist" aria-label="신랑측 신부측 계좌 전환">
+                    <button class="account-toggle-btn is-active" data-account-toggle="groom" type="button" role="tab" aria-selected="true">신랑측</button>
+                    <button class="account-toggle-btn" data-account-toggle="bride" type="button" role="tab" aria-selected="false">신부측</button>
+                </div>
+                <div class="account-group" data-account-group="groom">
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="account-card">
+                                <span class="account-relation">신랑</span>
+                                <p class="account-name">안용현</p>
+                                <p class="account-bank">OO은행</p>
+                                <p class="account-number">000-0000-0000000</p>
+                                <button class="account-copy-btn" type="button" data-copy-bank="OO은행" data-copy-account="000-0000-0000000" data-copy-holder="안용현">복사</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="account-card">
+                                <span class="account-relation">신랑 아버지</span>
+                                <p class="account-name">예금주 성함</p>
+                                <p class="account-bank">OO은행</p>
+                                <p class="account-number">000-0000-0000000</p>
+                                <button class="account-copy-btn" type="button" data-copy-bank="OO은행" data-copy-account="000-0000-0000000" data-copy-holder="예금주 성함">복사</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="account-card">
+                                <span class="account-relation">신랑 어머니</span>
+                                <p class="account-name">예금주 성함</p>
+                                <p class="account-bank">OO은행</p>
+                                <p class="account-number">000-0000-0000000</p>
+                                <button class="account-copy-btn" type="button" data-copy-bank="OO은행" data-copy-account="000-0000-0000000" data-copy-holder="예금주 성함">복사</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="account-group" data-account-group="bride" hidden>
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="account-card">
+                                <span class="account-relation">신부</span>
+                                <p class="account-name">안다혜</p>
+                                <p class="account-bank">OO은행</p>
+                                <p class="account-number">000-0000-0000000</p>
+                                <button class="account-copy-btn" type="button" data-copy-bank="OO은행" data-copy-account="000-0000-0000000" data-copy-holder="안다혜">복사</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="account-card">
+                                <span class="account-relation">신부 아버지</span>
+                                <p class="account-name">예금주 성함</p>
+                                <p class="account-bank">OO은행</p>
+                                <p class="account-number">000-0000-0000000</p>
+                                <button class="account-copy-btn" type="button" data-copy-bank="OO은행" data-copy-account="000-0000-0000000" data-copy-holder="예금주 성함">복사</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="account-card">
+                                <span class="account-relation">신부 어머니</span>
+                                <p class="account-name">예금주 성함</p>
+                                <p class="account-bank">OO은행</p>
+                                <p class="account-number">000-0000-0000000</p>
+                                <button class="account-copy-btn" type="button" data-copy-bank="OO은행" data-copy-account="000-0000-0000000" data-copy-holder="예금주 성함">복사</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -291,6 +369,8 @@
 <script src="scripts/wedding-utils.js"></script>
 <script src="scripts/gallery-utils.js"></script>
 <script src="scripts/gallery-viewer.js"></script>
+<script src="scripts/account-utils.js"></script>
+<script src="scripts/account-info.js"></script>
 <script src="scripts/main.js"></script>
 
 <div class="bottom_right"><i class="fa fa-arrow-up fa-2x" id="go-to-top"></i>

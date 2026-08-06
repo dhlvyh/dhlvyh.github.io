@@ -50,3 +50,36 @@ test("index.html embeds Google Maps for 더뉴컨벤션웨딩", () => {
     assert.match(decodedSrc, /더뉴컨벤션웨딩/);
     assert.match(decodedSrc, /공항대로36길 57/);
 });
+
+test("index.html adds the account info nav link", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.match(html, /href="#account-info">마음 전하실 곳<\/a>/);
+});
+
+test("index.html exposes the account info section and toggle groups", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.match(html, /id="account-info"/);
+    assert.match(html, /data-account-toggle="groom"/);
+    assert.match(html, /data-account-toggle="bride"/);
+    assert.match(html, /data-account-group="groom"/);
+    assert.match(html, /data-account-group="bride"/);
+
+    const copyButtons = html.match(/class="account-copy-btn"/g) || [];
+
+    assert.equal(copyButtons.length, 6);
+});
+
+test("index.html includes the account info scripts before main.js", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.match(html, /scripts\/account-utils\.js/);
+    assert.match(html, /scripts\/account-info\.js/);
+
+    const accountInfoIndex = html.indexOf("scripts/account-info.js");
+    const mainJsIndex = html.indexOf("scripts/main.js");
+
+    assert.notEqual(accountInfoIndex, -1, "expected account-info.js script tag");
+    assert.ok(accountInfoIndex < mainJsIndex, "expected account-info.js before main.js");
+});

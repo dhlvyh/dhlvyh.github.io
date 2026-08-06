@@ -10580,3 +10580,92 @@ body.gallery-viewer-open {
         right: 1rem;
     }
 }
+
+.account-section-lead {
+    max-width: 480px;
+    margin: 0 auto 2rem;
+    color: #7b6f69;
+    line-height: 1.8;
+}
+
+.account-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.account-toggle-btn {
+    padding: 0.6rem 1.6rem;
+    border: 1px solid rgba(242, 97, 71, 0.35);
+    border-radius: 999px;
+    background: transparent;
+    color: #f26147;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.account-toggle-btn.is-active {
+    background: #f26147;
+    border-color: #f26147;
+    color: #fff;
+}
+
+.account-group[hidden] {
+    display: none;
+}
+
+.account-card {
+    height: 100%;
+    padding: 1.75rem;
+    background: #fff;
+    border: 1px solid rgba(245, 138, 119, 0.22);
+    border-radius: 28px;
+    box-shadow: 0 20px 45px rgba(52, 40, 35, 0.08);
+    text-align: center;
+}
+
+.account-relation {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    color: #f26147;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.account-name {
+    margin-bottom: 0.5rem;
+    color: #3c2c26;
+    font-weight: 700;
+}
+
+.account-bank {
+    margin-bottom: 0.15rem;
+    color: #6f625d;
+}
+
+.account-number {
+    margin-bottom: 1rem;
+    color: #3c2c26;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.account-copy-btn {
+    padding: 0.45rem 1.2rem;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(242, 97, 71, 0.12);
+    color: #f26147;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.account-copy-btn:active {
+    transform: scale(0.96);
+    background: rgba(242, 97, 71, 0.22);
+}
