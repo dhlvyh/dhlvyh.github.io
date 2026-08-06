@@ -10078,6 +10078,15 @@ body {
     font-family: "Noto Serif KR", serif;
 }
 
+.section-icon {
+    display: block !important;
+    width: 100%;
+    margin: 0 auto 0.75rem;
+    font-size: 1.4rem;
+    color: var(--ww-gold);
+    text-align: center;
+}
+
 .ww-eyebrow {
     font-family: "Cormorant Garamond", serif;
     font-style: italic;
@@ -10137,6 +10146,13 @@ body {
     border-radius: 14px;
     border: 1px solid var(--ww-card-border);
     box-shadow: var(--ww-card-shadow);
+}
+
+.couple-message {
+    max-width: 480px;
+    margin: 2.5rem auto 0;
+    color: var(--ww-ink-muted);
+    line-height: 1.9;
 }
 
 .event-section-lead {
