@@ -10142,7 +10142,7 @@ body {
 .event-section-lead {
     max-width: 480px;
     margin: 0 auto;
-    color: #7b6f69;
+    color: var(--ww-ink-muted);
     line-height: 1.8;
 }
 
@@ -10177,13 +10177,13 @@ body {
 
 .event-title {
     margin-bottom: 1rem;
-    color: #3c2c26;
+    color: var(--ww-ink);
     line-height: 1.5;
 }
 
 .event-copy {
     margin-bottom: 1.5rem;
-    color: #6f625d;
+    color: var(--ww-ink-muted);
     line-height: 1.9;
 }
 
@@ -10204,14 +10204,14 @@ body {
 
 .event-venue-note {
     margin: 0.9rem 0 0;
-    color: #6f625d;
+    color: var(--ww-ink-muted);
     line-height: 1.75;
 }
 
 .gallery-lead {
     max-width: 600px;
     margin: 0 auto 2rem;
-    color: #7b6f69;
+    color: var(--ww-ink-muted);
     line-height: 1.8;
 }
 
@@ -10437,7 +10437,7 @@ body.gallery-viewer-open {
     gap: 0.35rem;
     padding: 1rem 0;
     border-top: 1px solid var(--ww-card-border);
-    color: #4f423d;
+    color: var(--ww-ink);
 }
 
 .event-meta li:first-child {
@@ -10446,7 +10446,7 @@ body.gallery-viewer-open {
 }
 
 .event-meta-label {
-    color: #b58274;
+    color: var(--ww-gold);
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -10480,7 +10480,7 @@ body.gallery-viewer-open {
 
 .countdown-copy {
     margin-bottom: 1.5rem;
-    color: #6a5b55;
+    color: var(--ww-ink-muted);
     font-size: 1rem;
     line-height: 1.8;
 }
@@ -10503,7 +10503,7 @@ body.gallery-viewer-open {
     -ms-flex-align: baseline;
     align-items: baseline;
     margin-bottom: 1rem;
-    color: #4f423d;
+    color: var(--ww-ink);
 }
 
 .calendar-header strong {
@@ -10528,7 +10528,7 @@ body.gallery-viewer-open {
 }
 
 .calendar-weekdays span {
-    color: #a78f86;
+    color: var(--ww-ink-muted);
     font-size: 0.82rem;
     text-align: center;
 }
@@ -10564,7 +10564,7 @@ body.gallery-viewer-open {
 
 .map-copy {
     margin-bottom: 1rem;
-    color: #7b6f69;
+    color: var(--ww-ink-muted);
 }
 
 .ww-rsvp-detail iframe {
@@ -10637,7 +10637,7 @@ body.gallery-viewer-open {
 .account-section-lead {
     max-width: 480px;
     margin: 0 auto 2rem;
-    color: #7b6f69;
+    color: var(--ww-ink-muted);
     line-height: 1.8;
 }
 
@@ -10713,18 +10713,18 @@ body.gallery-viewer-open {
 
 .account-name {
     margin-bottom: 0.5rem;
-    color: #3c2c26;
+    color: var(--ww-ink);
     font-weight: 700;
 }
 
 .account-bank {
     margin-bottom: 0.15rem;
-    color: #6f625d;
+    color: var(--ww-ink-muted);
 }
 
 .account-number {
     margin-bottom: 1rem;
-    color: #3c2c26;
+    color: var(--ww-ink);
     font-weight: 600;
     letter-spacing: 0.02em;
 }
