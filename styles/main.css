@@ -9750,7 +9750,26 @@ a.text-dark:hover, a.text-dark:focus {
     }
 }
 
+:root {
+    --ww-paper: #FAF7F2;
+    --ww-paper-alt: #F5F0E8;
+    --ww-ink: #33302C;
+    --ww-ink-muted: #7A7168;
+    --ww-accent: #B47B6B;
+    --ww-accent-hover: #9C6455;
+    --ww-accent-soft: rgba(180, 123, 107, 0.12);
+    --ww-gold: #B08D57;
+    --ww-card-bg: #FFFFFF;
+    --ww-card-border: rgba(51, 48, 44, 0.08);
+    --ww-card-shadow: 0 4px 16px rgba(51, 48, 44, 0.06);
+}
+
+.ww-section.bg-light {
+    background-color: var(--ww-paper-alt) !important;
+}
+
 body {
+    background: var(--ww-paper);
     font-family: "Dosis", sans-serif;
     word-break: keep-all;
     overflow-wrap: break-word;
