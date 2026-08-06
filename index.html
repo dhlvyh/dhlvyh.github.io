@@ -274,7 +274,11 @@
                     <p class="account-section-lead" style="font-family: 'Noto Serif KR', serif;">
                         축하의 마음을 전해주시면 소중히 전달하겠습니다.
                     </p>
+                    <button class="account-reveal-btn" type="button" data-account-reveal-toggle aria-expanded="false" aria-controls="account-reveal-content">
+                        계좌번호 보기
+                    </button>
                 </div>
+                <div class="account-reveal-content" id="account-reveal-content" data-account-reveal-content hidden>
                 <div class="account-toggle" role="tablist" aria-label="신랑측 신부측 계좌 전환">
                     <button class="account-toggle-btn is-active" data-account-toggle="groom" type="button" role="tab" aria-selected="true">신랑측</button>
                     <button class="account-toggle-btn" data-account-toggle="bride" type="button" role="tab" aria-selected="false">신부측</button>
@@ -340,6 +344,7 @@
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </div>

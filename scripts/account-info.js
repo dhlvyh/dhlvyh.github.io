@@ -27,6 +27,18 @@
         const toggles = Array.from(document.querySelectorAll(config.toggleSelector));
         const groups = Array.from(document.querySelectorAll(config.groupSelector));
         const copyButtons = Array.from(document.querySelectorAll(config.copySelector));
+        const revealToggle = document.querySelector(config.revealToggleSelector);
+        const revealContent = document.querySelector(config.revealContentSelector);
+
+        if (revealToggle && revealContent) {
+            revealToggle.addEventListener("click", function () {
+                const isOpen = !revealContent.hidden;
+
+                revealContent.hidden = isOpen;
+                revealToggle.setAttribute("aria-expanded", String(!isOpen));
+                revealToggle.textContent = isOpen ? "계좌번호 보기" : "계좌번호 닫기";
+            });
+        }
 
         if (toggles.length === 0 || groups.length === 0) {
             return;

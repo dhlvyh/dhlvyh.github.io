@@ -10588,6 +10588,27 @@ body.gallery-viewer-open {
     line-height: 1.8;
 }
 
+.account-reveal-btn {
+    padding: 0.75rem 2.2rem;
+    border: 0;
+    border-radius: 999px;
+    background: #f26147;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    box-shadow: 0 16px 32px rgba(242, 97, 71, 0.28);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.account-reveal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 38px rgba(242, 97, 71, 0.32);
+}
+
+.account-reveal-content[hidden] {
+    display: none;
+}
+
 .account-toggle {
     display: flex;
     justify-content: center;
