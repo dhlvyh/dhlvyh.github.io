@@ -9826,7 +9826,7 @@ body {
 
 .ww-home-page:before {
     content: "";
-    background-color: rgba(245, 138, 119, 0.2);
+    background-color: rgba(176, 141, 87, 0.15);
     width: 100%;
     height: 100%;
     height: 100vh;
@@ -10410,7 +10410,7 @@ body.gallery-viewer-open {
     flex-direction: column;
     gap: 0.35rem;
     padding: 1rem 0;
-    border-top: 1px solid rgba(242, 97, 71, 0.12);
+    border-top: 1px solid var(--ww-card-border);
     color: #4f423d;
 }
 
@@ -10445,11 +10445,11 @@ body.gallery-viewer-open {
     display: inline-block;
     padding: 0.7rem 1rem;
     border-radius: 999px;
-    background: #f26147;
+    background: var(--ww-ink);
     color: #fff;
     font-size: 1rem;
     line-height: 1;
-    box-shadow: 0 14px 24px rgba(242, 97, 71, 0.25);
+    box-shadow: 0 0 0 1px var(--ww-gold);
 }
 
 .countdown-copy {
@@ -10619,17 +10619,18 @@ body.gallery-viewer-open {
     padding: 0.75rem 2.2rem;
     border: 0;
     border-radius: 999px;
-    background: #f26147;
+    background: var(--ww-accent);
     color: #fff;
     font-weight: 600;
     letter-spacing: 0.02em;
-    box-shadow: 0 16px 32px rgba(242, 97, 71, 0.28);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 10px 24px rgba(180, 123, 107, 0.28);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
 .account-reveal-btn:hover {
+    background: var(--ww-accent-hover);
     transform: translateY(-2px);
-    box-shadow: 0 20px 38px rgba(242, 97, 71, 0.32);
+    box-shadow: 0 14px 28px rgba(180, 123, 107, 0.32);
 }
 
 .account-reveal-content[hidden] {
@@ -10645,18 +10646,18 @@ body.gallery-viewer-open {
 
 .account-toggle-btn {
     padding: 0.6rem 1.6rem;
-    border: 1px solid rgba(242, 97, 71, 0.35);
+    border: 1px solid var(--ww-accent);
     border-radius: 999px;
     background: transparent;
-    color: #f26147;
+    color: var(--ww-accent);
     font-weight: 600;
     letter-spacing: 0.02em;
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .account-toggle-btn.is-active {
-    background: #f26147;
-    border-color: #f26147;
+    background: var(--ww-accent);
+    border-color: var(--ww-accent);
     color: #fff;
 }
 
@@ -10677,7 +10678,7 @@ body.gallery-viewer-open {
 .account-relation {
     display: inline-block;
     margin-bottom: 0.5rem;
-    color: #f26147;
+    color: var(--ww-gold);
     font-size: 0.85rem;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -10706,8 +10707,8 @@ body.gallery-viewer-open {
     padding: 0.45rem 1.2rem;
     border: 0;
     border-radius: 999px;
-    background: rgba(242, 97, 71, 0.12);
-    color: #f26147;
+    background: var(--ww-accent-soft);
+    color: var(--ww-accent);
     font-size: 0.85rem;
     font-weight: 600;
     transition: transform 0.15s ease, background 0.15s ease;
@@ -10715,5 +10716,5 @@ body.gallery-viewer-open {
 
 .account-copy-btn:active {
     transform: scale(0.96);
-    background: rgba(242, 97, 71, 0.22);
+    background: rgba(180, 123, 107, 0.22);
 }
