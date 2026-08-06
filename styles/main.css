@@ -10049,7 +10049,14 @@ body {
 
 /* Common Style */
 .ww-title {
-    font-family: "Great Vibes", cursive;
+    font-family: "Noto Serif KR", serif;
+}
+
+.ww-eyebrow {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    letter-spacing: 0.12em;
+    color: var(--ww-gold);
 }
 
 .ww-section {
@@ -10132,9 +10139,11 @@ body {
 .event-kicker {
     display: inline-block;
     margin-bottom: 1rem;
-    color: #f26147;
-    font-size: 0.85rem;
-    font-weight: 700;
+    color: var(--ww-gold);
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    font-weight: 600;
     letter-spacing: 0.18em;
     text-transform: uppercase;
 }
@@ -10476,7 +10485,6 @@ body.gallery-viewer-open {
 }
 
 .calendar-header span {
-    color: #b58274;
     font-size: 0.85rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
