@@ -138,6 +138,10 @@
                 return;
             }
 
+            if (event.cancelable) {
+                event.preventDefault();
+            }
+
             const point = getPoint(event);
             const rawDeltaX = point.x - railDragState.startX;
             const deltaY = point.y - railDragState.startY;

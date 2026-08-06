@@ -10172,7 +10172,6 @@ body {
     padding: 0.25rem 0 0.75rem;
     cursor: grab;
     scroll-snap-type: none;
-    scroll-behavior: smooth;
     overscroll-behavior-x: contain;
     will-change: scroll-position, transform;
     scrollbar-width: none;
