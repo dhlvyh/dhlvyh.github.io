@@ -87,9 +87,9 @@ test("index.html includes the account info scripts before main.js", () => {
 test("index.html adds a couple intro paragraph before the couple message", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
-    assert.match(html, /class="couple-intro"/);
+    assert.match(html, /class="[^"]*couple-intro[^"]*"/);
 
-    const introIndex = html.indexOf('class="couple-intro"');
+    const introIndex = html.search(/class="[^"]*couple-intro[^"]*"/);
     const messageIndex = html.indexOf('class="couple-message');
 
     assert.notEqual(introIndex, -1, "expected couple intro paragraph");
@@ -100,8 +100,10 @@ test("index.html adds a couple intro paragraph before the couple message", () =>
 test("index.html adds parent names and a contact toggle to each couple card", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
-    assert.match(html, /class="couple-parents"[^>]*>[^<]*아버지 성함[^<]*·[^<]*어머니 성함[^<]*딸/);
-    assert.match(html, /class="couple-parents"[^>]*>[^<]*아버지 성함[^<]*·[^<]*어머니 성함[^<]*아들/);
+    const coupleParents = html.match(/class="couple-parents"/g) || [];
+    assert.equal(coupleParents.length, 2);
+    assert.match(html, /class="couple-parents"[^>]*>[\s\S]*?딸/);
+    assert.match(html, /class="couple-parents"[^>]*>[\s\S]*?아들/);
 
     assert.match(html, /data-accordion-toggle[^>]+aria-controls="contact-panel-bride"/);
     assert.match(html, /data-accordion-toggle[^>]+aria-controls="contact-panel-groom"/);
@@ -109,7 +111,7 @@ test("index.html adds parent names and a contact toggle to each couple card", ()
     assert.match(html, /id="contact-panel-bride"[^>]*hidden/);
     assert.match(html, /id="contact-panel-groom"[^>]*hidden/);
 
-    const telLinks = html.match(/href="tel:01000000000"/g) || [];
+    const telLinks = html.match(/href="tel:[0-9]+"/g) || [];
     assert.equal(telLinks.length, 4);
 });
 

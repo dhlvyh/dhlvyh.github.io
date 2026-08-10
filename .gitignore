@@ -4,3 +4,6 @@
 *.md
 docs/*
 tests/*
+.playwright-mcp/
+/*.png
+/*.yml

@@ -10177,11 +10177,6 @@ body {
     box-shadow: 0 8px 22px rgba(51, 48, 44, 0.1);
 }
 
-.couple-contact-toggle .account-accordion-icon {
-    color: var(--ww-gold);
-    transition: transform 0.2s ease;
-}
-
 .couple-contact-toggle.is-open .account-accordion-icon {
     transform: rotate(180deg);
 }
@@ -10869,6 +10864,7 @@ body.gallery-viewer-open {
 .transit-icon {
     font-size: 1.3rem;
     line-height: 1;
+    color: var(--ww-gold);
 }
 
 .transit-title {
