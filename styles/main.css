@@ -10148,6 +10148,66 @@ body {
     box-shadow: var(--ww-card-shadow);
 }
 
+.couple-parents {
+    margin-top: 0.75rem;
+    margin-bottom: 0.5rem;
+    color: var(--ww-ink-muted);
+    font-size: 0.95rem;
+}
+
+.couple-contact-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--ww-card-border);
+    border-radius: 999px;
+    background: var(--ww-card-bg);
+    box-shadow: var(--ww-card-shadow);
+    color: var(--ww-ink);
+    font-family: "Noto Serif KR", serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: box-shadow 0.2s ease;
+}
+
+.couple-contact-toggle:hover,
+.couple-contact-toggle:focus-visible {
+    box-shadow: 0 8px 22px rgba(51, 48, 44, 0.1);
+}
+
+.couple-contact-toggle .account-accordion-icon {
+    color: var(--ww-gold);
+    transition: transform 0.2s ease;
+}
+
+.couple-contact-toggle.is-open .account-accordion-icon {
+    transform: rotate(180deg);
+}
+
+.couple-contact-panel[hidden] {
+    display: none;
+}
+
+.couple-contact-panel {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+.couple-contact-link {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--ww-card-border);
+    border-radius: 999px;
+    background: var(--ww-card-bg);
+    box-shadow: var(--ww-card-shadow);
+    color: var(--ww-ink);
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+
 .couple-ornament {
     width: 120px;
     margin: 2.5rem auto 0;

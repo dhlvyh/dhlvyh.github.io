@@ -96,3 +96,19 @@ test("index.html adds a couple intro paragraph before the couple message", () =>
     assert.notEqual(messageIndex, -1, "expected couple message paragraph");
     assert.ok(introIndex < messageIndex, "expected intro before existing couple message");
 });
+
+test("index.html adds parent names and a contact toggle to each couple card", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.match(html, /class="couple-parents"[^>]*>[^<]*아버지 성함[^<]*·[^<]*어머니 성함[^<]*딸/);
+    assert.match(html, /class="couple-parents"[^>]*>[^<]*아버지 성함[^<]*·[^<]*어머니 성함[^<]*아들/);
+
+    assert.match(html, /data-accordion-toggle[^>]+aria-controls="contact-panel-bride"/);
+    assert.match(html, /data-accordion-toggle[^>]+aria-controls="contact-panel-groom"/);
+
+    assert.match(html, /id="contact-panel-bride"[^>]*hidden/);
+    assert.match(html, /id="contact-panel-groom"[^>]*hidden/);
+
+    const telLinks = html.match(/href="tel:01000000000"/g) || [];
+    assert.equal(telLinks.length, 4);
+});
