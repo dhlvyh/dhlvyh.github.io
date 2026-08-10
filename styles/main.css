@@ -10839,3 +10839,40 @@ body.gallery-viewer-open {
     transform: scale(0.96);
     background: rgba(180, 123, 107, 0.22);
 }
+
+.transit-info {
+    max-width: 480px;
+    margin: 1.5rem auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: left;
+}
+
+.transit-item {
+    display: flex;
+    gap: 0.9rem;
+    padding: 1.25rem;
+    background: var(--ww-card-bg);
+    border: 1px solid var(--ww-card-border);
+    border-radius: 14px;
+    box-shadow: var(--ww-card-shadow);
+}
+
+.transit-icon {
+    font-size: 1.3rem;
+    line-height: 1;
+}
+
+.transit-title {
+    margin-bottom: 0.35rem;
+    color: var(--ww-ink);
+    font-family: "Noto Serif KR", serif;
+    font-weight: 700;
+}
+
+.transit-desc {
+    margin: 0;
+    color: var(--ww-ink-muted);
+    line-height: 1.7;
+}

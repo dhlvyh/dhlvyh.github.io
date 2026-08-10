@@ -112,3 +112,20 @@ test("index.html adds parent names and a contact toggle to each couple card", ()
     const telLinks = html.match(/href="tel:01000000000"/g) || [];
     assert.equal(telLinks.length, 4);
 });
+
+test("index.html adds detailed transit info to the map section", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.match(html, /class="transit-info"/);
+
+    const transitTitles = html.match(/class="transit-title"[^>]*>[^<]+</g) || [];
+    assert.equal(transitTitles.length, 3);
+    assert.match(html, /지하철 이용 시/);
+    assert.match(html, /버스 이용 시/);
+    assert.match(html, /자가용 이용 시/);
+
+    const iframeIndex = html.indexOf("<iframe");
+    const transitIndex = html.indexOf('class="transit-info"');
+
+    assert.ok(iframeIndex < transitIndex, "expected transit info after the map iframe");
+});
