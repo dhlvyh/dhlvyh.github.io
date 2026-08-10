@@ -10737,6 +10737,13 @@ body.gallery-viewer-open {
     line-height: 1.8;
 }
 
+.account-closing {
+    max-width: 480px;
+    margin: 2rem auto 0;
+    color: var(--ww-ink-muted);
+    line-height: 1.8;
+}
+
 .account-accordion {
     max-width: 720px;
     margin: 0 auto;

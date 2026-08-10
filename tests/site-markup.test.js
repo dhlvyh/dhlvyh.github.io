@@ -129,3 +129,15 @@ test("index.html adds detailed transit info to the map section", () => {
 
     assert.ok(iframeIndex < transitIndex, "expected transit info after the map iframe");
 });
+
+test("index.html adds a closing message after the account accordion", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.match(html, /class="[^"]*account-closing[^"]*"/);
+
+    const accordionCloseIndex = html.indexOf('class="account-accordion"');
+    const closingIndex = html.indexOf('account-closing');
+
+    assert.notEqual(closingIndex, -1, "expected account closing paragraph");
+    assert.ok(accordionCloseIndex < closingIndex, "expected closing message after the accordion");
+});
