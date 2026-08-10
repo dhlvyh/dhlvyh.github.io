@@ -10167,6 +10167,14 @@ body {
     line-height: 1.9;
 }
 
+.couple-intro {
+    max-width: 480px;
+    margin: 0 auto;
+    color: var(--ww-ink);
+    font-size: 1.05rem;
+    line-height: 1.9;
+}
+
 .event-section-lead {
     max-width: 480px;
     margin: 0 auto;
