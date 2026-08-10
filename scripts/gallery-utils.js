@@ -88,7 +88,7 @@
         return Math.min(Math.max(index, 0), length - 1);
     }
 
-    function resolveViewerSnapIndex(
+    function resolveSnapIndex(
         activeIndex,
         dragDeltaX,
         velocityX,
@@ -134,7 +134,7 @@
         normalizeLoopedScroll,
         applyEdgeResistance,
         clampIndex,
-        resolveViewerSnapIndex,
+        resolveSnapIndex,
         findNearestSnapPoint
     };
 }));

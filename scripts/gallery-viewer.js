@@ -68,7 +68,7 @@
         }
 
         function setViewerTrackPosition(index, dragDeltaX, useTransition) {
-            const slideWidth = frame.clientWidth;
+            const slideWidth = viewerTrack.clientWidth;
             const translateX = (-index * slideWidth) + dragDeltaX;
 
             viewerTrack.classList.toggle("is-animating", useTransition);
@@ -225,11 +225,11 @@
                 return;
             }
 
-            const nextIndex = window.GalleryUtils.resolveViewerSnapIndex(
+            const nextIndex = window.GalleryUtils.resolveSnapIndex(
                 activeIndex,
                 viewerDragState.dragDeltaX,
                 viewerDragState.velocityX,
-                frame.clientWidth,
+                viewerTrack.clientWidth,
                 sourceItems.length
             );
 
