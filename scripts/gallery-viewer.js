@@ -220,7 +220,15 @@
 
         function updatePagerDots() {
             Array.from(pagerDots.children).forEach(function (dot, index) {
-                dot.classList.toggle("is-active", index === activePage);
+                const isActive = index === activePage;
+
+                dot.classList.toggle("is-active", isActive);
+
+                if (isActive) {
+                    dot.setAttribute("aria-current", "true");
+                } else {
+                    dot.removeAttribute("aria-current");
+                }
             });
         }
 
@@ -242,6 +250,13 @@
             updatePagerButtons();
             updatePagerDots();
             setPagerTrackPosition(activePage, 0, useTransition);
+            updatePagerPagesInertState();
+        }
+
+        function updatePagerPagesInertState() {
+            Array.from(track.children).forEach(function (pageElement, index) {
+                pageElement.inert = index !== activePage;
+            });
         }
 
         function handleResize() {
@@ -249,6 +264,7 @@
             const rebuilt = renderPages();
 
             if (!rebuilt) {
+                goToPage(activePage, false);
                 return;
             }
 

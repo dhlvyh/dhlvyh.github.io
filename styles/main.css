@@ -10403,7 +10403,6 @@ body {
     background: transparent;
     border-radius: 14px;
     overflow: hidden;
-    scroll-snap-align: start;
     box-shadow: var(--ww-card-shadow);
     transition: -webkit-transform 0.25s ease, box-shadow 0.25s ease;
     transition: transform 0.25s ease, box-shadow 0.25s ease;

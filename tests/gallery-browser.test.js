@@ -156,3 +156,47 @@ test("gallery pager reflows page size and keeps the active card in view after a 
 
     await browser.close();
 });
+
+test("gallery pager stays aligned to the current page after a resize that does not cross the breakpoint", async () => {
+    const { chromium } = require("playwright");
+    const browser = await chromium.launch({
+        headless: true,
+        executablePath: process.env.PLAYWRIGHT_CHROMIUM_BIN
+    });
+    const page = await browser.newPage({viewport: {width: 1400, height: 1200}});
+
+    await page.goto("http://127.0.0.1:" + PORT + "/index.html", {waitUntil: "domcontentloaded"});
+    await page.locator("#gallery-pager-next").click();
+    await page.waitForTimeout(400);
+
+    await page.setViewportSize({width: 1000, height: 1200});
+    await page.waitForTimeout(400);
+
+    const track = page.locator("#gallery-track");
+    const viewport = page.locator(".gallery-pager-viewport");
+    const transform = await track.evaluate((node) => node.style.transform);
+    const viewportWidth = await viewport.evaluate((node) => node.clientWidth);
+
+    assert.equal(transform, "translateX(" + (-viewportWidth) + "px)");
+
+    await browser.close();
+});
+
+test("clicking a card on a later page still opens the fullscreen viewer against the full item list", async () => {
+    const { chromium } = require("playwright");
+    const browser = await chromium.launch({
+        headless: true,
+        executablePath: process.env.PLAYWRIGHT_CHROMIUM_BIN
+    });
+    const page = await browser.newPage({viewport: {width: 1400, height: 1200}});
+
+    await page.goto("http://127.0.0.1:" + PORT + "/index.html", {waitUntil: "domcontentloaded"});
+    await page.locator("#gallery-pager-next").click();
+    await page.waitForTimeout(400);
+    await page.locator('[data-gallery-index="10"]').click();
+    await page.waitForTimeout(200);
+
+    assert.equal(await page.locator("#gallery-viewer-count").textContent(), "11 / 20");
+
+    await browser.close();
+});
