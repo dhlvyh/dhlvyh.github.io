@@ -114,18 +114,6 @@
         return clampIndex(activeIndex, length);
     }
 
-    function findNearestSnapPoint(scrollLeft, snapPoints) {
-        const points = Array.isArray(snapPoints) ? snapPoints : [];
-
-        if (points.length === 0) {
-            return 0;
-        }
-
-        return points.reduce(function (closest, point) {
-            return Math.abs(point - scrollLeft) < Math.abs(closest - scrollLeft) ? point : closest;
-        }, points[0]);
-    }
-
     function resolvePerPage(viewportWidth, breakpoint = 768, desktopCount = 10, mobileCount = 4) {
         return viewportWidth > breakpoint ? desktopCount : mobileCount;
     }
@@ -159,7 +147,6 @@
         applyEdgeResistance,
         clampIndex,
         resolveSnapIndex,
-        findNearestSnapPoint,
         resolvePerPage,
         buildPages
     };

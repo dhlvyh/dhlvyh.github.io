@@ -7,7 +7,6 @@ const {
     applyEdgeResistance,
     clampIndex,
     resolveSnapIndex,
-    findNearestSnapPoint,
     resolvePerPage,
     buildPages
 } = require("../scripts/gallery-utils");
@@ -45,12 +44,6 @@ test("resolveSnapIndex advances on a committed drag or a fast swipe", () => {
 test("resolveSnapIndex clamps at the first and last slides", () => {
     assert.equal(resolveSnapIndex(0, 240, 0, 360, 6), 0);
     assert.equal(resolveSnapIndex(5, -240, 0, 360, 6), 5);
-});
-
-test("findNearestSnapPoint chooses the closest snap column", () => {
-    assert.equal(findNearestSnapPoint(205, [0, 216, 432]), 216);
-    assert.equal(findNearestSnapPoint(404, [0, 216, 432]), 432);
-    assert.equal(findNearestSnapPoint(205, []), 0);
 });
 
 test("resolvePerPage returns the desktop count above the breakpoint", () => {
