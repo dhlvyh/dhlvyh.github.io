@@ -244,6 +244,21 @@
             setPagerTrackPosition(activePage, 0, useTransition);
         }
 
+        function handleResize() {
+            const anchorCardIndex = pages[activePage] ? pages[activePage][0] : 0;
+            const rebuilt = renderPages();
+
+            if (!rebuilt) {
+                return;
+            }
+
+            const nextPageIndex = pages.findIndex(function (pageIndexes) {
+                return pageIndexes.indexOf(anchorCardIndex) !== -1;
+            });
+
+            goToPage(nextPageIndex === -1 ? 0 : nextPageIndex, false);
+        }
+
         function beginPagerDrag(event) {
             if (event.button !== undefined && event.button !== 0) {
                 return;
@@ -384,6 +399,8 @@
         });
 
         window.addEventListener("resize", function () {
+            handleResize();
+
             if (!viewer.hidden) {
                 setViewerTrackPosition(activeIndex, 0, false);
             }

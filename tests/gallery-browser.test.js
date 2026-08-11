@@ -119,3 +119,40 @@ test("fullscreen viewer keeps the active slide centered without drift across rep
 
     await browser.close();
 });
+
+test("gallery pager reflows page size and keeps the active card in view after a breakpoint resize", async () => {
+    const { chromium } = require("playwright");
+    const browser = await chromium.launch({
+        headless: true,
+        executablePath: process.env.PLAYWRIGHT_CHROMIUM_BIN
+    });
+    const page = await browser.newPage({viewport: {width: 1400, height: 1200}});
+
+    await page.goto("http://127.0.0.1:" + PORT + "/index.html", {waitUntil: "domcontentloaded"});
+    await page.locator("#gallery-pager-next").click();
+    await page.waitForTimeout(400);
+
+    const activeCardIndexBefore = await page
+        .locator(".gallery-pager-page")
+        .nth(1)
+        .locator("[data-gallery-item]")
+        .first()
+        .getAttribute("data-gallery-index");
+
+    await page.setViewportSize({width: 480, height: 900});
+    await page.waitForTimeout(400);
+
+    const visibleIndexes = await page.evaluate(() => {
+        const activeDot = document.querySelector(".gallery-pager-dot.is-active");
+        const activePageElement = document.querySelectorAll(".gallery-pager-page")[
+            Number(activeDot.dataset.galleryPagerDotIndex)
+        ];
+        return Array.from(activePageElement.querySelectorAll("[data-gallery-item]")).map(
+            (node) => node.dataset.galleryIndex
+        );
+    });
+
+    assert.ok(visibleIndexes.includes(activeCardIndexBefore));
+
+    await browser.close();
+});
