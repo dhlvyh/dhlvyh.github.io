@@ -1,0 +1,13 @@
+{
+  "name": "dhlvyh-wedding-invitation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "안용현 · 안다혜 모바일 청첩장",
+  "scripts": {
+    "test": "node --test \"tests/*.test.js\"",
+    "images": "node tools/build-images.mjs"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.3"
+  }
+}

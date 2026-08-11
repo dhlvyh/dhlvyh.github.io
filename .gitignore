@@ -7,3 +7,4 @@ tests/*
 .playwright-mcp/
 /*.png
 /*.yml
+node_modules/

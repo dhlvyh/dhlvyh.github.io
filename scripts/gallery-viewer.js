@@ -453,7 +453,7 @@
         return (items || []).map(function (item, index) {
             return [
                 '<figure class="gallery-viewer-slide" data-gallery-viewer-slide-index="' + index + '">',
-                '<img src="' + escapeHtml(item.fullSrc) + '" alt="' + escapeHtml(item.alt || "") + '"/>',
+                '<img loading="lazy" decoding="async" src="' + escapeHtml(item.fullSrc) + '" alt="' + escapeHtml(item.alt || "") + '"/>',
                 "</figure>"
             ].join("");
         }).join("");

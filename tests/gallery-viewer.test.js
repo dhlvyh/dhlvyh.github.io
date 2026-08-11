@@ -71,7 +71,7 @@ test("buildViewerTrackMarkup escapes image metadata before interpolating HTML", 
     assert.equal(
         markup,
         '<figure class="gallery-viewer-slide" data-gallery-viewer-slide-index="0">' +
-        '<img src="images/&quot; onerror=&quot;alert(1).jpeg" alt="&lt;script&gt;alert(1)&lt;/script&gt;"/>' +
+        '<img loading="lazy" decoding="async" src="images/&quot; onerror=&quot;alert(1).jpeg" alt="&lt;script&gt;alert(1)&lt;/script&gt;"/>' +
         "</figure>"
     );
 });
