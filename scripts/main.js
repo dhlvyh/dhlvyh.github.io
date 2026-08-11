@@ -44,7 +44,44 @@ $(document).ready(function () {
         $("html,body").animate({scrollTop: 0}, 400);
         return false;
     });
+
+    initMusicToggle();
 });
+
+function initMusicToggle() {
+    const player = document.getElementById("player");
+    const button = document.getElementById("music-toggle");
+    const icon = document.getElementById("music-toggle-icon");
+
+    if (!player || !button || !icon) {
+        return;
+    }
+
+    function render(playing) {
+        button.setAttribute("aria-pressed", String(playing));
+        button.setAttribute("aria-label", playing ? "배경음악 정지" : "배경음악 재생");
+        icon.classList.toggle("fa-music", !playing);
+        icon.classList.toggle("fa-pause", playing);
+    }
+
+    button.addEventListener("click", function () {
+        if (player.paused) {
+            player.play().catch(function () {
+                render(false);
+            });
+        } else {
+            player.pause();
+        }
+    });
+
+    player.addEventListener("play", function () {
+        render(true);
+    });
+
+    player.addEventListener("pause", function () {
+        render(false);
+    });
+}
 
 $("a.smooth-scroll").click(function (event) {
     if (

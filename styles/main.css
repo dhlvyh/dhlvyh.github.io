@@ -10124,6 +10124,19 @@ body {
     margin: 0px 15px 15px 15px;
 }
 
+.music-toggle {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.music-toggle[aria-pressed="true"] {
+    color: var(--ww-accent);
+}
+
 .hero-subtitle {
     font-size: 1rem;
     letter-spacing: 4px;
