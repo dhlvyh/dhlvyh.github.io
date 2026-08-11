@@ -52,8 +52,8 @@ test("resolvePerPage returns the desktop count above the breakpoint", () => {
 });
 
 test("resolvePerPage returns the mobile count at or below the breakpoint", () => {
-    assert.equal(resolvePerPage(768), 4);
-    assert.equal(resolvePerPage(375), 4);
+    assert.equal(resolvePerPage(768), 8);
+    assert.equal(resolvePerPage(375), 8);
 });
 
 test("resolvePerPage honors custom breakpoint and counts", () => {

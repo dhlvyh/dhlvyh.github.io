@@ -10744,7 +10744,8 @@ body.gallery-viewer-open {
 
     .gallery-pager-page {
         grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(2, 160px);
+        grid-template-rows: repeat(4, 160px);
+        gap: 0.5rem;
     }
 
     .gallery-viewer-dialog {

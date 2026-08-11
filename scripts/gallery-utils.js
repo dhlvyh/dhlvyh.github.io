@@ -114,7 +114,7 @@
         return clampIndex(activeIndex, length);
     }
 
-    function resolvePerPage(viewportWidth, breakpoint = 768, desktopCount = 10, mobileCount = 4) {
+    function resolvePerPage(viewportWidth, breakpoint = 768, desktopCount = 10, mobileCount = 8) {
         return viewportWidth > breakpoint ? desktopCount : mobileCount;
     }
 
