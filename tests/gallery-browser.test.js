@@ -21,7 +21,7 @@ test.after(() => {
     }
 });
 
-test("gallery rail drag snaps to a nearby card column", async () => {
+test("gallery rail drag advances to the next page and snaps into place", async () => {
     const { chromium } = require("playwright");
     const browser = await chromium.launch({
         headless: true,
@@ -31,20 +31,45 @@ test("gallery rail drag snaps to a nearby card column", async () => {
 
     await page.goto("http://127.0.0.1:" + PORT + "/index.html", {waitUntil: "domcontentloaded"});
 
-    const rail = page.locator("#gallery-track");
-    const startScrollLeft = await rail.evaluate((node) => node.scrollLeft);
-    const box = await rail.boundingBox();
+    const viewport = page.locator(".gallery-pager-viewport");
+    const track = page.locator("#gallery-track");
+    const box = await viewport.boundingBox();
 
     await page.mouse.move(box.x + box.width * 0.75, box.y + box.height / 2);
     await page.mouse.down();
     await page.mouse.move(box.x + box.width * 0.2, box.y + box.height / 2, {steps: 8});
     await page.mouse.up();
-    await page.waitForTimeout(350);
+    await page.waitForTimeout(400);
 
-    const endScrollLeft = await rail.evaluate((node) => node.scrollLeft);
+    const transform = await track.evaluate((node) => node.style.transform);
+    const viewportWidth = await viewport.evaluate((node) => node.clientWidth);
 
-    assert.notEqual(endScrollLeft, startScrollLeft);
-    assert.equal(endScrollLeft % 1, 0);
+    assert.equal(transform, "translateX(" + (-viewportWidth) + "px)");
+    assert.equal(await page.locator("#gallery-pager-prev").isDisabled(), false);
+
+    await browser.close();
+});
+
+test("gallery pager buttons are disabled at the first and last page", async () => {
+    const { chromium } = require("playwright");
+    const browser = await chromium.launch({
+        headless: true,
+        executablePath: process.env.PLAYWRIGHT_CHROMIUM_BIN
+    });
+    const page = await browser.newPage({viewport: {width: 1400, height: 1200}});
+
+    await page.goto("http://127.0.0.1:" + PORT + "/index.html", {waitUntil: "domcontentloaded"});
+
+    assert.equal(await page.locator("#gallery-pager-prev").isDisabled(), true);
+
+    const dotCount = await page.locator(".gallery-pager-dot").count();
+
+    for (let step = 1; step < dotCount; step += 1) {
+        await page.locator("#gallery-pager-next").click();
+        await page.waitForTimeout(400);
+    }
+
+    assert.equal(await page.locator("#gallery-pager-next").isDisabled(), true);
 
     await browser.close();
 });

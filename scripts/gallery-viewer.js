@@ -32,21 +32,33 @@
         const close = viewer.querySelector("#gallery-viewer-close");
         const frame = viewer.querySelector(".gallery-viewer-frame");
         const backdrop = viewer.querySelector("[data-gallery-close]");
+        const pagerRoot = track.closest(".gallery-pager");
+        const pagerViewport = pagerRoot ? pagerRoot.querySelector(".gallery-pager-viewport") : null;
+        const pagerPrev = pagerRoot ? pagerRoot.querySelector("#gallery-pager-prev") : null;
+        const pagerNext = pagerRoot ? pagerRoot.querySelector("#gallery-pager-next") : null;
+        const pagerDots = pagerRoot ? pagerRoot.querySelector("#gallery-pager-dots") : null;
 
-        if (sourceItems.length === 0 || !viewerTrack || !count || !prev || !next || !close || !frame || !backdrop) {
+        if (
+            sourceItems.length === 0 || !viewerTrack || !count || !prev || !next || !close || !frame || !backdrop ||
+            !pagerViewport || !pagerPrev || !pagerNext || !pagerDots
+        ) {
             return;
         }
 
         let activeIndex = 0;
-        let railDragState = null;
         let viewerDragState = null;
-        let railSnapPoints = [];
         let suppressClickOnce = false;
         let suppressClickResetId = null;
         let pressedItem = null;
+        let cardNodes = sourceNodes;
+        let pages = [];
+        let activePage = 0;
+        let currentPerPage = null;
+        let pagerDragState = null;
 
         renderViewerTrack();
-        syncRailSnapPoints();
+        renderPages();
+        goToPage(0, false);
 
         function clearSuppressClickReset() {
             if (suppressClickResetId) {
@@ -111,72 +123,6 @@
             return {x: event.clientX, y: event.clientY};
         }
 
-        function beginRailDrag(event) {
-            if (event.button !== undefined && event.button !== 0) {
-                return;
-            }
-
-            const point = getPoint(event);
-            clearSuppressClickReset();
-            suppressClickOnce = false;
-            pressedItem = resolveClosestItem(event.target, track, config.itemSelector);
-            railDragState = {
-                startX: point.x,
-                startY: point.y,
-                scrollLeft: track.scrollLeft,
-                hasMoved: false
-            };
-            track.classList.add("is-dragging");
-
-            if (track.setPointerCapture && event.pointerId !== undefined) {
-                track.setPointerCapture(event.pointerId);
-            }
-        }
-
-        function updateRailDrag(event) {
-            if (!railDragState) {
-                return;
-            }
-
-            if (event.cancelable) {
-                event.preventDefault();
-            }
-
-            const point = getPoint(event);
-            const rawDeltaX = point.x - railDragState.startX;
-            const deltaY = point.y - railDragState.startY;
-            const maxScrollLeft = Math.max(track.scrollWidth - track.clientWidth, 0);
-            const intendedScrollLeft = railDragState.scrollLeft - rawDeltaX;
-            const clampedScrollLeft = Math.min(Math.max(intendedScrollLeft, 0), maxScrollLeft);
-            const overscroll = intendedScrollLeft - clampedScrollLeft;
-
-            track.scrollLeft = clampedScrollLeft;
-            track.style.transform = overscroll === 0
-                ? ""
-                : "translateX(" + window.GalleryUtils.applyEdgeResistance(-overscroll) + "px)";
-
-            if (window.GalleryUtils.shouldSuppressClick(rawDeltaX, deltaY, CLICK_SUPPRESS_THRESHOLD)) {
-                railDragState.hasMoved = true;
-            }
-        }
-
-        function endRailDrag() {
-            if (!railDragState) {
-                return;
-            }
-
-            const snappedScrollLeft = window.GalleryUtils.findNearestSnapPoint(track.scrollLeft, railSnapPoints);
-            suppressClickOnce = railDragState.hasMoved;
-            railDragState = null;
-            track.classList.remove("is-dragging");
-            track.style.transform = "";
-            track.scrollTo({left: snappedScrollLeft, behavior: "smooth"});
-
-            if (suppressClickOnce) {
-                queueSuppressClickReset();
-            }
-        }
-
         function beginViewerDrag(event) {
             if (event.button !== undefined && event.button !== 0) {
                 return;
@@ -238,13 +184,144 @@
             goToViewerIndex(nextIndex, true);
         }
 
-        function syncRailSnapPoints() {
-            railSnapPoints = collectRailSnapPoints(Array.from(track.querySelectorAll(config.itemSelector)));
+        function renderPages() {
+            const perPage = window.GalleryUtils.resolvePerPage(window.innerWidth);
 
-            const maxScrollLeft = Math.max(track.scrollWidth - track.clientWidth, 0);
+            if (perPage === currentPerPage) {
+                return false;
+            }
 
-            if (maxScrollLeft > 0 && railSnapPoints[railSnapPoints.length - 1] !== maxScrollLeft) {
-                railSnapPoints.push(maxScrollLeft);
+            currentPerPage = perPage;
+            pages = window.GalleryUtils.buildPages(cardNodes.length, perPage);
+
+            track.innerHTML = "";
+
+            pages.forEach(function (pageIndexes) {
+                const pageElement = document.createElement("div");
+                pageElement.className = "gallery-pager-page";
+
+                pageIndexes.forEach(function (cardIndex) {
+                    pageElement.appendChild(cardNodes[cardIndex]);
+                });
+
+                track.appendChild(pageElement);
+            });
+
+            renderDots();
+            return true;
+        }
+
+        function renderDots() {
+            pagerDots.innerHTML = pages.map(function (_, index) {
+                return '<button class="gallery-pager-dot" type="button" data-gallery-pager-dot-index="' +
+                    index + '" aria-label="' + (index + 1) + ' 페이지"></button>';
+            }).join("");
+        }
+
+        function updatePagerDots() {
+            Array.from(pagerDots.children).forEach(function (dot, index) {
+                dot.classList.toggle("is-active", index === activePage);
+            });
+        }
+
+        function updatePagerButtons() {
+            pagerPrev.disabled = activePage <= 0;
+            pagerNext.disabled = activePage >= pages.length - 1;
+        }
+
+        function setPagerTrackPosition(index, dragDeltaX, useTransition) {
+            const pageWidth = pagerViewport.clientWidth;
+            const translateX = (-index * pageWidth) + dragDeltaX;
+
+            track.classList.toggle("is-animating", useTransition);
+            track.style.transform = "translateX(" + translateX + "px)";
+        }
+
+        function goToPage(index, useTransition) {
+            activePage = window.GalleryUtils.clampIndex(index, pages.length);
+            updatePagerButtons();
+            updatePagerDots();
+            setPagerTrackPosition(activePage, 0, useTransition);
+        }
+
+        function beginPagerDrag(event) {
+            if (event.button !== undefined && event.button !== 0) {
+                return;
+            }
+
+            const point = getPoint(event);
+            clearSuppressClickReset();
+            suppressClickOnce = false;
+            pressedItem = resolveClosestItem(event.target, track, config.itemSelector);
+            pagerDragState = {
+                startX: point.x,
+                startY: point.y,
+                lastX: point.x,
+                lastTime: Date.now(),
+                velocityX: 0,
+                dragDeltaX: 0,
+                hasMoved: false
+            };
+            track.classList.remove("is-animating");
+            track.classList.add("is-dragging");
+
+            if (track.setPointerCapture && event.pointerId !== undefined) {
+                track.setPointerCapture(event.pointerId);
+            }
+        }
+
+        function updatePagerDrag(event) {
+            if (!pagerDragState) {
+                return;
+            }
+
+            if (event.cancelable) {
+                event.preventDefault();
+            }
+
+            const point = getPoint(event);
+            const rawDeltaX = point.x - pagerDragState.startX;
+            const deltaY = point.y - pagerDragState.startY;
+            const isPastFirst = activePage === 0 && rawDeltaX > 0;
+            const isPastLast = activePage === pages.length - 1 && rawDeltaX < 0;
+            const dragDeltaX = isPastFirst || isPastLast
+                ? window.GalleryUtils.applyEdgeResistance(rawDeltaX)
+                : rawDeltaX;
+            const now = Date.now();
+            const elapsed = Math.max(now - pagerDragState.lastTime, 1);
+
+            pagerDragState.velocityX = (point.x - pagerDragState.lastX) / elapsed;
+            pagerDragState.lastX = point.x;
+            pagerDragState.lastTime = now;
+            pagerDragState.dragDeltaX = dragDeltaX;
+
+            if (window.GalleryUtils.shouldSuppressClick(rawDeltaX, deltaY, CLICK_SUPPRESS_THRESHOLD)) {
+                pagerDragState.hasMoved = true;
+            }
+
+            setPagerTrackPosition(activePage, dragDeltaX, false);
+        }
+
+        function endPagerDrag() {
+            if (!pagerDragState) {
+                return;
+            }
+
+            const nextIndex = window.GalleryUtils.resolveSnapIndex(
+                activePage,
+                pagerDragState.dragDeltaX,
+                pagerDragState.velocityX,
+                pagerViewport.clientWidth,
+                pages.length
+            );
+
+            suppressClickOnce = pagerDragState.hasMoved;
+            track.classList.remove("is-dragging");
+            pagerDragState = null;
+            goToPage(nextIndex, true);
+
+            if (suppressClickOnce) {
+                queueSuppressClickReset();
             }
         }
 
@@ -266,11 +343,11 @@
             openViewer(Number(item.dataset.galleryIndex || 0));
         });
 
-        track.addEventListener("pointerdown", beginRailDrag);
-        track.addEventListener("pointermove", updateRailDrag);
-        track.addEventListener("pointerup", endRailDrag);
-        track.addEventListener("pointercancel", endRailDrag);
-        track.addEventListener("pointerleave", endRailDrag);
+        track.addEventListener("pointerdown", beginPagerDrag);
+        track.addEventListener("pointermove", updatePagerDrag);
+        track.addEventListener("pointerup", endPagerDrag);
+        track.addEventListener("pointercancel", endPagerDrag);
+        track.addEventListener("pointerleave", endPagerDrag);
 
         frame.addEventListener("pointerdown", beginViewerDrag);
         frame.addEventListener("pointermove", updateViewerDrag);
@@ -288,8 +365,25 @@
         close.addEventListener("click", closeViewer);
         backdrop.addEventListener("click", closeViewer);
 
+        pagerPrev.addEventListener("click", function () {
+            goToPage(activePage - 1, true);
+        });
+
+        pagerNext.addEventListener("click", function () {
+            goToPage(activePage + 1, true);
+        });
+
+        pagerDots.addEventListener("click", function (event) {
+            const dot = event.target.closest("[data-gallery-pager-dot-index]");
+
+            if (!dot) {
+                return;
+            }
+
+            goToPage(Number(dot.dataset.galleryPagerDotIndex), true);
+        });
+
         window.addEventListener("resize", function () {
-            syncRailSnapPoints();
             if (!viewer.hidden) {
                 setViewerTrackPosition(activeIndex, 0, false);
             }
@@ -320,18 +414,6 @@
 
             return {src: image.src, fullSrc: item.dataset.fullSrc || image.src, alt: image.alt || ""};
         }).filter(Boolean);
-    }
-
-    function collectRailSnapPoints(itemNodes) {
-        const points = [];
-
-        (itemNodes || []).forEach(function (node) {
-            if (node && typeof node.offsetLeft === "number" && points[points.length - 1] !== node.offsetLeft) {
-                points.push(node.offsetLeft);
-            }
-        });
-
-        return points;
     }
 
     function buildViewerTrackMarkup(items) {
@@ -373,5 +455,5 @@
         return typeof window !== "undefined" && window.GalleryUtils;
     }
 
-    return {initGalleryViewer, collectSourceItems, collectRailSnapPoints, buildViewerTrackMarkup, resolveActivatedItem};
+    return {initGalleryViewer, collectSourceItems, buildViewerTrackMarkup, resolveActivatedItem};
 }));

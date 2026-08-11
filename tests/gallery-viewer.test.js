@@ -6,7 +6,6 @@ const path = require("node:path");
 const {
     initGalleryViewer,
     collectSourceItems,
-    collectRailSnapPoints,
     buildViewerTrackMarkup,
     resolveActivatedItem
 } = require("../scripts/gallery-viewer");
@@ -51,18 +50,6 @@ test("collectSourceItems reads full image data from the original gallery items",
             src: "images/thumb-b.jpeg"
         }
     ]);
-});
-
-test("collectRailSnapPoints deduplicates repeated column offsets", () => {
-    const points = collectRailSnapPoints([
-        {offsetLeft: 0},
-        {offsetLeft: 0},
-        {offsetLeft: 216},
-        {offsetLeft: 216},
-        {offsetLeft: 432}
-    ]);
-
-    assert.deepEqual(points, [0, 216, 432]);
 });
 
 test("buildViewerTrackMarkup returns one fullscreen slide per source item", () => {
