@@ -9751,13 +9751,13 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 :root {
-    --ww-paper: #FAF7F2;
-    --ww-paper-alt: #F5F0E8;
+    --ww-paper: #FDFBF9;
+    --ww-paper-alt: #FAF7F3;
     --ww-ink: #33302C;
     --ww-ink-muted: #6B6259;
-    --ww-accent: #B47B6B;
-    --ww-accent-hover: #9C6455;
-    --ww-accent-soft: rgba(180, 123, 107, 0.12);
+    --ww-accent: #E08BA0;
+    --ww-accent-hover: #C86E87;
+    --ww-accent-soft: rgba(224, 139, 160, 0.12);
     --ww-gold: #B08D57;
     --ww-card-bg: #FFFFFF;
     --ww-card-border: rgba(51, 48, 44, 0.08);
@@ -9860,7 +9860,7 @@ body {
 
 .ww-nav-bar .nav-link:hover,
 .ww-nav-bar .nav-link:focus {
-    color: var(--ww-gold);
+    color: var(--ww-accent);
 }
 
 .ww-nav-bar .heart {
@@ -10083,7 +10083,7 @@ body {
     width: 100%;
     margin: 0 auto 0.75rem;
     font-size: 1.4rem;
-    color: var(--ww-gold);
+    color: var(--ww-accent);
     text-align: center;
 }
 
@@ -10091,7 +10091,7 @@ body {
     font-family: "Cormorant Garamond", serif;
     font-style: italic;
     letter-spacing: 0.12em;
-    color: var(--ww-gold);
+    color: var(--ww-accent);
 }
 
 .ww-section {
@@ -10206,7 +10206,7 @@ body {
 .couple-ornament {
     width: 120px;
     margin: 2.5rem auto 0;
-    color: var(--ww-gold);
+    color: var(--ww-accent);
 }
 
 .couple-ornament svg {
@@ -10257,7 +10257,7 @@ body {
 .event-kicker {
     display: inline-block;
     margin-bottom: 1rem;
-    color: var(--ww-gold);
+    color: var(--ww-accent);
     font-family: "Cormorant Garamond", serif;
     font-style: italic;
     font-size: 0.95rem;
@@ -10358,7 +10358,7 @@ body {
     border-radius: 999px;
     background: var(--ww-card-bg);
     box-shadow: var(--ww-card-shadow);
-    color: var(--ww-gold);
+    color: var(--ww-accent);
     font-size: 1.4rem;
     line-height: 1;
     transition: box-shadow 0.2s ease;
@@ -10599,7 +10599,7 @@ body.gallery-viewer-open {
 }
 
 .event-meta-label {
-    color: var(--ww-gold);
+    color: var(--ww-accent);
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -10839,7 +10839,7 @@ body.gallery-viewer-open {
 }
 
 .account-accordion-icon {
-    color: var(--ww-gold);
+    color: var(--ww-accent);
     transition: transform 0.2s ease;
 }
 
@@ -10864,7 +10864,7 @@ body.gallery-viewer-open {
 .account-relation {
     display: inline-block;
     margin-bottom: 0.5rem;
-    color: var(--ww-gold);
+    color: var(--ww-accent);
     font-size: 0.85rem;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -10927,7 +10927,7 @@ body.gallery-viewer-open {
 .transit-icon {
     font-size: 1.3rem;
     line-height: 1;
-    color: var(--ww-gold);
+    color: var(--ww-accent);
 }
 
 .transit-title {
