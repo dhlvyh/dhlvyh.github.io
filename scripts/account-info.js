@@ -24,22 +24,28 @@
             return;
         }
 
-        const accordionToggles = Array.from(document.querySelectorAll(config.accordionToggleSelector));
+        const accordionEntries = Array.from(document.querySelectorAll(config.accordionToggleSelector))
+            .map(function (toggle) {
+                return { toggle: toggle, panel: document.getElementById(toggle.getAttribute("aria-controls")) };
+            })
+            .filter(function (entry) {
+                return Boolean(entry.panel);
+            });
         const copyButtons = Array.from(document.querySelectorAll(config.copySelector));
 
-        accordionToggles.forEach(function (toggle) {
-            const panel = document.getElementById(toggle.getAttribute("aria-controls"));
+        function setEntryOpen(entry, open) {
+            entry.panel.hidden = !open;
+            entry.toggle.setAttribute("aria-expanded", String(open));
+            entry.toggle.classList.toggle("is-open", open);
+        }
 
-            if (!panel) {
-                return;
-            }
+        accordionEntries.forEach(function (entry) {
+            entry.toggle.addEventListener("click", function () {
+                const nextOpen = entry.panel.hidden;
 
-            toggle.addEventListener("click", function () {
-                const isOpen = !panel.hidden;
-
-                panel.hidden = isOpen;
-                toggle.setAttribute("aria-expanded", String(!isOpen));
-                toggle.classList.toggle("is-open", !isOpen);
+                accordionEntries.forEach(function (otherEntry) {
+                    setEntryOpen(otherEntry, otherEntry === entry ? nextOpen : false);
+                });
             });
         });
 
