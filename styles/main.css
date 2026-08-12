@@ -9762,6 +9762,37 @@ a.text-dark:hover, a.text-dark:focus {
     --ww-card-bg: #FFFFFF;
     --ww-card-border: rgba(51, 48, 44, 0.08);
     --ww-card-shadow: 0 4px 16px rgba(51, 48, 44, 0.06);
+    --ww-shell: #E7E2DC;
+    --ww-frame-width: 430px;
+}
+
+/* 폰 프레임 — 청첩장은 사실상 모바일에서만 열리므로 데스크톱에서도 같은 폭을 유지한다 */
+html {
+    background: var(--ww-shell);
+}
+
+.page-content {
+    position: relative;
+    max-width: var(--ww-frame-width);
+    margin: 0 auto;
+    min-height: 100vh;
+    background: var(--ww-paper);
+    box-shadow: 0 0 40px rgba(51, 48, 44, 0.13);
+    overflow-x: clip;
+}
+
+/* 고정 UI는 뷰포트가 아니라 프레임 폭에 붙여야 한다 */
+.frame-overlay {
+    position: fixed;
+    inset: 0;
+    max-width: var(--ww-frame-width);
+    margin: 0 auto;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.frame-overlay > * {
+    pointer-events: auto;
 }
 
 .ww-section.bg-light {
@@ -9769,7 +9800,7 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 body {
-    background: var(--ww-paper);
+    background: var(--ww-shell);
     font-family: "Dosis", sans-serif;
     word-break: keep-all;
     overflow-wrap: break-word;
@@ -10108,20 +10139,15 @@ body {
 
 
 .bottom_right {
-    overflow: hidden;
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    margin: 0px 15px 15px 15px;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
 }
 
 .bottom_left {
-    overflow: hidden;
-    position: fixed;
-    text-align: right;
-    bottom: 0;
-    left: 0;
-    margin: 0px 15px 15px 15px;
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
 }
 
 .music-toggle {
@@ -10451,6 +10477,8 @@ body {
 .gallery-viewer {
     position: fixed;
     inset: 0;
+    max-width: var(--ww-frame-width);
+    margin: 0 auto;
     z-index: 1100;
 }
 
