@@ -135,15 +135,25 @@ test("index.html adds detailed transit info to the map section", () => {
     assert.match(html, /class="transit-info"/);
 
     const transitTitles = html.match(/class="transit-title"[^>]*>[^<]+</g) || [];
-    assert.equal(transitTitles.length, 3);
+    assert.equal(transitTitles.length, 4);
     assert.match(html, /지하철 이용 시/);
     assert.match(html, /버스 이용 시/);
     assert.match(html, /자가용 이용 시/);
+    assert.match(html, /주차 안내/);
 
     const iframeIndex = html.indexOf("<iframe");
     const transitIndex = html.indexOf('class="transit-info"');
 
     assert.ok(iframeIndex < transitIndex, "expected transit info after the map iframe");
+});
+
+test("index.html fills in the parking policy without leaving OO placeholders", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const transitSection = html.slice(html.indexOf('class="transit-info"'), html.indexOf('class="ww-section bg-light" id="account-info"'));
+
+    assert.doesNotMatch(transitSection, /OO/);
+    assert.match(transitSection, /지하 4층~지상 1층/);
+    assert.match(transitSection, /주차 등록 필수/);
 });
 
 test("index.html adds a closing message after the account accordion", () => {
