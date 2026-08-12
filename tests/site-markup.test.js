@@ -167,3 +167,17 @@ test("index.html adds a closing message after the account accordion", () => {
     assert.notEqual(closingIndex, -1, "expected account closing paragraph");
     assert.ok(accordionCloseIndex < closingIndex, "expected closing message after the accordion");
 });
+
+test("index.html adds a full-bleed farewell section after the account section", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.match(html, /class="closing-section"[^>]+id="closing"/);
+    assert.match(html, /class="closing-photo"/);
+    assert.match(html, /class="closing-message"/);
+
+    const accountSectionIndex = html.indexOf('id="account-info"');
+    const closingSectionIndex = html.indexOf('id="closing"');
+
+    assert.ok(accountSectionIndex !== -1 && closingSectionIndex !== -1 && accountSectionIndex < closingSectionIndex,
+        "expected the closing section after the account-info section");
+});
