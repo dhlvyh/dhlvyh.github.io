@@ -1,0 +1,162 @@
+/* Bootstrap 4를 대체하는 최소 베이스 — 리셋, 타이포, 실제로 쓰는 레이아웃/유틸리티만 담는다 */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--ww-ink);
+    text-align: left;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+h1, .h1 {
+    font-size: 2.5rem;
+}
+
+h2, .h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.75rem;
+}
+
+h4 {
+    font-size: 1.5rem;
+}
+
+h5 {
+    font-size: 1.25rem;
+}
+
+h6 {
+    font-size: 1rem;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+ul {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+b, strong {
+    font-weight: bolder;
+}
+
+a {
+    color: var(--ww-accent);
+    text-decoration: none;
+    background-color: transparent;
+}
+
+a:hover {
+    color: var(--ww-accent-hover);
+}
+
+img {
+    border-style: none;
+    vertical-align: middle;
+}
+
+iframe {
+    border: 0;
+}
+
+button {
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    text-transform: none;
+    -webkit-appearance: button;
+    appearance: button;
+    cursor: pointer;
+}
+
+button:not(:disabled) {
+    cursor: pointer;
+}
+
+/* 레이아웃 */
+.container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* 430px 고정 폭이라 모든 카드 묶음은 세로 스택 하나로 충분하다 */
+.stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* 유틸리티 — index.html에서 실제로 쓰는 것만 */
+.d-flex {
+    display: flex;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.justify-content-start {
+    justify-content: flex-start;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+.mt-4 {
+    margin-top: 1.5rem;
+}
+
+.mb-5 {
+    margin-bottom: 3rem;
+}
+
+.my-3 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.pb-3 {
+    padding-bottom: 1rem;
+}
