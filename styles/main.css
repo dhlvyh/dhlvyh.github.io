@@ -10112,13 +10112,17 @@ body {
     font-family: "Noto Serif KR", serif;
 }
 
-.section-icon {
-    display: block !important;
-    width: 100%;
-    margin: 0 auto 0.75rem;
-    font-size: 1.4rem;
+/* 모든 섹션 머리말은 영문 eyebrow + 국문 제목 한 쌍으로 통일한다 */
+.section-eyebrow {
+    margin: 0 0 0.35rem;
     color: var(--ww-accent);
+    font-family: "Cormorant Garamond", serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
     text-align: center;
+    text-indent: 0.3em;
+    text-transform: uppercase;
 }
 
 .ww-eyebrow {
