@@ -621,26 +621,50 @@ body.is-drawer-open {
     font-size: 1.4rem;
 }
 
+.couple-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    text-align: center;
+}
+
 .couple-card img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
     border-radius: 14px;
     border: 1px solid var(--ww-card-border);
     box-shadow: var(--ww-card-shadow);
 }
 
-.couple-parents {
+.couple-card-name {
     margin-top: 0.75rem;
+    font-size: 1.05rem;
+}
+
+.couple-parents {
+    margin-top: 0.35rem;
     margin-bottom: 0.5rem;
     color: var(--ww-ink-muted);
-    font-size: 0.95rem;
+    font-size: 0.85rem;
+}
+
+.couple-names {
+    margin: 1.5rem 0 0;
+    color: var(--ww-accent);
+    font-size: 1.1rem;
+    letter-spacing: 0.04em;
 }
 
 /* 연락하기 — 카드마다 있던 아코디언을 버튼 1개 + 전체 시트로 통합했다 */
 .couple-contact-open {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    width: fit-content;
     margin-top: 2rem;
+    margin-left: auto;
     padding: 0.7rem 1.75rem;
     border: 1px solid var(--ww-card-border);
     border-radius: 999px;
@@ -796,17 +820,9 @@ body.is-contact-sheet-open {
 
 .couple-message {
     max-width: 480px;
-    margin: 0.75rem auto 0;
+    margin: 1.5rem auto 0;
     color: var(--ww-ink-muted);
-    line-height: 1.9;
-}
-
-.couple-intro {
-    max-width: 480px;
-    margin: 0 auto;
-    color: var(--ww-ink);
-    font-size: 1.05rem;
-    line-height: 1.9;
+    line-height: 2.1;
 }
 
 .event-section-lead {
