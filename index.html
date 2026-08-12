@@ -528,6 +528,10 @@
                     <br>저희 두 사람, 오래오래 행복하겠습니다.
                 </p>
                 <p class="closing-signoff">안용현 · 안다혜 드림</p>
+                <button class="kakao-share-button" id="kakao-share-button" type="button">
+                    <i aria-hidden="true" class="fa fa-comment"></i>
+                    카카오톡으로 초대장 보내기
+                </button>
             </div>
         </div>
 
@@ -600,6 +604,7 @@
     </div>
 </div>
 
+<script defer src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js"></script>
 <script src="js/aos.js"></script>
 <script src="scripts/wedding-utils.js"></script>
 <script src="scripts/odometer.js"></script>
@@ -647,6 +652,10 @@
             <button class="nav-drawer-action" id="copy-invitation-link" type="button">
                 <i aria-hidden="true" class="fa fa-link"></i>
                 <span>청첩장<br>링크복사</span>
+            </button>
+            <button class="nav-drawer-action" id="kakao-share-drawer-button" type="button">
+                <i aria-hidden="true" class="fa fa-comment"></i>
+                <span>카카오톡<br>공유하기</span>
             </button>
             <a class="nav-drawer-action" href="#home" data-drawer-close>
                 <i aria-hidden="true" class="fa fa-angle-up"></i>

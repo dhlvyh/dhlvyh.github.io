@@ -189,3 +189,16 @@ test("index.html adds a full-bleed farewell section after the account section", 
     assert.ok(accountSectionIndex !== -1 && closingSectionIndex !== -1 && accountSectionIndex < closingSectionIndex,
         "expected the closing section after the account-info section");
 });
+
+test("index.html wires up Kakao share buttons and loads the Kakao JS SDK", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.match(html, /kakaocdn\.net\/kakao_js_sdk\//);
+    assert.match(html, /id="kakao-share-button"/);
+    assert.match(html, /id="kakao-share-drawer-button"/);
+
+    const sdkIndex = html.indexOf("kakao_js_sdk");
+    const mainJsIndex = html.indexOf("scripts/main.js");
+    assert.ok(sdkIndex !== -1 && mainJsIndex !== -1 && sdkIndex < mainJsIndex,
+        "expected the Kakao SDK script before main.js");
+});

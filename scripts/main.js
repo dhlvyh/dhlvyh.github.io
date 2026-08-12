@@ -6,6 +6,12 @@ const WEDDING_MONTH_INDEX = 10;
 const WEDDING_DAY = 1;
 const RELATIONSHIP_START_ISO = "2023-07-01T00:00:00+09:00";
 
+// TODO: Kakao Developers(https://developers.kakao.com)에서 앱을 등록하고
+// 발급받은 JavaScript 키로 교체한다. 등록한 앱의 플랫폼 > Web에 이 사이트
+// 도메인(dhlvyh.github.io)을 추가해야 실제로 공유가 동작한다.
+const KAKAO_JS_KEY = "YOUR_KAKAO_JS_KEY";
+const SITE_URL = "https://dhlvyh.github.io/";
+
 document.addEventListener("DOMContentLoaded", function () {
     if (window.AOS) {
         window.AOS.init({
@@ -60,6 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
     initContactSheet();
     initSmoothScroll();
     initMusicToggle();
+    initKakaoShare();
 });
 
 function setText(selector, value) {
@@ -362,5 +369,54 @@ function initMusicToggle() {
 
     player.addEventListener("pause", function () {
         render(false);
+    });
+}
+
+function shareToKakao() {
+    if (!window.Kakao) {
+        window.alert("카카오 공유를 준비하지 못했습니다. 잠시 후 다시 시도해 주세요.");
+        return;
+    }
+
+    if (!KAKAO_JS_KEY || KAKAO_JS_KEY === "YOUR_KAKAO_JS_KEY") {
+        window.alert("카카오톡 공유를 사용하려면 Kakao Developers에서 발급받은 JS 키를 먼저 등록해야 합니다.");
+        return;
+    }
+
+    if (!window.Kakao.isInitialized()) {
+        window.Kakao.init(KAKAO_JS_KEY);
+    }
+
+    window.Kakao.Share.sendDefault({
+        objectType: "feed",
+        content: {
+            title: "안용현 ♥ 안다혜 결혼식에 초대합니다",
+            description: "2026년 11월 1일 일요일 11:00 AM · 더뉴컨벤션 2층 더뉴홀",
+            imageUrl: SITE_URL + "images/main.jpg",
+            link: {
+                mobileWebUrl: SITE_URL,
+                webUrl: SITE_URL
+            }
+        },
+        buttons: [
+            {
+                title: "청첩장 보기",
+                link: {
+                    mobileWebUrl: SITE_URL,
+                    webUrl: SITE_URL
+                }
+            }
+        ]
+    });
+}
+
+function initKakaoShare() {
+    const buttons = [
+        document.getElementById("kakao-share-button"),
+        document.getElementById("kakao-share-drawer-button")
+    ].filter(Boolean);
+
+    buttons.forEach(function (button) {
+        button.addEventListener("click", shareToKakao);
     });
 }
