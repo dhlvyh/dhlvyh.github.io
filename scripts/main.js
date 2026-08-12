@@ -1,8 +1,10 @@
 // 청첩장 전역 초기화 — 카운트다운/달력, 갤러리, 계좌, 목차 드로어, 배경음악을 묶는다
 const WEDDING_DATE = "2026-11-01";
+const WEDDING_DATETIME_ISO = "2026-11-01T11:00:00+09:00";
 const WEDDING_YEAR = 2026;
 const WEDDING_MONTH_INDEX = 10;
 const WEDDING_DAY = 1;
+const RELATIONSHIP_START_ISO = "2023-07-01T00:00:00+09:00";
 
 document.addEventListener("DOMContentLoaded", function () {
     if (window.AOS) {
@@ -19,7 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const weeks = window.WeddingUtils.buildCalendarWeeks(WEDDING_YEAR, WEDDING_MONTH_INDEX);
         const calendarMarkup = window.WeddingUtils.buildCalendarMarkup(weeks, WEDDING_DAY);
 
-        setText("#wedding-countdown-label", countdown.label);
         setText("#wedding-countdown-copy", countdown.copy);
 
         const grid = document.querySelector("#wedding-calendar-grid");
@@ -27,6 +28,9 @@ document.addEventListener("DOMContentLoaded", function () {
             grid.innerHTML = calendarMarkup;
         }
     }
+
+    initCountdownTicker();
+    initTogetherOdometer();
 
     if (window.GalleryViewer) {
         window.GalleryViewer.initGalleryViewer({
@@ -60,6 +64,72 @@ function setText(selector, value) {
     if (element) {
         element.textContent = value;
     }
+}
+
+function initCountdownTicker() {
+    if (!window.WeddingUtils) {
+        return;
+    }
+
+    const days = document.querySelector("[data-countdown-days]");
+    const hours = document.querySelector("[data-countdown-hours]");
+    const minutes = document.querySelector("[data-countdown-minutes]");
+    const seconds = document.querySelector("[data-countdown-seconds]");
+
+    if (!days || !hours || !minutes || !seconds) {
+        return;
+    }
+
+    function pad(value) {
+        return String(value).padStart(2, "0");
+    }
+
+    function tick() {
+        const parts = window.WeddingUtils.buildCountdownParts(WEDDING_DATETIME_ISO);
+
+        days.textContent = String(parts.days);
+        hours.textContent = pad(parts.hours);
+        minutes.textContent = pad(parts.minutes);
+        seconds.textContent = pad(parts.seconds);
+    }
+
+    tick();
+    window.setInterval(tick, 1000);
+}
+
+function initTogetherOdometer() {
+    if (!window.WeddingUtils || !window.Odometer) {
+        return;
+    }
+
+    const groups = Array.from(document.querySelectorAll("[data-odometer-role]")).map(function (container) {
+        return {
+            container,
+            role: container.dataset.odometerRole,
+            length: Number(container.dataset.odometerLength || 2)
+        };
+    });
+
+    if (groups.length === 0) {
+        return;
+    }
+
+    groups.forEach(function (group) {
+        group.container.innerHTML = window.Odometer.buildOdometerMarkup(group.length);
+    });
+
+    function tick() {
+        const parts = window.WeddingUtils.buildElapsedParts(RELATIONSHIP_START_ISO);
+
+        groups.forEach(function (group) {
+            const value = parts[group.role];
+            const padded = window.Odometer.padNumber(value == null ? 0 : value, group.length);
+            window.Odometer.updateOdometerCells(group.container, padded);
+        });
+    }
+
+    tick();
+    window.setInterval(tick, 1000);
 }
 
 function initNavDrawer() {

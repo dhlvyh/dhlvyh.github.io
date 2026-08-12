@@ -48,6 +48,49 @@
         return {days, label, copy};
     }
 
+    function buildCountdownParts(targetIso, fromDate = new Date()) {
+        const targetMs = new Date(targetIso).getTime();
+        const diffMs = Math.max(0, targetMs - fromDate.getTime());
+        const totalSeconds = Math.floor(diffMs / 1000);
+
+        return {
+            days: Math.floor(totalSeconds / 86400),
+            hours: Math.floor((totalSeconds % 86400) / 3600),
+            minutes: Math.floor((totalSeconds % 3600) / 60),
+            seconds: totalSeconds % 60,
+            isPast: targetMs <= fromDate.getTime()
+        };
+    }
+
+    function buildElapsedParts(startIso, fromDate = new Date()) {
+        const start = new Date(startIso);
+        let years = fromDate.getFullYear() - start.getFullYear();
+        let anniversary = new Date(start);
+        anniversary.setFullYear(start.getFullYear() + years);
+
+        if (anniversary.getTime() > fromDate.getTime()) {
+            years -= 1;
+            anniversary = new Date(start);
+            anniversary.setFullYear(start.getFullYear() + years);
+        }
+
+        years = Math.max(years, 0);
+
+        const sinceAnniversarySeconds = Math.floor(
+            Math.max(0, fromDate.getTime() - anniversary.getTime()) / 1000
+        );
+        const days = Math.floor(sinceAnniversarySeconds / 86400);
+        const remainderSeconds = sinceAnniversarySeconds % 86400;
+
+        return {
+            years,
+            days,
+            hours: Math.floor(remainderSeconds / 3600),
+            minutes: Math.floor((remainderSeconds % 3600) / 60),
+            seconds: remainderSeconds % 60
+        };
+    }
+
     function buildCalendarWeeks(year, monthIndex) {
         const firstWeekday = new Date(year, monthIndex, 1).getDay();
         const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
@@ -95,6 +138,8 @@
 
     return {
         buildCountdown,
+        buildCountdownParts,
+        buildElapsedParts,
         buildCalendarWeeks,
         buildCalendarMarkup
     };

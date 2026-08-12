@@ -61,6 +61,8 @@ body {
 
 /* Home Page Style */
 .ww-home-page {
+    position: relative;
+    overflow: hidden;
     background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("../images/main-background.jpg") no-repeat center center;
     background-size: cover;
     background-position: 50%;
@@ -69,68 +71,108 @@ body {
     min-height: 480px;
 }
 
-.ww-home-page .ww-wedding-announcement {
-    width: 100%;
-    max-width: 1600px;
-    margin: 0 auto;
-    height: 140%;
+.ww-home-page:before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(176, 141, 87, 0.15);
+}
+
+/* 첫 화면 낙화 효과 — JS 파티클이 아니라 SVG 꽃잎 타일 2겹의 background-position 애니메이션이다 */
+.hero-effect {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='70' height='70' viewBox='0 0 70 70'%3E%3Cpath d='M35 24 C40 28 40 38 35 45 C30 38 30 28 35 24 Z' fill='%23F5CBD8' opacity='0.7' transform='rotate(-18 35 35)'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='110' height='110' viewBox='0 0 110 110'%3E%3Cpath d='M55 40 C62 46 62 62 55 72 C48 62 48 46 55 40 Z' fill='%23DE9AB1' opacity='0.4' transform='rotate(25 55 55)'/%3E%3C/svg%3E");
+    background-repeat: repeat, repeat;
+    background-size: 130px, 190px;
+    animation: hero-petals-fall 22s linear infinite;
+}
+
+@keyframes hero-petals-fall {
+    0% {
+        background-position: 0 0, 0 0;
+    }
+    100% {
+        background-position: 15rem 70rem, -25rem 100rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-effect {
+        animation: none;
+    }
+}
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 2rem 1.5rem;
     text-align: center;
     color: #fff;
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
-    letter-spacing: 2px;
 }
 
-.ww-home-page .ww-wedding-announcement .ww-announcement-container {
-    max-width: 600px;
-    text-align: center;
-    z-index: 999;
+.hero-names {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
 }
 
-.ww-home-page .ww-wedding-announcement img {
-    max-height: 350px;
-    width: auto;
+.hero-name {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
 }
 
-@media (max-width: 480px) {
-    .ww-home-page .ww-wedding-announcement img {
-        max-height: 250px;
-        width: auto;
-    }
+.hero-name-role {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.85;
 }
 
-.ww-home-page .ww-wedding-announcement .ww-couple-name {
-    position: relative;
-    padding-top: 1.5rem;
-    font-size: 70px;
+.hero-name-value {
+    font-size: 1.9rem;
+    letter-spacing: 0.08em;
 }
 
-.ww-home-page .ww-wedding-announcement .ww-couple-name::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 64px;
-    height: 1px;
-    background: rgba(176, 141, 87, 0.6);
+.hero-name-divider {
+    width: 1px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.5);
 }
 
-@media (max-width: 576px) {
-    .ww-home-page .ww-wedding-announcement .ww-couple-name {
-        font-size: 50px;
-    }
+.hero-photo-frame {
+    width: min(78%, 320px);
+    padding: 0.5rem;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 18px 40px rgba(20, 15, 12, 0.28);
 }
 
-.ww-home-page:before {
-    content: "";
-    background-color: rgba(176, 141, 87, 0.15);
+.hero-photo {
+    display: block;
     width: 100%;
-    height: 100%;
-    height: 100vh;
-    min-height: 480px;
-    position: absolute;
-    left: 0;
-    top: 0;
+    height: auto;
+    border-radius: 14px;
+}
+
+.hero-eyebrow {
+    margin: 0;
+    font-size: 1.05rem;
+    letter-spacing: 4px;
 }
 
 /* 목차 드로어 — sticky 네비바가 모바일 화면을 잡아먹어 우측 드로어로 교체했다 */
@@ -1059,15 +1101,46 @@ body.gallery-viewer-open {
     margin-bottom: 1rem;
 }
 
-.countdown-badge {
-    display: inline-block;
-    padding: 0.7rem 1rem;
-    border-radius: 999px;
+.countdown-ticker {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+    padding: 1rem 0.5rem;
+    border-radius: 14px;
     background: var(--ww-ink);
-    color: #fff;
-    font-size: 1rem;
-    line-height: 1;
     box-shadow: 0 0 0 1px var(--ww-gold);
+}
+
+.countdown-unit {
+    display: flex;
+    min-width: 44px;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.countdown-unit-value {
+    font-family: "Noto Serif KR", serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+}
+
+.countdown-unit-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+}
+
+.countdown-sep {
+    margin-top: 0.15rem;
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 1.1rem;
+    line-height: 1.4;
 }
 
 .countdown-copy {
@@ -1387,4 +1460,76 @@ body.gallery-viewer-open {
     margin: 0;
     color: var(--ww-ink-muted);
     line-height: 1.7;
+}
+
+.transit-desc-highlight {
+    color: var(--ww-accent-hover);
+    font-weight: 700;
+}
+
+/* 함께한 시간 — 초 단위로 굴러가는 오도미터. JS는 --n 커스텀 프로퍼티만 바꾼다 */
+.together-lead {
+    max-width: 480px;
+    margin: 0 auto;
+    color: var(--ww-ink-muted);
+    line-height: 1.8;
+}
+
+.together-odometer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.5rem 0.6rem;
+    margin-top: 2rem;
+    padding: 1.5rem 1rem;
+    border-radius: 14px;
+    background: var(--ww-card-bg);
+    border: 1px solid var(--ww-card-border);
+    box-shadow: var(--ww-card-shadow);
+}
+
+.odometer-group {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.3rem;
+}
+
+.odometer-digits {
+    --roll-ms: 600ms;
+    --reel-h: 1.2em;
+    display: inline-flex;
+    align-items: center;
+    font-family: "Noto Serif KR", serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--ww-ink);
+}
+
+.odometer-digits .digit {
+    display: inline-block;
+    width: 0.62em;
+    height: var(--reel-h);
+    overflow: hidden;
+    mask-image: linear-gradient(180deg, transparent 0, #000 28%, #000 72%, transparent);
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 28%, #000 72%, transparent);
+}
+
+.odometer-digits .reel {
+    display: flex;
+    flex-direction: column;
+    transform: translateY(calc(var(--n, 0) * var(--reel-h) * -1));
+    transition: transform var(--roll-ms) cubic-bezier(0.22, 1, 0.28, 1);
+}
+
+.odometer-digits .reel i {
+    height: var(--reel-h);
+    line-height: var(--reel-h);
+    text-align: center;
+    font-style: normal;
+}
+
+.odometer-unit {
+    color: var(--ww-ink-muted);
+    font-size: 0.85rem;
 }
