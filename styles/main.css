@@ -885,273 +885,128 @@ body.is-contact-sheet-open {
     line-height: 1.8;
 }
 
-.gallery-pager {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.gallery-pager-viewport {
+/* 갤러리 — full-bleed 메인 뷰어 + 5열 썸네일 그리드, 별도 라이트박스 없음 */
+.gallery-main {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    background: var(--ww-paper-alt);
     overflow: hidden;
 }
 
-.gallery-pager-track {
+/* viewport/track는 %-높이 상속 체인 대신 inset:0으로 고정한다 —
+   .gallery-main이 aspect-ratio로 만든 정박스에 직접 앵커링해
+   flex 자손을 거치며 퍼센트 높이가 풀리는 문제를 원천 차단한다 */
+.gallery-main-viewport {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.gallery-main-track {
+    position: absolute;
+    inset: 0;
     display: flex;
     cursor: grab;
     touch-action: pan-y;
     will-change: transform;
 }
 
-.gallery-pager-track.is-animating {
+.gallery-main-track.is-animating {
     transition: transform 280ms ease;
 }
 
-.gallery-pager-track.is-dragging {
+.gallery-main-track.is-dragging {
     cursor: grabbing;
 }
 
-.gallery-pager-page {
+.gallery-main-slide {
     flex: 0 0 100%;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(2, 220px);
-    gap: 1rem;
-    padding: 0.25rem 0 0.75rem;
-}
-
-.gallery-pager-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-}
-
-.gallery-pager-nav {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border: 1px solid var(--ww-card-border);
-    border-radius: 999px;
-    background: var(--ww-card-bg);
-    box-shadow: var(--ww-card-shadow);
-    color: var(--ww-accent);
-    font-size: 1.4rem;
-    line-height: 1;
-    transition: box-shadow 0.2s ease;
-}
-
-.gallery-pager-nav:hover,
-.gallery-pager-nav:focus-visible {
-    box-shadow: 0 8px 22px rgba(51, 48, 44, 0.1);
-}
-
-.gallery-pager-nav:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-}
-
-.gallery-pager-dots {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.gallery-pager-dot {
-    width: 8px;
-    height: 8px;
-    padding: 0;
-    border: 0;
-    border-radius: 999px;
-    background: var(--ww-card-border);
-    transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.gallery-pager-dot.is-active {
-    background: var(--ww-gold);
-    transform: scale(1.3);
-}
-
-.gallery-card {
-    display: block;
+    width: 100%;
     height: 100%;
+    margin: 0;
     padding: 0;
-    border: 0;
-    background: transparent;
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: var(--ww-card-shadow);
-    transition: -webkit-transform 0.25s ease, box-shadow 0.25s ease;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, -webkit-transform 0.25s ease;
 }
 
-.gallery-card:focus {
-    outline: 2px solid rgba(180, 123, 107, 0.55);
-    outline-offset: 4px;
-}
-
-.gallery-card:hover {
-    -webkit-transform: translateY(-4px);
-    transform: translateY(-4px);
-    box-shadow: 0 10px 28px rgba(51, 48, 44, 0.12);
-}
-
-.gallery-card img {
+.gallery-main-slide img {
     display: block;
     width: 100%;
     height: 100%;
-    -o-object-fit: cover;
     object-fit: cover;
     pointer-events: none;
     -webkit-user-drag: none;
     user-select: none;
 }
 
-.gallery-viewer[hidden] {
-    display: none !important;
-}
-
-.gallery-viewer {
-    position: fixed;
-    inset: 0;
-    max-width: var(--ww-frame-width);
-    margin: 0 auto;
-    z-index: 1100;
-}
-
-.gallery-viewer-backdrop {
+.gallery-main-nav {
     position: absolute;
-    inset: 0;
-    background: rgba(15, 12, 11, 0.84);
-    backdrop-filter: blur(10px);
-}
-
-.gallery-viewer-dialog {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    height: 100%;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    top: 50%;
+    z-index: 2;
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
     justify-content: center;
-    gap: 1rem;
-    padding: 2rem;
-}
-
-.gallery-viewer-frame {
-    position: relative;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    width: min(82vw, 960px);
-    max-height: 84vh;
-    padding: 1rem;
-    border-radius: 30px;
-    background: rgba(255, 255, 255, 0.08);
-    touch-action: pan-y;
-    cursor: grab;
-    overflow: hidden;
-}
-
-.gallery-viewer-frame.is-dragging {
-    cursor: grabbing;
-}
-
-.gallery-viewer-track {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    will-change: transform;
-}
-
-.gallery-viewer-track.is-animating {
-    transition: transform 280ms ease;
-}
-
-.gallery-viewer-slide {
-    flex: 0 0 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    padding: 1rem;
-}
-
-.gallery-viewer-slide img {
-    max-width: 100%;
-    max-height: calc(84vh - 2rem);
-    border-radius: 22px;
-    -o-object-fit: contain;
-    object-fit: contain;
-    -webkit-user-drag: none;
-    user-select: none;
-}
-
-.gallery-viewer-count {
-    position: absolute;
-    left: 50%;
-    bottom: 1rem;
-    -webkit-transform: translateX(-50%);
-    transform: translateX(-50%);
-    padding: 0.6rem 0.95rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.14);
-    color: #fff;
-    font-size: 0.95rem;
-    letter-spacing: 0.04em;
-}
-
-.gallery-viewer-nav,
-.gallery-viewer-close {
+    width: 34px;
+    height: 34px;
+    padding: 0;
     border: 0;
-    background: rgba(255, 255, 255, 0.14);
-    color: #fff;
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-}
-
-.gallery-viewer-nav {
-    width: 56px;
-    height: 56px;
     border-radius: 999px;
-    font-size: 2rem;
+    background: rgba(253, 251, 249, 0.82);
+    box-shadow: 0 2px 10px rgba(51, 48, 44, 0.18);
+    color: var(--ww-ink);
+    font-size: 1.3rem;
     line-height: 1;
+    transform: translateY(-50%);
 }
 
-.gallery-viewer-nav:disabled {
+.gallery-main-nav:disabled {
     opacity: 0.4;
     cursor: not-allowed;
 }
 
-.gallery-viewer-close {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    width: 48px;
-    height: 48px;
-    border-radius: 999px;
-    font-size: 2rem;
-    line-height: 1;
-    z-index: 2;
+.gallery-main-prev {
+    left: 12px;
 }
 
-body.gallery-viewer-open {
+.gallery-main-next {
+    right: 12px;
+}
+
+.gallery-thumb-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.gallery-thumb {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    padding: 0;
+    border: 0;
     overflow: hidden;
+    background: var(--ww-paper-alt);
+}
+
+.gallery-thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+.gallery-thumb::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 0 0 var(--ww-accent);
+    transition: box-shadow 0.15s ease;
+}
+
+.gallery-thumb.is-active::after {
+    box-shadow: inset 0 0 0 3px var(--ww-accent);
 }
 
 .event-meta {
@@ -1361,26 +1216,6 @@ body.gallery-viewer-open {
         padding: 1.5rem;
     }
 
-    .gallery-pager-page {
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(4, 160px);
-        gap: 0.5rem;
-    }
-
-    .gallery-viewer-dialog {
-        padding: 1rem;
-    }
-
-    .gallery-viewer-frame {
-        width: 100%;
-        max-height: 76vh;
-        padding: 0.75rem;
-    }
-
-    .gallery-viewer-frame img {
-        max-height: calc(76vh - 1.5rem);
-    }
-
     .countdown-header {
         -webkit-box-align: start;
         -ms-flex-align: start;
@@ -1389,21 +1224,6 @@ body.gallery-viewer-open {
         -webkit-box-direction: normal;
         -ms-flex-direction: column;
         flex-direction: column;
-    }
-
-    .gallery-viewer-nav {
-        position: absolute;
-        bottom: 1.5rem;
-        width: 48px;
-        height: 48px;
-    }
-
-    .gallery-viewer-prev {
-        left: 1rem;
-    }
-
-    .gallery-viewer-next {
-        right: 1rem;
     }
 }
 

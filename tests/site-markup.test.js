@@ -3,14 +3,22 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 
-test("index.html exposes the fullscreen viewer track mount", () => {
+test("index.html exposes the full-bleed main viewer and thumbnail grid mounts", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
-    assert.match(html, /id="gallery-track"/);
-    assert.match(html, /id="gallery-viewer"/);
-    assert.match(html, /id="gallery-viewer-track"/);
-    assert.match(html, /id="gallery-viewer-count"/);
-    assert.doesNotMatch(html, /id="gallery-viewer-image"/);
+    assert.match(html, /id="gallery-main-viewport"/);
+    assert.match(html, /id="gallery-main-track"/);
+    assert.match(html, /id="gallery-thumb-grid"/);
+    assert.match(html, /id="gallery-main-prev"/);
+    assert.match(html, /id="gallery-main-next"/);
+
+    const slideMatches = html.match(/data-gallery-slide-index="\d+"/g) || [];
+    const thumbMatches = html.match(/data-gallery-thumb-index="\d+"/g) || [];
+    assert.equal(slideMatches.length, 20);
+    assert.equal(thumbMatches.length, 20);
+
+    assert.doesNotMatch(html, /id="gallery-viewer"/);
+    assert.doesNotMatch(html, /class="gallery-pager"/);
 });
 
 test("index.html includes the gallery helper scripts before main.js", () => {

@@ -6,9 +6,7 @@ const {
     shouldSuppressClick,
     applyEdgeResistance,
     clampIndex,
-    resolveSnapIndex,
-    resolvePerPage,
-    buildPages
+    resolveSnapIndex
 } = require("../scripts/gallery-utils");
 
 test("resolveSwipeAction returns next for a left swipe beyond threshold", () => {
@@ -44,39 +42,4 @@ test("resolveSnapIndex advances on a committed drag or a fast swipe", () => {
 test("resolveSnapIndex clamps at the first and last slides", () => {
     assert.equal(resolveSnapIndex(0, 240, 0, 360, 6), 0);
     assert.equal(resolveSnapIndex(5, -240, 0, 360, 6), 5);
-});
-
-test("resolvePerPage returns the desktop count above the breakpoint", () => {
-    assert.equal(resolvePerPage(1400), 10);
-    assert.equal(resolvePerPage(769), 10);
-});
-
-test("resolvePerPage returns the mobile count at or below the breakpoint", () => {
-    assert.equal(resolvePerPage(768), 8);
-    assert.equal(resolvePerPage(375), 8);
-});
-
-test("resolvePerPage honors custom breakpoint and counts", () => {
-    assert.equal(resolvePerPage(900, 992, 6, 2), 2);
-    assert.equal(resolvePerPage(1000, 992, 6, 2), 6);
-});
-
-test("buildPages groups item indexes into fixed-size pages", () => {
-    assert.deepEqual(buildPages(20, 10), [
-        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-        [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-    ]);
-});
-
-test("buildPages keeps a shorter final page when the count doesn't divide evenly", () => {
-    assert.deepEqual(buildPages(9, 4), [
-        [0, 1, 2, 3],
-        [4, 5, 6, 7],
-        [8]
-    ]);
-});
-
-test("buildPages returns an empty array for non-positive counts", () => {
-    assert.deepEqual(buildPages(0, 10), []);
-    assert.deepEqual(buildPages(20, 0), []);
 });

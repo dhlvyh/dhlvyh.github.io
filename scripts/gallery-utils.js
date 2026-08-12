@@ -114,30 +114,6 @@
         return clampIndex(activeIndex, length);
     }
 
-    function resolvePerPage(viewportWidth, breakpoint = 768, desktopCount = 10, mobileCount = 8) {
-        return viewportWidth > breakpoint ? desktopCount : mobileCount;
-    }
-
-    function buildPages(itemCount, perPage) {
-        if (itemCount <= 0 || perPage <= 0) {
-            return [];
-        }
-
-        const pages = [];
-
-        for (let startIndex = 0; startIndex < itemCount; startIndex += perPage) {
-            const page = [];
-
-            for (let index = startIndex; index < Math.min(startIndex + perPage, itemCount); index += 1) {
-                page.push(index);
-            }
-
-            pages.push(page);
-        }
-
-        return pages;
-    }
-
     return {
         resolveSwipeAction,
         getWrappedIndex,
@@ -146,8 +122,6 @@
         normalizeLoopedScroll,
         applyEdgeResistance,
         clampIndex,
-        resolveSnapIndex,
-        resolvePerPage,
-        buildPages
+        resolveSnapIndex
     };
 }));

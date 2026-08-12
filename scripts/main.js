@@ -33,10 +33,12 @@ document.addEventListener("DOMContentLoaded", function () {
     initTogetherOdometer();
 
     if (window.GalleryViewer) {
-        window.GalleryViewer.initGalleryViewer({
-            trackSelector: "#gallery-track",
-            itemSelector: "[data-gallery-item]",
-            viewerSelector: "#gallery-viewer"
+        window.GalleryViewer.initGallery({
+            viewportSelector: "#gallery-main-viewport",
+            trackSelector: "#gallery-main-track",
+            thumbGridSelector: "#gallery-thumb-grid",
+            prevSelector: "#gallery-main-prev",
+            nextSelector: "#gallery-main-next"
         });
     }
 
