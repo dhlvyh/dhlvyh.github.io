@@ -19,12 +19,17 @@ test("initGallery is a no-op outside a browser environment (no window/document)"
     }));
 });
 
-test("gallery-viewer drives the main track through GalleryUtils snap/edge-resistance math", () => {
+test("gallery-viewer drives the main track through GalleryUtils snap/edge-resistance/pinch math", () => {
     const source = fs.readFileSync(path.resolve(__dirname, "../scripts/gallery-viewer.js"), "utf8");
 
     assert.match(source, /window\.GalleryUtils\.clampIndex/);
     assert.match(source, /window\.GalleryUtils\.applyEdgeResistance/);
     assert.match(source, /window\.GalleryUtils\.resolveSnapIndex/);
+    assert.match(source, /window\.GalleryUtils\.clampZoomScale/);
+    assert.match(source, /window\.GalleryUtils\.clampPanOffset/);
+    assert.match(source, /window\.GalleryUtils\.computePinchDistance/);
+    assert.match(source, /window\.GalleryUtils\.computePinchMidpointPercent/);
+    assert.match(source, /window\.GalleryUtils\.computeContainSize/);
 });
 
 test("index.html wraps the gallery in a full-bleed main viewer with a 5-column thumbnail grid", () => {
