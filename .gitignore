@@ -1,10 +1,13 @@
 .idea
 .DS_Store
+.claude
 .superpowers/
-*.md
-docs/*
-tests/*
 .playwright-mcp/
+
+docs/
+tests/
+node_modules/
+
+*.md
 /*.png
 /*.yml
-node_modules/
