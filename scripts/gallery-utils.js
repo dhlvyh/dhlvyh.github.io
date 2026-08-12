@@ -114,6 +114,50 @@
         return clampIndex(activeIndex, length);
     }
 
+    function computeContainSize(containerWidth, containerHeight, contentWidth, contentHeight) {
+        if (containerWidth <= 0 || containerHeight <= 0 || contentWidth <= 0 || contentHeight <= 0) {
+            return {width: 0, height: 0};
+        }
+
+        const containerRatio = containerWidth / containerHeight;
+        const contentRatio = contentWidth / contentHeight;
+
+        if (contentRatio > containerRatio) {
+            return {width: containerWidth, height: containerWidth / contentRatio};
+        }
+
+        return {width: containerHeight * contentRatio, height: containerHeight};
+    }
+
+    function clampPanOffset(offset, scale, containerSize, contentSize) {
+        const maxOffset = Math.max(0, (contentSize * scale - containerSize) / 2);
+        return Math.min(Math.max(offset, -maxOffset), maxOffset);
+    }
+
+    function computePinchDistance(pointA, pointB) {
+        return Math.hypot(pointB.x - pointA.x, pointB.y - pointA.y);
+    }
+
+    function computePinchMidpointPercent(pointA, pointB, rect) {
+        if (rect.width <= 0 || rect.height <= 0) {
+            return {x: 50, y: 50};
+        }
+
+        const midX = (pointA.x + pointB.x) / 2;
+        const midY = (pointA.y + pointB.y) / 2;
+        const xPercent = ((midX - rect.left) / rect.width) * 100;
+        const yPercent = ((midY - rect.top) / rect.height) * 100;
+
+        return {
+            x: Math.min(Math.max(xPercent, 0), 100),
+            y: Math.min(Math.max(yPercent, 0), 100)
+        };
+    }
+
+    function clampZoomScale(scale, min = 1, max = 3) {
+        return Math.min(Math.max(scale, min), max);
+    }
+
     return {
         resolveSwipeAction,
         getWrappedIndex,
@@ -122,6 +166,11 @@
         normalizeLoopedScroll,
         applyEdgeResistance,
         clampIndex,
-        resolveSnapIndex
+        resolveSnapIndex,
+        computeContainSize,
+        clampPanOffset,
+        computePinchDistance,
+        computePinchMidpointPercent,
+        clampZoomScale
     };
 }));
