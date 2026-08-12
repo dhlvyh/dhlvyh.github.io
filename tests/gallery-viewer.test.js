@@ -41,3 +41,13 @@ test("index.html wraps the gallery in a full-bleed main viewer with a 5-column t
     assert.ok(mainIndex !== -1 && thumbIndex !== -1 && mainIndex < thumbIndex,
         "expected the thumbnail grid after the main viewer");
 });
+
+test("index.html gives each gallery slide a blurred backdrop image and a contain-fit photo", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    const backdropMatches = html.match(/class="gallery-main-slide-backdrop"/g) || [];
+    const photoMatches = html.match(/class="gallery-main-slide-photo"/g) || [];
+
+    assert.equal(backdropMatches.length, 20);
+    assert.equal(photoMatches.length, 20);
+});
