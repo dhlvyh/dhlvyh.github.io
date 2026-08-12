@@ -9776,9 +9776,16 @@ html {
     max-width: var(--ww-frame-width);
     margin: 0 auto;
     min-height: 100vh;
-    background: var(--ww-paper);
+    background-color: var(--ww-paper);
+    /* 작은 꽃 타일. 외부 요청 없이 SVG data URI로 넣는다 */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23C9A9B0' stroke-width='0.9' stroke-linecap='round' opacity='0.18'%3E%3Cg transform='translate(18 18)'%3E%3Cellipse cx='0' cy='-5' rx='2.2' ry='4.6'/%3E%3Cellipse cx='0' cy='-5' rx='2.2' ry='4.6' transform='rotate(72)'/%3E%3Cellipse cx='0' cy='-5' rx='2.2' ry='4.6' transform='rotate(144)'/%3E%3Cellipse cx='0' cy='-5' rx='2.2' ry='4.6' transform='rotate(216)'/%3E%3Cellipse cx='0' cy='-5' rx='2.2' ry='4.6' transform='rotate(288)'/%3E%3C/g%3E%3Cg transform='translate(54 54)'%3E%3Cellipse cx='0' cy='-5' rx='2.2' ry='4.6'/%3E%3Cellipse cx='0' cy='-5' rx='2.2' ry='4.6' transform='rotate(72)'/%3E%3Cellipse cx='0' cy='-5' rx='2.2' ry='4.6' transform='rotate(144)'/%3E%3Cellipse cx='0' cy='-5' rx='2.2' ry='4.6' transform='rotate(216)'/%3E%3Cellipse cx='0' cy='-5' rx='2.2' ry='4.6' transform='rotate(288)'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     box-shadow: 0 0 40px rgba(51, 48, 44, 0.13);
     overflow-x: clip;
+}
+
+/* 섹션 배경은 패턴이 비치도록 반투명으로 얹는다 */
+.ww-section.bg-light {
+    background-color: rgba(250, 247, 243, 0.72) !important;
 }
 
 /* 고정 UI는 뷰포트가 아니라 프레임 폭에 붙여야 한다 */
@@ -9793,10 +9800,6 @@ html {
 
 .frame-overlay > * {
     pointer-events: auto;
-}
-
-.ww-section.bg-light {
-    background-color: var(--ww-paper-alt) !important;
 }
 
 body {
