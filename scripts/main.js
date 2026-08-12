@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     initNavDrawer();
+    initContactSheet();
     initSmoothScroll();
     initMusicToggle();
 });
@@ -199,6 +200,64 @@ function initNavDrawer() {
             copyInvitationLink(copyButton);
         });
     }
+}
+
+function initContactSheet() {
+    const sheet = document.getElementById("contact-sheet");
+    const openButton = document.getElementById("contact-sheet-open");
+    const closeButton = document.getElementById("contact-sheet-close");
+
+    if (!sheet || !openButton) {
+        return;
+    }
+
+    let lastFocused = null;
+
+    function open() {
+        lastFocused = document.activeElement;
+        sheet.hidden = false;
+        requestAnimationFrame(function () {
+            sheet.classList.add("is-open");
+        });
+        openButton.setAttribute("aria-expanded", "true");
+        document.body.classList.add("is-contact-sheet-open");
+
+        if (closeButton) {
+            closeButton.focus();
+        }
+    }
+
+    function close() {
+        sheet.classList.remove("is-open");
+        openButton.setAttribute("aria-expanded", "false");
+        document.body.classList.remove("is-contact-sheet-open");
+
+        window.setTimeout(function () {
+            sheet.hidden = true;
+        }, 300);
+
+        if (lastFocused) {
+            lastFocused.focus({preventScroll: true});
+        }
+    }
+
+    openButton.addEventListener("click", open);
+
+    sheet.addEventListener("click", function (event) {
+        if (event.target.closest("[data-contact-close]")) {
+            close();
+        }
+    }, true);
+
+    if (closeButton) {
+        closeButton.addEventListener("click", close);
+    }
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && !sheet.hidden) {
+            close();
+        }
+    });
 }
 
 function copyInvitationLink(button) {

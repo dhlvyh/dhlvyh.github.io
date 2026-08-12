@@ -97,22 +97,36 @@ test("index.html adds a couple intro paragraph before the couple message", () =>
     assert.ok(introIndex < messageIndex, "expected intro before existing couple message");
 });
 
-test("index.html adds parent names and a contact toggle to each couple card", () => {
+test("index.html adds parent names to each couple card", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
     const coupleParents = html.match(/class="couple-parents"/g) || [];
     assert.equal(coupleParents.length, 2);
     assert.match(html, /class="couple-parents"[^>]*>[\s\S]*?딸/);
     assert.match(html, /class="couple-parents"[^>]*>[\s\S]*?아들/);
+});
 
-    assert.match(html, /data-accordion-toggle[^>]+aria-controls="contact-panel-bride"/);
-    assert.match(html, /data-accordion-toggle[^>]+aria-controls="contact-panel-groom"/);
+test("index.html exposes a single contact sheet listing all six family members", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
-    assert.match(html, /id="contact-panel-bride"[^>]*hidden/);
-    assert.match(html, /id="contact-panel-groom"[^>]*hidden/);
+    const openButtonTag = html.match(/<button[^>]*id="contact-sheet-open"[^>]*>/);
+    assert.ok(openButtonTag, "expected a button with id=contact-sheet-open");
+    assert.match(openButtonTag[0], /aria-controls="contact-sheet"/);
+
+    assert.match(html, /id="contact-sheet"[^>]*hidden/);
+
+    const rows = html.match(/class="contact-sheet-row"/g) || [];
+    assert.equal(rows.length, 6);
 
     const telLinks = html.match(/href="tel:[0-9]+"/g) || [];
-    assert.equal(telLinks.length, 4);
+    const smsLinks = html.match(/href="sms:[0-9]+"/g) || [];
+    assert.equal(telLinks.length, 6);
+    assert.equal(smsLinks.length, 6);
+
+    const openIndex = html.indexOf('id="contact-sheet-open"');
+    const sheetIndex = html.indexOf('id="contact-sheet"');
+    assert.ok(openIndex !== -1 && sheetIndex !== -1 && openIndex < sheetIndex,
+        "expected the open button to appear before the contact sheet markup");
 });
 
 test("index.html adds detailed transit info to the map section", () => {
