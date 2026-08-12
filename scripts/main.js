@@ -9,7 +9,7 @@ const RELATIONSHIP_START_ISO = "2023-07-01T00:00:00+09:00";
 // TODO: Kakao Developers(https://developers.kakao.com)에서 앱을 등록하고
 // 발급받은 JavaScript 키로 교체한다. 등록한 앱의 플랫폼 > Web에 이 사이트
 // 도메인(dhlvyh.github.io)을 추가해야 실제로 공유가 동작한다.
-const KAKAO_JS_KEY = "YOUR_KAKAO_JS_KEY";
+const KAKAO_JS_KEY = "779686afc372d325a6fe9a8dadcad2d0";
 const SITE_URL = "https://dhlvyh.github.io/";
 
 document.addEventListener("DOMContentLoaded", function () {
