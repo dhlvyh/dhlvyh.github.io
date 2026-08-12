@@ -45,28 +45,6 @@
                 </div>
             </div>
         </div>
-        <div class="ww-nav-bar sticky-top bg-light">
-            <nav class="navbar navbar-expand-lg navbar-light">
-                <div class="container">
-                    <button aria-controls="ww-navbarNav" aria-expanded="false" aria-label="Toggle navigation"
-                            class="navbar-toggler"
-                            data-target="#ww-navbarNav" data-toggle="collapse" type="button">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse text-uppercase" id="ww-navbarNav">
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item"><a class="nav-link smooth-scroll" href="#home">홈</a></li>
-                            <li class="nav-item"><a class="nav-link smooth-scroll" href="#couple">두 사람</a></li>
-                            <li class="nav-item"><a class="nav-link smooth-scroll" href="#events">예식 안내</a></li>
-                            <li class="nav-item"><a class="nav-link smooth-scroll" href="#gallery">갤러리</a></li>
-                            <li class="nav-item"><a class="nav-link smooth-scroll" href="#map">오시는 길</a></li>
-                            <li class="nav-item"><a class="nav-link smooth-scroll" href="#account-info">마음 전하실 곳</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </div>
-
         <div class="ww-section" id="couple">
             <div class="container">
                 <p class="section-eyebrow" data-aos="fade-up">COUPLE</p>
@@ -462,9 +440,6 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="js/aos.js"></script>
 <script src="scripts/wedding-utils.js"></script>
 <script src="scripts/gallery-utils.js"></script>
@@ -474,6 +449,12 @@
 <script src="scripts/main.js"></script>
 
 <div class="frame-overlay">
+    <button aria-controls="nav-drawer" aria-expanded="false" aria-label="메뉴 열기" class="nav-drawer-open" id="nav-drawer-open" type="button">
+        <span class="nav-drawer-open-bar"></span>
+        <span class="nav-drawer-open-bar"></span>
+        <span class="nav-drawer-open-bar"></span>
+    </button>
+
     <div class="bottom_right"><i class="fa fa-arrow-up fa-2x" id="go-to-top"></i>
     </div>
 
@@ -485,6 +466,32 @@
             </button>
         </div>
     </div>
+</div>
+
+<div class="nav-drawer" id="nav-drawer" hidden>
+    <div class="nav-drawer-backdrop" data-drawer-close></div>
+    <nav aria-label="청첩장 목차" class="nav-drawer-panel" role="dialog" aria-modal="true">
+        <button aria-label="메뉴 닫기" class="nav-drawer-close" id="nav-drawer-close" type="button">×</button>
+        <p class="nav-drawer-title">안용현 · 안다혜</p>
+        <ul class="nav-drawer-list">
+            <li><a class="smooth-scroll" href="#home">홈</a></li>
+            <li><a class="smooth-scroll" href="#couple">두 사람</a></li>
+            <li><a class="smooth-scroll" href="#events">예식 안내</a></li>
+            <li><a class="smooth-scroll" href="#gallery">갤러리</a></li>
+            <li><a class="smooth-scroll" href="#map">오시는 길</a></li>
+            <li><a class="smooth-scroll" href="#account-info">마음 전하실 곳</a></li>
+        </ul>
+        <div class="nav-drawer-actions">
+            <button class="nav-drawer-action" id="copy-invitation-link" type="button">
+                <i aria-hidden="true" class="fa fa-link"></i>
+                <span>청첩장<br>링크복사</span>
+            </button>
+            <a class="nav-drawer-action" href="#home" data-drawer-close>
+                <i aria-hidden="true" class="fa fa-angle-up"></i>
+                <span>맨 위로<br>이동</span>
+            </a>
+        </div>
+    </nav>
 </div>
 
 </body>

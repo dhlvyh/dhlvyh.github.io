@@ -1,11 +1,10 @@
+// 청첩장 전역 초기화 — 카운트다운/달력, 갤러리, 계좌, 목차 드로어, 배경음악을 묶는다
 const WEDDING_DATE = "2026-11-01";
 const WEDDING_YEAR = 2026;
 const WEDDING_MONTH_INDEX = 10;
 const WEDDING_DAY = 1;
 
-const NAV_COLLAPSED_HEIGHT = $(".ww-nav-bar").outerHeight() || 0;
-
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
     if (window.AOS) {
         window.AOS.init({
             duration: 700,
@@ -20,9 +19,13 @@ $(document).ready(function () {
         const weeks = window.WeddingUtils.buildCalendarWeeks(WEDDING_YEAR, WEDDING_MONTH_INDEX);
         const calendarMarkup = window.WeddingUtils.buildCalendarMarkup(weeks, WEDDING_DAY);
 
-        $("#wedding-countdown-label").text(countdown.label);
-        $("#wedding-countdown-copy").text(countdown.copy);
-        $("#wedding-calendar-grid").html(calendarMarkup);
+        setText("#wedding-countdown-label", countdown.label);
+        setText("#wedding-countdown-copy", countdown.copy);
+
+        const grid = document.querySelector("#wedding-calendar-grid");
+        if (grid) {
+            grid.innerHTML = calendarMarkup;
+        }
     }
 
     if (window.GalleryViewer) {
@@ -40,13 +43,161 @@ $(document).ready(function () {
         });
     }
 
-    $("#go-to-top").click(function () {
-        $("html,body").animate({scrollTop: 0}, 400);
-        return false;
-    });
+    const goToTop = document.getElementById("go-to-top");
+    if (goToTop) {
+        goToTop.addEventListener("click", function () {
+            window.scrollTo({top: 0, behavior: "smooth"});
+        });
+    }
 
+    initNavDrawer();
+    initSmoothScroll();
     initMusicToggle();
 });
+
+function setText(selector, value) {
+    const element = document.querySelector(selector);
+    if (element) {
+        element.textContent = value;
+    }
+}
+
+function initNavDrawer() {
+    const drawer = document.getElementById("nav-drawer");
+    const openButton = document.getElementById("nav-drawer-open");
+
+    if (!drawer || !openButton) {
+        return;
+    }
+
+    let lastFocused = null;
+
+    function open() {
+        lastFocused = document.activeElement;
+        drawer.hidden = false;
+        // hidden 해제 직후 트랜지션이 걸리도록 다음 프레임에 클래스를 붙인다
+        requestAnimationFrame(function () {
+            drawer.classList.add("is-open");
+        });
+        openButton.setAttribute("aria-expanded", "true");
+        document.body.classList.add("is-drawer-open");
+
+        const closeButton = document.getElementById("nav-drawer-close");
+        if (closeButton) {
+            closeButton.focus();
+        }
+    }
+
+    function close() {
+        drawer.classList.remove("is-open");
+        openButton.setAttribute("aria-expanded", "false");
+        document.body.classList.remove("is-drawer-open");
+
+        window.setTimeout(function () {
+            drawer.hidden = true;
+        }, 280);
+
+        if (lastFocused) {
+            lastFocused.focus({preventScroll: true});
+        }
+    }
+
+    openButton.addEventListener("click", open);
+
+    // 캡처 단계에서 닫는다. 목차 링크의 스크롤 핸들러보다 먼저 실행돼야
+    // body의 overflow 잠금이 풀린 뒤 스크롤이 걸린다.
+    drawer.addEventListener("click", function (event) {
+        if (event.target.closest("[data-drawer-close]") || event.target.closest(".nav-drawer-list a")) {
+            close();
+        }
+    }, true);
+
+    const closeButton = document.getElementById("nav-drawer-close");
+    if (closeButton) {
+        closeButton.addEventListener("click", close);
+    }
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && !drawer.hidden) {
+            close();
+        }
+    });
+
+    const copyButton = document.getElementById("copy-invitation-link");
+    if (copyButton) {
+        copyButton.addEventListener("click", function () {
+            copyInvitationLink(copyButton);
+        });
+    }
+}
+
+function copyInvitationLink(button) {
+    const label = button.querySelector("span");
+    if (!label) {
+        return;
+    }
+
+    const original = label.innerHTML;
+
+    function done(message) {
+        label.textContent = message;
+        window.setTimeout(function () {
+            label.innerHTML = original;
+        }, 1600);
+    }
+
+    const url = window.location.href.split("#")[0];
+
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(url).then(
+            function () {
+                done("복사됨");
+            },
+            function () {
+                done("복사 실패");
+            }
+        );
+        return;
+    }
+
+    // http로 열린 경우 clipboard API를 못 쓰므로 임시 입력창으로 대체한다
+    const helper = document.createElement("textarea");
+    helper.value = url;
+    helper.setAttribute("readonly", "");
+    helper.style.position = "fixed";
+    helper.style.opacity = "0";
+    document.body.appendChild(helper);
+    helper.select();
+
+    let copied = false;
+    try {
+        copied = document.execCommand("copy");
+    } catch {
+        copied = false;
+    }
+
+    document.body.removeChild(helper);
+    done(copied ? "복사됨" : "복사 실패");
+}
+
+function initSmoothScroll() {
+    document.querySelectorAll("a.smooth-scroll").forEach(function (link) {
+        link.addEventListener("click", function (event) {
+            const target = document.querySelector(link.getAttribute("href"));
+            if (!target) {
+                return;
+            }
+
+            event.preventDefault();
+            target.scrollIntoView({behavior: "smooth", block: "start"});
+
+            if (!target.hasAttribute("tabindex")) {
+                target.setAttribute("tabindex", "-1");
+            }
+            target.focus({preventScroll: true});
+        });
+    });
+}
 
 function initMusicToggle() {
     const player = document.getElementById("player");
@@ -82,35 +233,3 @@ function initMusicToggle() {
         render(false);
     });
 }
-
-$("a.smooth-scroll").click(function (event) {
-    if (
-        location.pathname.replace(/^\//, "") === this.pathname.replace(/^\//, "") &&
-        location.hostname === this.hostname
-    ) {
-        let target = $(this.hash);
-        target = target.length ? target : $("[name=" + this.hash.slice(1) + "]");
-
-        if (target.length) {
-            event.preventDefault();
-
-            $("#ww-navbarNav").removeClass("show");
-
-            $("html, body").animate(
-                {
-                    scrollTop: target.offset().top - NAV_COLLAPSED_HEIGHT
-                },
-                1000,
-                function () {
-                    const $target = $(target);
-                    $target.focus();
-
-                    if (!$target.is(":focus")) {
-                        $target.attr("tabindex", "-1");
-                        $target.focus();
-                    }
-                }
-            );
-        }
-    }
-});

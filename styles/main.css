@@ -9883,18 +9883,159 @@ body {
     top: 0;
 }
 
-/* Nav Bar Style */
-.ww-nav-bar {
-    background-color: var(--ww-paper) !important;
+/* 목차 드로어 — sticky 네비바가 모바일 화면을 잡아먹어 우측 드로어로 교체했다 */
+.nav-drawer-open {
+    position: absolute;
+    top: 16px;
+    right: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 42px;
+    height: 42px;
+    padding: 0 11px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(253, 251, 249, 0.82);
+    box-shadow: 0 2px 10px rgba(51, 48, 44, 0.14);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
 }
 
-.ww-nav-bar .nav-link {
-    color: var(--ww-ink);
+.nav-drawer-open-bar {
+    display: block;
+    height: 1.5px;
+    border-radius: 2px;
+    background: var(--ww-ink);
 }
 
-.ww-nav-bar .nav-link:hover,
-.ww-nav-bar .nav-link:focus {
+.nav-drawer-open-bar:nth-child(2) {
+    width: 70%;
+}
+
+.nav-drawer[hidden] {
+    display: none;
+}
+
+.nav-drawer {
+    position: fixed;
+    inset: 0;
+    max-width: var(--ww-frame-width);
+    margin: 0 auto;
+    z-index: 1200;
+}
+
+.nav-drawer-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(35, 31, 28, 0.42);
+    backdrop-filter: blur(3px);
+}
+
+.nav-drawer-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    width: 74%;
+    max-width: 300px;
+    height: 100%;
+    padding: 1.75rem 1.5rem;
+    background: var(--ww-paper);
+    box-shadow: -8px 0 30px rgba(51, 48, 44, 0.18);
+    transform: translateX(100%);
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.28, 1);
+}
+
+.nav-drawer.is-open .nav-drawer-panel {
+    transform: translateX(0);
+}
+
+.nav-drawer-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--ww-ink-muted);
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.nav-drawer-title {
+    margin: 0.5rem 0 1.5rem;
     color: var(--ww-accent);
+    font-family: "Noto Serif KR", serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.04em;
+}
+
+.nav-drawer-list {
+    flex: 1;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.nav-drawer-list a {
+    display: block;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--ww-card-border);
+    color: var(--ww-ink);
+    font-family: "Noto Serif KR", serif;
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+.nav-drawer-list a:hover,
+.nav-drawer-list a:focus-visible {
+    color: var(--ww-accent);
+}
+
+.nav-drawer-actions {
+    display: flex;
+    gap: 0.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--ww-card-border);
+}
+
+.nav-drawer-action {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 0.25rem;
+    border: 0;
+    border-radius: 12px;
+    background: none;
+    color: var(--ww-ink-muted);
+    font-size: 0.75rem;
+    line-height: 1.35;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.nav-drawer-action i {
+    font-size: 1.15rem;
+    color: var(--ww-accent);
+}
+
+.nav-drawer-action:hover,
+.nav-drawer-action:focus-visible {
+    background: var(--ww-accent-soft);
+}
+
+/* 버튼 클래스(.nav-drawer-open)와 겹치지 않게 body 상태는 다른 이름을 쓴다 */
+body.is-drawer-open {
+    overflow: hidden;
 }
 
 .ww-nav-bar .heart {
