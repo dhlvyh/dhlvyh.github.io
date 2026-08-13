@@ -10,7 +10,7 @@
         root.PetalFall = utils;
     }
 }(typeof window !== "undefined" ? window : globalThis, function () {
-    const PETAL_COLORS = ["#E08BA0", "#C86E87", "#F3C6D2"];
+    const PETAL_COLORS = ["#E08BA0", "#F3C6D2"];
     const MIN_PETALS = 12;
     const MAX_PETALS = 30;
 

@@ -21,7 +21,10 @@ const VARIANTS = [
 const GALLERY_COUNT = 20;
 
 // 갤러리 외 단일 이미지. 카드 안에서만 쓰이므로 1024면 충분하다.
-const SINGLES = [{ source: "hall.jpg", out: "hall.webp", width: 1024, quality: 82 }];
+const SINGLES = [
+    { source: "hall.jpg", out: "hall.webp", width: 1024, quality: 82 },
+    { source: "end.jpg", out: "end.webp", width: 1024, quality: 82 }
+];
 
 async function isStale(srcPath, outPath) {
     try {

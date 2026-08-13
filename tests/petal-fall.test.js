@@ -17,7 +17,7 @@ test("createPetal derives every field deterministically from the given random fu
     assert.equal(petal.y, 400);
     assert.equal(petal.size, 6.5);
     assert.equal(petal.rotation, 180);
-    assert.equal(petal.color, "#C86E87");
+    assert.equal(petal.color, "#F3C6D2");
 });
 
 test("stepPetal advances y by fallSpeed, accumulates rotation, and computes sway-based x", () => {
