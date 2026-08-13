@@ -1439,12 +1439,14 @@ body.is-contact-sheet-open {
     margin-bottom: 0.35rem;
     color: var(--ww-ink);
     font-family: "Noto Serif KR", serif;
-    font-weight: 700;
+    font-weight: 600;
+    font-size: 1.05rem;
 }
 
 .transit-desc {
     margin: 0;
     color: var(--ww-ink-muted);
+    font-size: 0.95rem;
     line-height: 1.7;
 }
 
