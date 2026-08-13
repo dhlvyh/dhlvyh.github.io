@@ -29,7 +29,7 @@
             swayAmplitude: 10 + rand() * 20,
             swayFrequency: 0.01 + rand() * 0.01,
             rotationSpeed: (rand() - 0.5) * 2,
-            size: 6 + rand() * 8,
+            size: 4 + rand() * 5,
             opacity: 0.55 + rand() * 0.3,
             color: PETAL_COLORS[Math.floor(rand() * PETAL_COLORS.length)]
         };
@@ -64,14 +64,24 @@
     }
 
     function drawPetal(ctx, petal) {
+        const petalLength = petal.size * 0.55;
+        const petalWidth = petal.size * 0.42;
+
         ctx.save();
         ctx.translate(petal.x, petal.y);
         ctx.rotate((petal.rotation * Math.PI) / 180);
         ctx.globalAlpha = petal.opacity;
         ctx.fillStyle = petal.color;
-        ctx.beginPath();
-        ctx.ellipse(0, 0, petal.size, petal.size * 0.6, 0, 0, Math.PI * 2);
-        ctx.fill();
+
+        for (let i = 0; i < 5; i += 1) {
+            ctx.save();
+            ctx.rotate((i * 72 * Math.PI) / 180);
+            ctx.beginPath();
+            ctx.ellipse(0, -petalLength, petalWidth, petalLength, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+
         ctx.restore();
     }
 

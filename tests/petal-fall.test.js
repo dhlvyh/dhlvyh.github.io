@@ -15,7 +15,7 @@ test("createPetal derives every field deterministically from the given random fu
 
     assert.equal(petal.baseX, 200);
     assert.equal(petal.y, 400);
-    assert.equal(petal.size, 10);
+    assert.equal(petal.size, 6.5);
     assert.equal(petal.rotation, 180);
     assert.equal(petal.color, "#C86E87");
 });

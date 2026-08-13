@@ -117,7 +117,7 @@
         return weeks;
     }
 
-    function buildCalendarMarkup(weeks, weddingDay, weddingTimeLabel) {
+    function buildCalendarMarkup(weeks, weddingDay) {
         return weeks.flat().map(function (day) {
             const classes = ["calendar-day"];
             let content = "&nbsp;";
@@ -129,10 +129,6 @@
 
                 if (day === weddingDay) {
                     classes.push("is-wedding-day");
-
-                    if (weddingTimeLabel) {
-                        content += '<em class="calendar-day-time">' + weddingTimeLabel + "</em>";
-                    }
                 }
             }
 

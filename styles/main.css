@@ -1184,10 +1184,6 @@ body.is-contact-sheet-open {
     gap: 0.5rem;
 }
 
-.calendar-grid {
-    row-gap: 1.1rem;
-}
-
 .calendar-weekdays {
     margin-bottom: 0.75rem;
 }
@@ -1208,7 +1204,6 @@ body.is-contact-sheet-open {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    position: relative;
     min-height: 46px;
     border-radius: 10px;
     background: var(--ww-card-bg);
@@ -1222,23 +1217,31 @@ body.is-contact-sheet-open {
     box-shadow: none;
 }
 
+/* 7열 그리드라 셀 폭이 좁다(모바일 기준 약 29px) — 셀 전체를 원으로 키우는 대신
+   고정 크기 배지를 숫자 뒤에 겹쳐 그려 옆 날짜를 침범하지 않게 한다 */
 .calendar-day.is-wedding-day {
-    background: var(--ww-accent);
+    position: relative;
     color: #fff;
-    border-radius: 50%;
-    aspect-ratio: 1;
-    box-shadow: var(--ww-card-shadow);
 }
 
-.calendar-day-time {
+.calendar-day.is-wedding-day::before {
+    content: "";
     position: absolute;
-    bottom: -16px;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    font-size: 0.65rem;
-    font-weight: 500;
-    font-style: normal;
+    transform: translate(-50%, -50%);
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--ww-accent);
+    box-shadow: var(--ww-card-shadow);
+    z-index: -1;
+}
+
+.calendar-time-caption {
+    margin: 0.75rem 0 0;
+    text-align: center;
+    font-size: 0.8rem;
     color: var(--ww-ink-muted);
 }
 

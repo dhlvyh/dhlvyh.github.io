@@ -105,16 +105,3 @@ test("formatKoreanTime treats midnight as 오전 12시 and noon as 오후 12시"
     assert.equal(WeddingUtils.formatKoreanTime("2026-11-01T12:00:00+09:00"), "오후 12시");
 });
 
-test("buildCalendarMarkup appends a time label inside the wedding day cell when provided", () => {
-    const weeks = buildCalendarWeeks(2027, 10);
-    const markup = buildCalendarMarkup(weeks, 1, "오전 11시");
-
-    assert.match(markup, /calendar-day is-wedding-day">1<em class="calendar-day-time">오전 11시<\/em><\/span>/);
-});
-
-test("buildCalendarMarkup omits the time label when none is provided", () => {
-    const weeks = buildCalendarWeeks(2027, 10);
-    const markup = buildCalendarMarkup(weeks, 1);
-
-    assert.doesNotMatch(markup, /calendar-day-time/);
-});

@@ -26,9 +26,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const countdown = window.WeddingUtils.buildCountdown(WEDDING_DATE);
         const weeks = window.WeddingUtils.buildCalendarWeeks(WEDDING_YEAR, WEDDING_MONTH_INDEX);
         const weddingTimeLabel = window.WeddingUtils.formatKoreanTime(WEDDING_DATETIME_ISO);
-        const calendarMarkup = window.WeddingUtils.buildCalendarMarkup(weeks, WEDDING_DAY, weddingTimeLabel);
+        const calendarMarkup = window.WeddingUtils.buildCalendarMarkup(weeks, WEDDING_DAY);
 
         setText("#wedding-countdown-copy", countdown.copy);
+        setText("#wedding-calendar-time", "예식 시간 " + weddingTimeLabel);
 
         const grid = document.querySelector("#wedding-calendar-grid");
         if (grid) {
