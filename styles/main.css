@@ -52,6 +52,15 @@ html {
     pointer-events: auto;
 }
 
+#petal-fall-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+}
+
 body {
     background: var(--ww-shell);
     font-family: "Dosis", sans-serif;
@@ -1094,12 +1103,9 @@ body.is-contact-sheet-open {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    gap: 0.4rem;
+    gap: 1.1rem;
     margin-bottom: 1rem;
-    padding: 1rem 0.5rem;
-    border-radius: 14px;
-    background: var(--ww-ink);
-    box-shadow: 0 0 0 1px var(--ww-gold);
+    padding: 0.5rem 0;
 }
 
 .countdown-unit {
@@ -1111,8 +1117,16 @@ body.is-contact-sheet-open {
 }
 
 .countdown-unit-value {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--ww-accent);
+    box-shadow: var(--ww-card-shadow);
     font-family: "Noto Serif KR", serif;
-    font-size: 1.4rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #fff;
     font-variant-numeric: tabular-nums;
@@ -1121,15 +1135,8 @@ body.is-contact-sheet-open {
 .countdown-unit-label {
     font-size: 0.6rem;
     letter-spacing: 0.12em;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--ww-ink-muted);
     text-transform: uppercase;
-}
-
-.countdown-sep {
-    margin-top: 0.15rem;
-    color: rgba(255, 255, 255, 0.35);
-    font-size: 1.1rem;
-    line-height: 1.4;
 }
 
 .countdown-copy {
@@ -1177,6 +1184,10 @@ body.is-contact-sheet-open {
     gap: 0.5rem;
 }
 
+.calendar-grid {
+    row-gap: 1.1rem;
+}
+
 .calendar-weekdays {
     margin-bottom: 0.75rem;
 }
@@ -1197,6 +1208,7 @@ body.is-contact-sheet-open {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
+    position: relative;
     min-height: 46px;
     border-radius: 10px;
     background: var(--ww-card-bg);
@@ -1211,9 +1223,23 @@ body.is-contact-sheet-open {
 }
 
 .calendar-day.is-wedding-day {
-    background: var(--ww-ink);
+    background: var(--ww-accent);
     color: #fff;
-    box-shadow: 0 0 0 1px var(--ww-gold);
+    border-radius: 50%;
+    aspect-ratio: 1;
+    box-shadow: var(--ww-card-shadow);
+}
+
+.calendar-day-time {
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 0.65rem;
+    font-weight: 500;
+    font-style: normal;
+    color: var(--ww-ink-muted);
 }
 
 .map-icon {
@@ -1258,6 +1284,12 @@ body.is-contact-sheet-open {
         -webkit-box-direction: normal;
         -ms-flex-direction: column;
         flex-direction: column;
+    }
+
+    .countdown-unit-value {
+        width: 45px;
+        height: 45px;
+        font-size: 0.9rem;
     }
 }
 
