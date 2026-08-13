@@ -53,6 +53,6 @@ test("index.html gives each gallery slide a blurred backdrop image and a contain
     const backdropMatches = html.match(/class="gallery-main-slide-backdrop"/g) || [];
     const photoMatches = html.match(/class="gallery-main-slide-photo"/g) || [];
 
-    assert.equal(backdropMatches.length, 20);
-    assert.equal(photoMatches.length, 20);
+    assert.equal(backdropMatches.length, 35);
+    assert.equal(photoMatches.length, 35);
 });
