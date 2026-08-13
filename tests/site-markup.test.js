@@ -157,7 +157,7 @@ test("index.html adds detailed transit info to the map section", () => {
 
 test("index.html fills in the parking policy without leaving OO placeholders", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
-    const transitSection = html.slice(html.indexOf('class="transit-info"'), html.indexOf('class="ww-section bg-light" id="account-info"'));
+    const transitSection = html.slice(html.indexOf('class="transit-info"'), html.indexOf('class="ww-section" id="account-info"'));
 
     assert.doesNotMatch(transitSection, /OO/);
     assert.match(transitSection, /지하 4층~지상 1층/);
