@@ -190,6 +190,24 @@ test("index.html adds a full-bleed farewell section after the account section", 
         "expected the closing section after the account-info section");
 });
 
+test("index.html mounts the petal-fall canvas inside frame-overlay and loads the script", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.match(html, /<div class="frame-overlay">\s*<canvas id="petal-fall-canvas"/);
+    assert.match(html, /<script src="scripts\/petal-fall\.js"><\/script>/);
+
+    const petalScriptIndex = html.indexOf("scripts/petal-fall.js");
+    const mainJsIndex = html.indexOf("scripts/main.js");
+    assert.ok(petalScriptIndex !== -1 && mainJsIndex !== -1 && petalScriptIndex < mainJsIndex,
+        "expected petal-fall.js before main.js");
+});
+
+test("index.html no longer renders countdown separator spans", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.doesNotMatch(html, /countdown-sep/);
+});
+
 test("index.html wires up Kakao share buttons and loads the Kakao JS SDK", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 

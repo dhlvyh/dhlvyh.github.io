@@ -25,7 +25,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (window.WeddingUtils) {
         const countdown = window.WeddingUtils.buildCountdown(WEDDING_DATE);
         const weeks = window.WeddingUtils.buildCalendarWeeks(WEDDING_YEAR, WEDDING_MONTH_INDEX);
-        const calendarMarkup = window.WeddingUtils.buildCalendarMarkup(weeks, WEDDING_DAY);
+        const weddingTimeLabel = window.WeddingUtils.formatKoreanTime(WEDDING_DATETIME_ISO);
+        const calendarMarkup = window.WeddingUtils.buildCalendarMarkup(weeks, WEDDING_DAY, weddingTimeLabel);
 
         setText("#wedding-countdown-copy", countdown.copy);
 
@@ -33,6 +34,10 @@ document.addEventListener("DOMContentLoaded", function () {
         if (grid) {
             grid.innerHTML = calendarMarkup;
         }
+    }
+
+    if (window.PetalFall) {
+        window.PetalFall.init();
     }
 
     initCountdownTicker();

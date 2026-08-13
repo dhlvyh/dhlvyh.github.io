@@ -156,17 +156,14 @@
                                     <span class="countdown-unit-value" data-countdown-days>00</span>
                                     <span class="countdown-unit-label">DAYS</span>
                                 </div>
-                                <span class="countdown-sep" aria-hidden="true">:</span>
                                 <div class="countdown-unit">
                                     <span class="countdown-unit-value" data-countdown-hours>00</span>
                                     <span class="countdown-unit-label">HOUR</span>
                                 </div>
-                                <span class="countdown-sep" aria-hidden="true">:</span>
                                 <div class="countdown-unit">
                                     <span class="countdown-unit-value" data-countdown-minutes>00</span>
                                     <span class="countdown-unit-label">MIN</span>
                                 </div>
-                                <span class="countdown-sep" aria-hidden="true">:</span>
                                 <div class="countdown-unit">
                                     <span class="countdown-unit-value" data-countdown-seconds>00</span>
                                     <span class="countdown-unit-label">SEC</span>
@@ -633,9 +630,12 @@
 <script src="scripts/gallery-viewer.js"></script>
 <script src="scripts/account-utils.js"></script>
 <script src="scripts/account-info.js"></script>
+<script src="scripts/petal-fall.js"></script>
 <script src="scripts/main.js"></script>
 
 <div class="frame-overlay">
+    <canvas id="petal-fall-canvas" aria-hidden="true"></canvas>
+
     <button aria-controls="nav-drawer" aria-expanded="false" aria-label="메뉴 열기" class="nav-drawer-open" id="nav-drawer-open" type="button">
         <span class="nav-drawer-open-bar"></span>
         <span class="nav-drawer-open-bar"></span>
