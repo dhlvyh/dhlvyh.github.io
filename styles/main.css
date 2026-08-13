@@ -1192,6 +1192,7 @@ body.is-contact-sheet-open {
    고정 크기 배지를 숫자 뒤에 겹쳐 그려 옆 날짜를 침범하지 않게 한다 */
 .calendar-day.is-wedding-day {
     position: relative;
+    z-index: 0;
     color: #fff;
 }
 
