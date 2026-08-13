@@ -117,7 +117,7 @@
         return weeks;
     }
 
-    function buildCalendarMarkup(weeks, weddingDay) {
+    function buildCalendarMarkup(weeks, weddingDay, weddingTimeLabel) {
         return weeks.flat().map(function (day) {
             const classes = ["calendar-day"];
             let content = "&nbsp;";
@@ -129,6 +129,10 @@
 
                 if (day === weddingDay) {
                     classes.push("is-wedding-day");
+
+                    if (weddingTimeLabel) {
+                        content += '<em class="calendar-day-time">' + weddingTimeLabel + "</em>";
+                    }
                 }
             }
 
@@ -136,11 +140,37 @@
         }).join("");
     }
 
+    function formatKoreanTime(isoDateTime) {
+        const match = /T(\d{2}):(\d{2})/.exec(isoDateTime);
+
+        if (!match) {
+            throw new Error("Invalid ISO datetime: " + isoDateTime);
+        }
+
+        const hours24 = Number(match[1]);
+        const minutes = Number(match[2]);
+        const period = hours24 < 12 ? "오전" : "오후";
+        let hours12 = hours24 % 12;
+
+        if (hours12 === 0) {
+            hours12 = 12;
+        }
+
+        let label = period + " " + hours12 + "시";
+
+        if (minutes > 0) {
+            label += " " + minutes + "분";
+        }
+
+        return label;
+    }
+
     return {
         buildCountdown,
         buildCountdownParts,
         buildElapsedParts,
         buildCalendarWeeks,
-        buildCalendarMarkup
+        buildCalendarMarkup,
+        formatKoreanTime
     };
 }));
