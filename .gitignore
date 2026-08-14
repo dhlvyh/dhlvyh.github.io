@@ -11,3 +11,8 @@ node_modules/
 *.md
 /*.png
 /*.yml
+
+# 원본 사진은 `npm run images`의 입력일 뿐 사이트가 직접 서빙하지 않는다.
+# 400MB나 되고 GitHub Pages 게시 용량(1GB) 을 잡아먹어서 추적하지 않는다.
+# 배포되는 건 images/opt, images/gallery 의 변환 결과물뿐이다.
+images/*.jpg
