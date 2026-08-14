@@ -220,3 +220,31 @@ test("index.html wires up Kakao share buttons and loads the Kakao JS SDK", () =>
     assert.ok(sdkIndex !== -1 && mainJsIndex !== -1 && sdkIndex < mainJsIndex,
         "expected the Kakao SDK script before main.js");
 });
+
+test("index.html adds a greeting section between the hero and the couple section", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.match(html, /class="ww-section" id="greeting"/);
+    assert.match(html, /소중한 분들을 초대합니다/);
+    assert.match(html, /두 사람이 만나 사랑을 배우고/);
+
+    const homeIndex = html.indexOf('id="home"');
+    const greetingIndex = html.indexOf('id="greeting"');
+    const coupleIndex = html.indexOf('id="couple"');
+
+    assert.ok(homeIndex !== -1 && greetingIndex !== -1 && coupleIndex !== -1,
+        "expected home, greeting, and couple sections to all exist");
+    assert.ok(homeIndex < greetingIndex && greetingIndex < coupleIndex,
+        "expected greeting section between hero and couple section");
+});
+
+test("index.html removes the duplicate invitation copy from the events section", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.doesNotMatch(html, /class="event-title"/);
+    assert.doesNotMatch(html, /class="event-copy"/);
+    assert.doesNotMatch(html, /안용현, 안다혜의 결혼식에 초대합니다/);
+
+    assert.match(html, /class="event-meta"/);
+    assert.match(html, /class="event-venue-preview"/);
+});

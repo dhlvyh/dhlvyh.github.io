@@ -805,6 +805,13 @@ body.is-contact-sheet-open {
     line-height: 2.1;
 }
 
+.greeting-message {
+    max-width: 480px;
+    margin: 0 auto;
+    color: var(--ww-ink-muted);
+    line-height: 2.1;
+}
+
 .event-section-lead {
     max-width: 480px;
     margin: 0 auto;
