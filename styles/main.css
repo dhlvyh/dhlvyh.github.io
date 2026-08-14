@@ -72,19 +72,10 @@ body {
 .ww-home-page {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("../images/opt/main-background.webp") no-repeat center center;
-    background-size: cover;
-    background-position: 50%;
+    background: linear-gradient(180deg, var(--ww-paper) 0%, var(--ww-accent-soft) 100%);
     height: 100vh;
     height: 100svh;
     min-height: 480px;
-}
-
-.ww-home-page:before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-color: rgba(176, 141, 87, 0.15);
 }
 
 .hero-content {
@@ -98,8 +89,7 @@ body {
     gap: 1.5rem;
     padding: 2rem 1.5rem;
     text-align: center;
-    color: #fff;
-    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
+    color: var(--ww-ink);
 }
 
 .hero-names {
@@ -120,7 +110,7 @@ body {
     font-size: 0.85rem;
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    opacity: 0.85;
+    color: var(--ww-ink-muted);
 }
 
 .hero-name-value {
@@ -131,15 +121,15 @@ body {
 .hero-name-divider {
     width: 1px;
     height: 44px;
-    background: rgba(255, 255, 255, 0.5);
+    background: var(--ww-card-border);
 }
 
 .hero-photo-frame {
     width: min(78%, 320px);
     padding: 0.5rem;
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.14);
-    box-shadow: 0 18px 40px rgba(20, 15, 12, 0.28);
+    background: var(--ww-card-bg);
+    box-shadow: var(--ww-card-shadow);
 }
 
 .hero-photo {
