@@ -838,8 +838,21 @@ body.is-contact-sheet-open {
     box-shadow: var(--ww-card-shadow);
 }
 
-.event-card-copy {
+/* 홀 사진이 카드 헤더라 패딩을 걷고, 라운드 모서리로 사진을 클리핑한다.
+   본문 패딩은 .event-card-body가 대신 맡는다.
+
+   클래스를 둘 다 쓴 건 아래 @media (max-width: 768px)의 `.event-card`가
+   같은 명시도로 더 뒤에 있어서, 한 클래스로는 패딩이 되살아나기 때문이다. */
+.event-card.event-card-copy {
+    padding: 0;
+    overflow: hidden;
     background: var(--ww-card-bg);
+}
+
+/* 좌우 패딩은 옆 달력 카드(.event-card)와 같은 값을 써야 두 카드의
+   본문 시작선이 맞는다. 아래 미디어쿼리에서 함께 줄인다. */
+.event-card-body {
+    padding: 1.5rem 2rem 2rem;
 }
 
 .event-card-calendar {
@@ -870,19 +883,12 @@ body.is-contact-sheet-open {
     line-height: 1.9;
 }
 
-.event-venue-preview {
-    padding: 1rem;
-    border-radius: 14px;
-    background: var(--ww-paper);
-    border: 1px solid var(--ww-card-border);
-}
-
+/* aspect-ratio를 CSS로 고정해 이미지가 로드되기 전에도 자리를 잡는다(CLS 0 유지) */
 .event-venue-image {
     display: block;
     width: 100%;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: var(--ww-card-shadow);
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
 }
 
 .event-venue-note {
@@ -1322,6 +1328,10 @@ body.is-contact-sheet-open {
 
     .event-card {
         padding: 1.5rem;
+    }
+
+    .event-card-body {
+        padding: 1.25rem 1.5rem 1.5rem;
     }
 
     .countdown-header {
