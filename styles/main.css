@@ -71,6 +71,8 @@ body {
 /* Home Page Style */
 .ww-home-page {
     position: relative;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
     background: linear-gradient(180deg, var(--ww-paper) 0%, var(--ww-accent-soft) 100%);
     height: 100vh;
@@ -78,71 +80,43 @@ body {
     min-height: 480px;
 }
 
-.hero-content {
+.hero-photo-full {
     position: relative;
-    z-index: 3;
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
-    padding: 2rem 1.5rem;
-    text-align: center;
-    color: var(--ww-ink);
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
 }
 
-.hero-names {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-}
-
-.hero-name {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.35rem;
-}
-
-.hero-name-role {
-    font-family: "Cormorant Garamond", serif;
-    font-size: 0.85rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--ww-ink-muted);
-}
-
-.hero-name-value {
-    font-size: 1.9rem;
-    letter-spacing: 0.08em;
-}
-
-.hero-name-divider {
-    width: 1px;
-    height: 44px;
-    background: var(--ww-card-border);
-}
-
-.hero-photo-frame {
-    width: min(78%, 320px);
-    padding: 0.5rem;
-    border-radius: 18px;
-    background: var(--ww-card-bg);
-    box-shadow: var(--ww-card-shadow);
-}
-
-.hero-photo {
+.hero-photo-full .hero-photo {
+    position: absolute;
+    inset: 0;
     display: block;
     width: 100%;
-    height: auto;
-    border-radius: 14px;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-photo-full:after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 40%;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.45) 100%);
+    pointer-events: none;
 }
 
 .hero-eyebrow {
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    bottom: 1.75rem;
+    left: 0;
     margin: 0;
+    color: #fff;
     font-size: 1.05rem;
     letter-spacing: 4px;
+    text-align: center;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
 }
 
 /* 목차 드로어 — sticky 네비바가 모바일 화면을 잡아먹어 우측 드로어로 교체했다 */
@@ -579,10 +553,13 @@ body.is-drawer-open {
 }
 
 .hero-date {
-    margin-top: 2rem;
+    margin: 0;
+    padding: 1.75rem 1.5rem 2rem;
+    color: var(--ww-ink);
     font-size: 1rem;
     line-height: 1.9;
     letter-spacing: 0;
+    text-align: center;
 }
 
 .hero-date b {
