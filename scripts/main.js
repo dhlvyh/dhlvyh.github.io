@@ -145,11 +145,15 @@ function initTogetherOdometer() {
         return;
     }
 
+    // data-odometer-length가 있으면 그 자릿수로 0을 채우고, 없으면 앞자리 0
+    // 없이 값 그대로 쓴다("03년 044일" -> "3년 44일").
     const groups = Array.from(document.querySelectorAll("[data-odometer-role]")).map(function (container) {
+        const length = Number(container.dataset.odometerLength || 0);
+
         return {
             container,
             role: container.dataset.odometerRole,
-            length: Number(container.dataset.odometerLength || 2)
+            length
         };
     });
 
@@ -158,16 +162,25 @@ function initTogetherOdometer() {
     }
 
     groups.forEach(function (group) {
-        group.container.innerHTML = window.Odometer.buildOdometerMarkup(group.length);
+        group.container.innerHTML = window.Odometer.buildOdometerMarkup(group.length || 1);
     });
 
     function tick() {
         const parts = window.WeddingUtils.buildElapsedParts(RELATIONSHIP_START_ISO);
 
         groups.forEach(function (group) {
-            const value = parts[group.role];
-            const padded = window.Odometer.padNumber(value == null ? 0 : value, group.length);
-            window.Odometer.updateOdometerCells(group.container, padded);
+            const value = parts[group.role] == null ? 0 : parts[group.role];
+            const digits = group.length > 0
+                ? window.Odometer.padNumber(value, group.length)
+                : window.Odometer.trimNumber(value);
+
+            // 패딩을 안 쓰는 자리는 자릿수가 변할 수 있다(9일 -> 10일).
+            // 그때만 릴을 다시 만든다.
+            if (group.container.childElementCount !== digits.length) {
+                group.container.innerHTML = window.Odometer.buildOdometerMarkup(digits.length);
+            }
+
+            window.Odometer.updateOdometerCells(group.container, digits);
         });
     }
 

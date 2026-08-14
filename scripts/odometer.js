@@ -14,6 +14,13 @@
         return String(Math.max(0, Math.trunc(value))).padStart(length, "0");
     }
 
+    // 앞자리 0 없이 자연스러운 자릿수로만 쓴다. 년/일처럼 "03년 044일"이
+    // 어색한 자리에 쓰고, 시/분/초는 시간 표기 관례대로 padNumber를 유지한다
+    // (초까지 0을 빼면 9->10초마다 자릿수가 늘어 줄 전체가 밀린다).
+    function trimNumber(value) {
+        return String(Math.max(0, Math.trunc(value)));
+    }
+
     function buildReelMarkup() {
         let digits = "";
 
@@ -51,5 +58,5 @@
         });
     }
 
-    return {padNumber, buildOdometerMarkup, updateOdometerCells};
+    return {padNumber, trimNumber, buildOdometerMarkup, updateOdometerCells};
 }));

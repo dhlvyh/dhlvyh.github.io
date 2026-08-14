@@ -1,7 +1,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const {padNumber, buildOdometerMarkup, updateOdometerCells} = require("../scripts/odometer");
+const {padNumber, trimNumber, buildOdometerMarkup, updateOdometerCells} = require("../scripts/odometer");
 
 test("padNumber pads with leading zeros to the requested length", () => {
     assert.equal(padNumber(5, 2), "05");
@@ -45,4 +45,16 @@ test("updateOdometerCells sets the --n custom property on each digit's reel from
 
 test("updateOdometerCells is a no-op when the container is missing", () => {
     assert.doesNotThrow(() => updateOdometerCells(null, "255"));
+});
+
+test("trimNumber drops leading zeros so 년/일이 \"03\"/\"044\"로 안 나온다", () => {
+    assert.equal(trimNumber(3), "3");
+    assert.equal(trimNumber(44), "44");
+    assert.equal(trimNumber(0), "0");
+    assert.equal(trimNumber(365), "365");
+});
+
+test("trimNumber clamps negatives and truncates fractions like padNumber", () => {
+    assert.equal(trimNumber(-5), "0");
+    assert.equal(trimNumber(7.9), "7");
 });
