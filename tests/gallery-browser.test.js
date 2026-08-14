@@ -6,8 +6,25 @@ const { spawn } = require("node:child_process");
 const PORT = 4173;
 let serverProcess = null;
 
-test.before(async () => {
-    serverProcess = spawn(process.env.PYTHON_BIN, ["-m", "http.server", String(PORT)], {
+// playwright는 devDependency가 아니라 선택 설치다(브라우저 바이너리가 무거워서).
+// 없으면 이 파일 전체를 건너뛴다 — 예전에는 PYTHON_BIN=undefined로 spawn하다
+// before 훅에서 5건이 통째로 실패해서 `npm test`가 늘 빨간불이었다.
+const hasPlaywright = (() => {
+    try {
+        require.resolve("playwright");
+        return true;
+    } catch {
+        return false;
+    }
+})();
+
+test.before(async (t) => {
+    if (!hasPlaywright) {
+        return;
+    }
+
+    // 파이썬 대신 이 저장소의 개발 서버를 쓴다. 별도 준비물이 없다.
+    serverProcess = spawn(process.execPath, ["tools/dev-server.mjs", "--port", String(PORT)], {
         cwd: path.resolve(__dirname, ".."),
         stdio: "ignore"
     });
@@ -34,7 +51,7 @@ async function launch() {
     return {browser, page};
 }
 
-test("gallery main track drag advances to the next slide and snaps into place", async () => {
+test("gallery main track drag advances to the next slide and snaps into place", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
     const {browser, page} = await launch();
 
     const viewport = page.locator("#gallery-main-viewport");
@@ -59,7 +76,7 @@ test("gallery main track drag advances to the next slide and snaps into place", 
     await browser.close();
 });
 
-test("clicking a thumbnail jumps the main track to the matching slide without drift", async () => {
+test("clicking a thumbnail jumps the main track to the matching slide without drift", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
     const {browser, page} = await launch();
 
     const viewport = page.locator("#gallery-main-viewport");
@@ -79,7 +96,7 @@ test("clicking a thumbnail jumps the main track to the matching slide without dr
     await browser.close();
 });
 
-test("gallery main nav buttons step through slides and clamp at the last one", async () => {
+test("gallery main nav buttons step through slides and clamp at the last one", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
     const {browser, page} = await launch();
 
     const slideCount = await page.locator("[data-gallery-slide-index]").count();
@@ -106,7 +123,7 @@ test("gallery main nav buttons step through slides and clamp at the last one", a
     await browser.close();
 });
 
-test("main track stays aligned to the active slide after a viewport resize", async () => {
+test("main track stays aligned to the active slide after a viewport resize", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
     const {browser, page} = await launch();
 
     await page.locator('[data-gallery-thumb-index="5"]').click();
@@ -125,7 +142,7 @@ test("main track stays aligned to the active slide after a viewport resize", asy
     await browser.close();
 });
 
-test("swiping the main track updates the active thumbnail to match", async () => {
+test("swiping the main track updates the active thumbnail to match", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
     const {browser, page} = await launch();
 
     await page.locator('[data-gallery-thumb-index="3"]').click();

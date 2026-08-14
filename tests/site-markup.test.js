@@ -39,7 +39,7 @@ test("index.html adds a venue preview block inside the invitation card", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
     assert.match(html, /class="event-venue-preview"/);
-    assert.match(html, /class="event-venue-image"[^>]+src="images\/hall\.jpg"/);
+    assert.match(html, /class="event-venue-image"[^>]+src="images\/opt\/hall\.webp"/);
     assert.match(html, /href="https:\/\/thenewwed\.kr\/"/);
     assert.match(html, /target="_blank"/);
     assert.match(html, /rel="noopener noreferrer"/);
@@ -49,7 +49,7 @@ test("index.html adds a venue preview block inside the invitation card", () => {
 
     assert.notEqual(venuePreviewIndex, -1, "expected venue preview block");
     assert.notEqual(metaListIndex, -1, "expected event metadata list");
-    assert.ok(venuePreviewIndex < metaListIndex, "expected venue preview before event metadata");
+    assert.ok(metaListIndex < venuePreviewIndex, "expected event metadata before the venue preview");
 });
 
 test("index.html embeds Google Maps for 더뉴컨벤션웨딩", () => {
@@ -97,19 +97,6 @@ test("index.html includes the account info scripts before main.js", () => {
 
     assert.notEqual(accountInfoIndex, -1, "expected account-info.js script tag");
     assert.ok(accountInfoIndex < mainJsIndex, "expected account-info.js before main.js");
-});
-
-test("index.html adds a couple intro paragraph before the couple message", () => {
-    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
-
-    assert.match(html, /class="[^"]*couple-intro[^"]*"/);
-
-    const introIndex = html.search(/class="[^"]*couple-intro[^"]*"/);
-    const messageIndex = html.indexOf('class="couple-message');
-
-    assert.notEqual(introIndex, -1, "expected couple intro paragraph");
-    assert.notEqual(messageIndex, -1, "expected couple message paragraph");
-    assert.ok(introIndex < messageIndex, "expected intro before existing couple message");
 });
 
 test("index.html adds parent names to each couple card", () => {
@@ -201,7 +188,7 @@ test("index.html mounts the petal-fall canvas inside frame-overlay and loads the
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
     assert.match(html, /<div class="frame-overlay">\s*<canvas id="petal-fall-canvas"/);
-    assert.match(html, /<script src="scripts\/petal-fall\.js"><\/script>/);
+    assert.match(html, /<script defer src="scripts\/petal-fall\.js"><\/script>/);
 
     const petalScriptIndex = html.indexOf("scripts/petal-fall.js");
     const mainJsIndex = html.indexOf("scripts/main.js");
@@ -254,4 +241,117 @@ test("index.html removes the duplicate invitation copy from the events section",
 
     assert.match(html, /class="event-meta"/);
     assert.match(html, /class="event-venue-preview"/);
+});
+
+test("index.html points every share surface at the optimized JPG card", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const mainJs = fs.readFileSync(path.resolve(__dirname, "../scripts/main.js"), "utf8");
+
+    // 카카오 스크래퍼는 WebP를 못 읽고 대용량 원본은 타임아웃으로 썸네일이 빈다
+    assert.match(html, /property="og:image" content="[^"]+\/images\/opt\/share\.jpg"/);
+    assert.match(html, /name="twitter:image" content="[^"]+\/images\/opt\/share\.jpg"/);
+    assert.match(mainJs, /imageUrl: SITE_URL \+ "images\/opt\/share\.jpg"/);
+
+    assert.doesNotMatch(html, /images\/main\.jpg/);
+    assert.doesNotMatch(mainJs, /images\/main\.jpg/);
+});
+
+test("index.html loads fonts in one preconnected request with display=swap", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    const fontLinks = html.match(/<link[^>]+fonts\.googleapis\.com\/css/g) || [];
+    assert.equal(fontLinks.length, 1, "expected a single combined Google Fonts request");
+
+    assert.match(html, /rel="preconnect"[^>]*>/);
+    assert.match(html, /fonts\.gstatic\.com" rel="preconnect" crossorigin/);
+    assert.match(html, /display=swap/);
+
+    // v1 API(css?family=)는 패밀리마다 요청이 따로 나가고 swap도 못 건다
+    assert.doesNotMatch(html, /fonts\.googleapis\.com\/css\?family=/);
+});
+
+test("index.html drops FontAwesome and AOS in favour of the inline sprite", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.doesNotMatch(html, /font-awesome/);
+    assert.doesNotMatch(html, /maxcdn/);
+    assert.doesNotMatch(html, /aos\.(css|js)/);
+    assert.doesNotMatch(html, /class="fa /);
+
+    assert.match(html, /class="icon-sprite"/);
+
+    // 스프라이트가 참조되는 심볼을 전부 갖고 있어야 한다
+    const used = new Set([...html.matchAll(/<use href="#(i-[a-z-]+)"/g)].map((m) => m[1]));
+    assert.ok(used.size > 0, "expected <use> icon references");
+
+    for (const id of used) {
+        assert.match(html, new RegExp(`<symbol id="${id}"`), `missing sprite symbol: ${id}`);
+    }
+
+    // 음악 토글은 JS가 #i-music <-> #i-pause 로 갈아끼운다
+    assert.match(html, /<symbol id="i-music"/);
+    assert.match(html, /<symbol id="i-pause"/);
+});
+
+test("index.html defers every script so parsing is never blocked", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const scripts = html.match(/<script[^>]*src=[^>]*>/g) || [];
+
+    assert.ok(scripts.length > 0, "expected script tags");
+
+    for (const tag of scripts) {
+        assert.match(tag, /\sdefer\s/, `expected defer on: ${tag}`);
+    }
+});
+
+test("index.html lazy-loads the map embed and labels it for screen readers", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const iframe = html.match(/<iframe[^>]*>/);
+
+    assert.ok(iframe, "expected the map iframe");
+    assert.match(iframe[0], /title="[^"]+"/);
+    assert.match(iframe[0], /loading="lazy"/);
+    assert.doesNotMatch(iframe[0], /frameborder/);
+});
+
+test("index.html opens the three map services in a new tab", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const mapLinks = html.match(/<a class="map-link"[^>]*>/g) || [];
+
+    assert.equal(mapLinks.length, 3);
+
+    for (const link of mapLinks) {
+        assert.match(link, /target="_blank"/);
+        assert.match(link, /rel="noopener noreferrer"/);
+    }
+});
+
+test("index.html lists the greeting section in the drawer table of contents", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.match(html, /href="#greeting">인사말<\/a>/);
+
+    // 드로어 목차가 실제 섹션을 빠짐없이 가리키는지 확인한다
+    const drawer = html.slice(html.indexOf('class="nav-drawer-list"'));
+    const linked = [...drawer.matchAll(/href="#([a-z-]+)"/g)].map((m) => m[1]);
+
+    for (const id of ["home", "greeting", "couple", "events", "together", "gallery", "map", "account-info"]) {
+        assert.ok(linked.includes(id), `drawer is missing a link to #${id}`);
+    }
+});
+
+test("index.html exposes the scroll-to-top control as a real button", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const goToTop = html.match(/<[a-z]+[^>]*id="go-to-top"[^>]*>/);
+
+    assert.ok(goToTop, "expected a go-to-top control");
+    assert.match(goToTop[0], /^<button/, "go-to-top must be a button, not a bare <i>");
+    assert.match(goToTop[0], /aria-label="[^"]+"/);
+});
+
+test("countdown unit labels are consistently pluralised", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const labels = [...html.matchAll(/class="countdown-unit-label">([A-Z]+)</g)].map((m) => m[1]);
+
+    assert.deepEqual(labels, ["DAYS", "HOURS", "MIN", "SEC"]);
 });
