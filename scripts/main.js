@@ -44,15 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
     initCountdownTicker();
     initTogetherOdometer();
 
-    if (window.GalleryViewer) {
-        window.GalleryViewer.initGallery({
-            viewportSelector: "#gallery-main-viewport",
-            trackSelector: "#gallery-main-track",
-            thumbGridSelector: "#gallery-thumb-grid",
-            prevSelector: "#gallery-main-prev",
-            nextSelector: "#gallery-main-next"
-        });
-    }
+    loadGallery();
 
     if (window.AccountInfo) {
         window.AccountInfo.initAccountInfo({
@@ -146,6 +138,39 @@ function initTogetherOdometer() {
 
     tick();
     window.setInterval(tick, 1000);
+}
+
+function loadGallery() {
+    if (!window.GalleryLoader || !window.GalleryViewer) {
+        return;
+    }
+
+    fetch("images/gallery/manifest.json")
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (manifest) {
+            const track = document.querySelector("#gallery-main-track");
+            const thumbGrid = document.querySelector("#gallery-thumb-grid");
+
+            if (!track || !thumbGrid || !Array.isArray(manifest) || manifest.length === 0) {
+                return;
+            }
+
+            track.innerHTML = window.GalleryLoader.buildGallerySlidesMarkup(manifest);
+            thumbGrid.innerHTML = window.GalleryLoader.buildGalleryThumbsMarkup(manifest);
+
+            window.GalleryViewer.initGallery({
+                viewportSelector: "#gallery-main-viewport",
+                trackSelector: "#gallery-main-track",
+                thumbGridSelector: "#gallery-thumb-grid",
+                prevSelector: "#gallery-main-prev",
+                nextSelector: "#gallery-main-next"
+            });
+        })
+        .catch(function () {
+            // 매니페스트를 불러오지 못해도 나머지 페이지 기능은 그대로 동작해야 한다
+        });
 }
 
 function initNavDrawer() {

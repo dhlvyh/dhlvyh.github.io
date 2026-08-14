@@ -3,19 +3,20 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 
-test("index.html exposes the full-bleed main viewer and thumbnail grid mounts", () => {
+test("index.html exposes the full-bleed main viewer and thumbnail grid mounts, populated at runtime", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
     assert.match(html, /id="gallery-main-viewport"/);
-    assert.match(html, /id="gallery-main-track"/);
-    assert.match(html, /id="gallery-thumb-grid"/);
     assert.match(html, /id="gallery-main-prev"/);
     assert.match(html, /id="gallery-main-next"/);
 
-    const slideMatches = html.match(/data-gallery-slide-index="\d+"/g) || [];
-    const thumbMatches = html.match(/data-gallery-thumb-index="\d+"/g) || [];
-    assert.equal(slideMatches.length, 40);
-    assert.equal(thumbMatches.length, 40);
+    // 슬라이드/썸네일은 더 이상 정적 마크업이 아니라 gallery-loader.js가
+    // images/gallery/manifest.json을 읽어 런타임에 채운다 (사진 개수가 바뀌어도
+    // index.html을 다시 손댈 필요가 없도록).
+    assert.match(html, /<div aria-label="웨딩 사진 갤러리" class="gallery-main-track" id="gallery-main-track"><\/div>/);
+    assert.match(html, /<div aria-label="갤러리 사진 목록"[^>]+id="gallery-thumb-grid"><\/div>/);
+    assert.doesNotMatch(html, /data-gallery-slide-index="\d+"/);
+    assert.doesNotMatch(html, /data-gallery-thumb-index="\d+"/);
 
     assert.doesNotMatch(html, /id="gallery-viewer"/);
     assert.doesNotMatch(html, /class="gallery-pager"/);
@@ -26,6 +27,12 @@ test("index.html includes the gallery helper scripts before main.js", () => {
 
     assert.match(html, /scripts\/gallery-utils\.js/);
     assert.match(html, /scripts\/gallery-viewer\.js/);
+    assert.match(html, /scripts\/gallery-loader\.js/);
+
+    const loaderIndex = html.indexOf("scripts/gallery-loader.js");
+    const mainJsIndex = html.indexOf("scripts/main.js");
+    assert.ok(loaderIndex !== -1 && mainJsIndex !== -1 && loaderIndex < mainJsIndex,
+        "expected gallery-loader.js before main.js");
 });
 
 test("index.html adds a venue preview block inside the invitation card", () => {

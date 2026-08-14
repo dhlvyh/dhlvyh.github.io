@@ -47,12 +47,16 @@ test("index.html wraps the gallery in a full-bleed main viewer with a 5-column t
         "expected the thumbnail grid after the main viewer");
 });
 
-test("index.html gives each gallery slide a blurred backdrop image and a contain-fit photo", () => {
-    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+test("gallery-loader builds each slide with a blurred backdrop image and a contain-fit photo", () => {
+    const {buildGallerySlidesMarkup} = require("../scripts/gallery-loader");
+    const markup = buildGallerySlidesMarkup([
+        {main: "images/gallery/main/1.webp", thumb: "images/gallery/thumb/1.webp"},
+        {main: "images/gallery/main/2.webp", thumb: "images/gallery/thumb/2.webp"}
+    ]);
 
-    const backdropMatches = html.match(/class="gallery-main-slide-backdrop"/g) || [];
-    const photoMatches = html.match(/class="gallery-main-slide-photo"/g) || [];
+    const backdropMatches = markup.match(/class="gallery-main-slide-backdrop"/g) || [];
+    const photoMatches = markup.match(/class="gallery-main-slide-photo"/g) || [];
 
-    assert.equal(backdropMatches.length, 40);
-    assert.equal(photoMatches.length, 40);
+    assert.equal(backdropMatches.length, 2);
+    assert.equal(photoMatches.length, 2);
 });

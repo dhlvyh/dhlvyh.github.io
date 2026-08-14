@@ -18,7 +18,7 @@ const VARIANTS = [
     { name: "thumb", width: 380, quality: 78 }
 ];
 
-const GALLERY_COUNT = 40;
+const GALLERY_PATTERN = /^gallery(\d+)\.jpg$/i;
 
 // 갤러리 외 단일 이미지. 카드/배경 안에서만 쓰이므로 1024면 충분하다.
 const SINGLES = [
@@ -29,6 +29,16 @@ const SINGLES = [
     { source: "person1.jpg", out: "person1.webp", width: 1024, quality: 82 },
     { source: "person2.jpg", out: "person2.webp", width: 1024, quality: 82 }
 ];
+
+async function discoverGalleryIndices() {
+    const files = await readdir(SRC_DIR);
+
+    return files
+        .map((name) => name.match(GALLERY_PATTERN))
+        .filter(Boolean)
+        .map((match) => Number(match[1]))
+        .sort((a, b) => a - b);
+}
 
 async function convert(srcPath, outPath, { width, quality }) {
     await sharp(srcPath)
@@ -49,16 +59,12 @@ async function main() {
     let srcTotal = 0;
     let outTotal = 0;
 
-    for (let i = 1; i <= GALLERY_COUNT; i += 1) {
-        const srcPath = path.join(SRC_DIR, `gallery${i}.jpg`);
+    const galleryIndices = await discoverGalleryIndices();
 
-        let srcStat;
-        try {
-            srcStat = await stat(srcPath);
-        } catch {
-            console.warn(`  건너뜀 — gallery${i}.jpg 없음`);
-            continue;
-        }
+    for (const i of galleryIndices) {
+        const srcPath = path.join(SRC_DIR, `gallery${i}.jpg`);
+        const srcStat = await stat(srcPath);
+
         srcTotal += srcStat.size;
 
         const entry = { index: i, source: `gallery${i}.jpg` };
