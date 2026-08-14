@@ -14,8 +14,8 @@ test("index.html exposes the full-bleed main viewer and thumbnail grid mounts", 
 
     const slideMatches = html.match(/data-gallery-slide-index="\d+"/g) || [];
     const thumbMatches = html.match(/data-gallery-thumb-index="\d+"/g) || [];
-    assert.equal(slideMatches.length, 35);
-    assert.equal(thumbMatches.length, 35);
+    assert.equal(slideMatches.length, 40);
+    assert.equal(thumbMatches.length, 40);
 
     assert.doesNotMatch(html, /id="gallery-viewer"/);
     assert.doesNotMatch(html, /class="gallery-pager"/);

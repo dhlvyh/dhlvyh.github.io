@@ -18,7 +18,7 @@ const VARIANTS = [
     { name: "thumb", width: 380, quality: 78 }
 ];
 
-const GALLERY_COUNT = 35;
+const GALLERY_COUNT = 40;
 
 // 갤러리 외 단일 이미지. 카드/배경 안에서만 쓰이므로 1024면 충분하다.
 const SINGLES = [
