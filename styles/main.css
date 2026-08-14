@@ -1034,6 +1034,49 @@ body.is-contact-sheet-open {
     user-select: none;
 }
 
+/* 더보기 토글 — 사진이 30장을 넘을 때만 노출된다.
+   버튼 언어는 .couple-contact-open과 맞춘다 */
+.gallery-thumb-more {
+    display: flex;
+    justify-content: center;
+    padding: 1.25rem 15px 0;
+}
+
+.gallery-thumb-more[hidden] {
+    display: none;
+}
+
+.gallery-more-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0.7rem 1.75rem;
+    border: 1px solid var(--ww-card-border);
+    border-radius: 999px;
+    background: var(--ww-card-bg);
+    box-shadow: var(--ww-card-shadow);
+    color: var(--ww-accent);
+    font-family: "Noto Serif KR", serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: box-shadow 0.2s ease;
+}
+
+.gallery-more-button:hover,
+.gallery-more-button:focus-visible {
+    box-shadow: 0 8px 22px rgba(51, 48, 44, 0.1);
+}
+
+.gallery-more-icon {
+    transition: transform 0.2s ease;
+}
+
+.gallery-thumb-more.is-expanded .gallery-more-icon {
+    transform: rotate(180deg);
+}
+
 .gallery-thumb::after {
     content: "";
     position: absolute;
@@ -1609,7 +1652,8 @@ body.is-contact-sheet-open {
     .gallery-main-track.is-animating,
     .nav-drawer-panel,
     .contact-sheet-panel,
-    .account-accordion-icon {
+    .account-accordion-icon,
+    .gallery-more-icon {
         transition: none;
     }
 

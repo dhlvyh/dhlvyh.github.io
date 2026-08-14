@@ -195,12 +195,22 @@ function loadGallery() {
             track.innerHTML = window.GalleryLoader.buildGallerySlidesMarkup(manifest);
             thumbGrid.innerHTML = window.GalleryLoader.buildGalleryThumbsMarkup(manifest);
 
+            // 뷰어보다 먼저 초기화해야 첫 goToIndex(0)에서 이미 배선돼 있다
+            const collapse = window.GalleryCollapse
+                ? window.GalleryCollapse.initCollapse({
+                    gridSelector: "#gallery-thumb-grid",
+                    wrapperSelector: "#gallery-thumb-more",
+                    toggleSelector: "#gallery-thumb-toggle"
+                })
+                : null;
+
             window.GalleryViewer.initGallery({
                 viewportSelector: "#gallery-main-viewport",
                 trackSelector: "#gallery-main-track",
                 thumbGridSelector: "#gallery-thumb-grid",
                 prevSelector: "#gallery-main-prev",
-                nextSelector: "#gallery-main-next"
+                nextSelector: "#gallery-main-next",
+                onIndexChange: collapse ? collapse.ensureIndexVisible : null
             });
         })
         .catch(function () {

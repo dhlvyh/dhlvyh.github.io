@@ -355,3 +355,32 @@ test("countdown unit labels are consistently pluralised", () => {
 
     assert.deepEqual(labels, ["DAYS", "HOURS", "MIN", "SEC"]);
 });
+
+test("index.html mounts the thumbnail collapse toggle outside the grid", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.match(html, /id="gallery-thumb-more"[^>]*hidden/);
+    assert.match(html, /id="gallery-thumb-toggle"/);
+    assert.match(html, /aria-controls="gallery-thumb-grid"/);
+    assert.match(html, /data-collapse-label/);
+
+    // 토글이 그리드 안에 들어가면 gallery-viewer의 children 인덱스가 밀린다
+    const gridTag = html.match(/<div[^>]*id="gallery-thumb-grid"[^>]*><\/div>/);
+    assert.ok(gridTag, "expected the thumb grid to stay an empty container");
+
+    const gridEnd = html.indexOf(gridTag[0]) + gridTag[0].length;
+    const toggleIndex = html.indexOf('id="gallery-thumb-more"');
+    assert.ok(toggleIndex > gridEnd, "expected the toggle to sit after the grid, not inside it");
+});
+
+test("index.html loads gallery-collapse.js before main.js", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.match(html, /<script defer src="scripts\/gallery-collapse\.js"><\/script>/);
+
+    const collapseIndex = html.indexOf("scripts/gallery-collapse.js");
+    const mainJsIndex = html.indexOf("scripts/main.js");
+
+    assert.ok(collapseIndex !== -1 && collapseIndex < mainJsIndex,
+        "expected gallery-collapse.js before main.js");
+});

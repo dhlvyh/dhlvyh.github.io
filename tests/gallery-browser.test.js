@@ -164,3 +164,85 @@ test("swiping the main track updates the active thumbnail to match", {skip: hasP
 
     await browser.close();
 });
+
+test("thumbnail grid collapses past the limit and the toggle reveals the rest", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
+    const {browser, page} = await launch();
+
+    const total = await page.locator("[data-gallery-thumb-index]").count();
+    const limit = 30;
+
+    // 이 테스트는 사진이 한도를 넘는다는 전제 위에 있다
+    assert.ok(total > limit, `expected more than ${limit} photos, got ${total}`);
+
+    const visible = () => page.locator("[data-gallery-thumb-index]:visible").count();
+
+    assert.equal(await visible(), limit);
+    await assert.doesNotReject(page.locator("#gallery-thumb-more").waitFor({state: "visible"}));
+    assert.equal(
+        await page.locator("#gallery-thumb-toggle").getAttribute("aria-expanded"),
+        "false"
+    );
+    assert.match(
+        await page.locator("#gallery-thumb-toggle [data-collapse-label]").textContent(),
+        new RegExp(`더보기 \(${total - limit}장\)`)
+    );
+
+    await page.locator("#gallery-thumb-toggle").click();
+
+    assert.equal(await visible(), total);
+    assert.equal(
+        await page.locator("#gallery-thumb-toggle").getAttribute("aria-expanded"),
+        "true"
+    );
+    assert.equal(
+        (await page.locator("#gallery-thumb-toggle [data-collapse-label]").textContent()).trim(),
+        "접기"
+    );
+
+    await page.locator("#gallery-thumb-toggle").click();
+    assert.equal(await visible(), limit);
+
+    await browser.close();
+});
+
+test("swiping past the collapsed limit expands the grid automatically", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
+    const {browser, page} = await launch();
+
+    const limit = 30;
+
+    assert.equal(await page.locator("[data-gallery-thumb-index]:visible").count(), limit);
+
+    // 접힌 구간(35번)으로 이동시키면 활성 썸네일이 숨어 있으면 안 된다
+    await page.evaluate(() => {
+        for (let step = 0; step < 35; step += 1) {
+            document.querySelector("#gallery-main-next").click();
+        }
+    });
+    await page.waitForTimeout(400);
+
+    const active = page.locator(".gallery-thumb.is-active");
+    assert.equal(await active.getAttribute("data-gallery-thumb-index"), "35");
+    assert.ok(await active.isVisible(), "active thumbnail must not stay hidden");
+    assert.equal(
+        await page.locator("#gallery-thumb-toggle").getAttribute("aria-expanded"),
+        "true"
+    );
+
+    await browser.close();
+});
+
+test("collapsed thumbnails past the limit are never downloaded", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
+    const {browser, page} = await launch();
+
+    await page.locator("#gallery-thumb-more").waitFor({state: "visible"});
+    await page.waitForTimeout(1200);
+
+    // hidden은 display:none이라 loading=lazy 이미지가 요청되지 않는다
+    const requested = await page.evaluate(() => performance
+        .getEntriesByType("resource")
+        .filter((entry) => entry.name.includes("/gallery/thumb/")).length);
+
+    assert.ok(requested <= 30, `expected at most 30 thumb requests while collapsed, got ${requested}`);
+
+    await browser.close();
+});

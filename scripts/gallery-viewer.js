@@ -135,6 +135,11 @@
             activeIndex = window.GalleryUtils.clampIndex(index, length);
             setTrackPosition(activeIndex, 0, useTransition);
             updateActiveThumb();
+
+            // 썸네일이 접혀 있을 수 있다. 접힘 모듈이 필요하면 펼치도록 알린다.
+            if (typeof config.onIndexChange === "function") {
+                config.onIndexChange(activeIndex);
+            }
         }
 
         function getPoint(event) {
