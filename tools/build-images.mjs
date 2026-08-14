@@ -24,7 +24,6 @@ const GALLERY_PATTERN = /^gallery(\d+)\.jpg$/i;
 const SINGLES = [
     { source: "hall.jpg", out: "hall.webp", width: 1024, quality: 82 },
     { source: "end.jpg", out: "end.webp", width: 1024, quality: 82 },
-    { source: "main-background.jpg", out: "main-background.webp", width: 1024, quality: 82 },
     { source: "main.jpg", out: "main.webp", width: 1024, quality: 82 },
     { source: "person1.jpg", out: "person1.webp", width: 1024, quality: 82 },
     { source: "person2.jpg", out: "person2.webp", width: 1024, quality: 82 }
