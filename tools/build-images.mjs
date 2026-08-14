@@ -2,7 +2,7 @@
 //
 // 사용법: npm run images
 // 출력물은 images/gallery/main, images/gallery/thumb 에 생성된다.
-// 원본보다 최신인 결과물은 건너뛴다.
+// 실행할 때마다 기존 결과물을 덮어쓰고 다시 변환한다(원본 교체 후 재실행 용도).
 
 import { mkdir, readdir, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -20,20 +20,15 @@ const VARIANTS = [
 
 const GALLERY_COUNT = 35;
 
-// 갤러리 외 단일 이미지. 카드 안에서만 쓰이므로 1024면 충분하다.
+// 갤러리 외 단일 이미지. 카드/배경 안에서만 쓰이므로 1024면 충분하다.
 const SINGLES = [
     { source: "hall.jpg", out: "hall.webp", width: 1024, quality: 82 },
-    { source: "end.jpg", out: "end.webp", width: 1024, quality: 82 }
+    { source: "end.jpg", out: "end.webp", width: 1024, quality: 82 },
+    { source: "main-background.jpg", out: "main-background.webp", width: 1024, quality: 82 },
+    { source: "main.jpg", out: "main.webp", width: 1024, quality: 82 },
+    { source: "person1.jpg", out: "person1.webp", width: 1024, quality: 82 },
+    { source: "person2.jpg", out: "person2.webp", width: 1024, quality: 82 }
 ];
-
-async function isStale(srcPath, outPath) {
-    try {
-        const [src, out] = await Promise.all([stat(srcPath), stat(outPath)]);
-        return src.mtimeMs > out.mtimeMs;
-    } catch {
-        return true;
-    }
-}
 
 async function convert(srcPath, outPath, { width, quality }) {
     await sharp(srcPath)
@@ -53,7 +48,6 @@ async function main() {
     const manifest = [];
     let srcTotal = 0;
     let outTotal = 0;
-    let skipped = 0;
 
     for (let i = 1; i <= GALLERY_COUNT; i += 1) {
         const srcPath = path.join(SRC_DIR, `gallery${i}.jpg`);
@@ -73,12 +67,7 @@ async function main() {
             const outPath = path.join(OUT_DIR, variant.name, `${i}.webp`);
             const rel = path.relative(ROOT, outPath).replace(/\\/g, "/");
 
-            if (await isStale(srcPath, outPath)) {
-                outTotal += await convert(srcPath, outPath, variant);
-            } else {
-                outTotal += (await stat(outPath)).size;
-                skipped += 1;
-            }
+            outTotal += await convert(srcPath, outPath, variant);
             entry[variant.name] = rel;
         }
 
@@ -104,13 +93,7 @@ async function main() {
             continue;
         }
         srcTotal += srcStat.size;
-
-        if (await isStale(srcPath, outPath)) {
-            outTotal += await convert(srcPath, outPath, single);
-        } else {
-            outTotal += (await stat(outPath)).size;
-            skipped += 1;
-        }
+        outTotal += await convert(srcPath, outPath, single);
         console.log(`  ${single.source}  ${mb(srcStat.size)}`);
     }
 
@@ -123,9 +106,6 @@ async function main() {
     console.log("");
     console.log(`원본   ${mb(srcTotal)}`);
     console.log(`생성물 ${mb(outTotal)}  (${(srcTotal / outTotal).toFixed(1)}배 감소)`);
-    if (skipped > 0) {
-        console.log(`재사용 ${skipped}개 (원본이 바뀌지 않음)`);
-    }
 }
 
 function mb(bytes) {
