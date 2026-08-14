@@ -58,12 +58,21 @@ npm run images
 실행해야 한다.
 
 - `images/gallery/main/{번호}.webp` — 1280px, 메인 뷰어용
-- `images/gallery/thumb/{번호}.webp` — 380px, 썸네일 그리드용
+- `images/gallery/thumb/{번호}.webp` — 260px, 썸네일 그리드용
+  (5열 그리드라 표시 폭이 최대 86px뿐이다. DPR 3을 감안해도 260이면 충분하다)
 - `images/opt/hall.webp`, `end.webp`, `main.webp`, `person1.webp`, `person2.webp` — 1024px,
   예식장 카드·마지막 인사·히어로·인물 소개용
+- `images/opt/share.jpg` — 1200×630, 카카오톡/OG 공유 카드용
 - `images/gallery/manifest.json` — 변환된 갤러리 사진 목록(경로, 가로/세로 크기 포함)
 
 콘솔에 원본 대비 감소 배율이 출력되니 확인만 하면 된다.
+
+> 공유 카드만 WebP가 아니라 JPG다. 카카오톡 스크래퍼가 WebP를 읽지 못해서,
+> WebP로 두면 링크를 공유했을 때 썸네일이 통째로 비어버린다.
+
+원본 `images/*.jpg`는 이 스크립트의 입력일 뿐 사이트가 직접 서빙하지 않는다.
+용량이 400MB에 달해 git 추적에서 제외돼 있으니(`.gitignore`), 새로 클론한
+환경에서 사진을 다시 변환하려면 원본을 별도로 가져와야 한다.
 
 ### 3. 갤러리가 화면에 뿌려지는 방식
 

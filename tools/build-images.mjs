@@ -1,7 +1,7 @@
-// 원본 사진을 갤러리용 WebP 2단(메인 1280 / 썸네일 380)으로 변환하는 빌드 스크립트
+// 원본 사진을 갤러리용 WebP 2단(메인 1280 / 썸네일 260)으로 변환하는 빌드 스크립트
 //
 // 사용법: npm run images
-// 출력물은 images/gallery/main, images/gallery/thumb 에 생성된다.
+// 출력물은 images/gallery/main, images/gallery/thumb, images/opt 에 생성된다.
 // 실행할 때마다 기존 결과물을 덮어쓰고 다시 변환한다(원본 교체 후 재실행 용도).
 
 import { mkdir, readdir, stat, writeFile } from "node:fs/promises";
@@ -12,10 +12,11 @@ const ROOT = path.resolve(import.meta.dirname, "..");
 const SRC_DIR = path.join(ROOT, "images");
 const OUT_DIR = path.join(SRC_DIR, "gallery");
 
-// 표본 청첩장(theirmood)의 전송 스펙과 동일하게 맞췄다.
+// main은 프레임 폭(430px)을 DPR 3으로 커버하는 1280.
+// thumb은 5열 그리드라 표시 폭이 최대 86px뿐이라 DPR 3 기준 260이면 충분하다.
 const VARIANTS = [
     { name: "main", width: 1280, quality: 82 },
-    { name: "thumb", width: 380, quality: 78 }
+    { name: "thumb", width: 260, quality: 78 }
 ];
 
 const GALLERY_PATTERN = /^gallery(\d+)\.jpg$/i;
@@ -28,6 +29,20 @@ const SINGLES = [
     { source: "person1.jpg", out: "person1.webp", width: 1024, quality: 82 },
     { source: "person2.jpg", out: "person2.webp", width: 1024, quality: 82 }
 ];
+
+// 카카오톡/OG 공유 카드용. 카카오 스크래퍼는 WebP를 지원하지 않고 대용량
+// 이미지는 타임아웃으로 썸네일이 비므로, 반드시 별도 JPG로 뽑는다.
+//
+// 원본이 세로 2:3이라 1.91:1로 잘라내면 인물이 반드시 잘린다(sharp의
+// attention 전략은 붉은 꽃에 반응해 머리를 자른다). 그래서 자르는 대신
+// 갤러리 뷰어와 같은 방식 — 흐린 배경 위에 전체 사진을 얹는다 — 을 쓴다.
+const SHARE = {
+    source: "main.jpg",
+    out: "share.jpg",
+    width: 1200,
+    height: 630,
+    quality: 82
+};
 
 async function discoverGalleryIndices() {
     const files = await readdir(SRC_DIR);
@@ -44,6 +59,27 @@ async function convert(srcPath, outPath, { width, quality }) {
         .rotate() // EXIF 방향 정보를 픽셀에 반영한다
         .resize({ width, withoutEnlargement: true })
         .webp({ quality })
+        .toFile(outPath);
+
+    return (await stat(outPath)).size;
+}
+
+async function convertShareCard(srcPath, outPath, { width, height, quality }) {
+    const backdrop = await sharp(srcPath)
+        .rotate()
+        .resize(width, height, { fit: "cover", position: "centre" })
+        .blur(40)
+        .modulate({ brightness: 1.06, saturation: 0.75 })
+        .toBuffer();
+
+    const photo = await sharp(srcPath)
+        .rotate()
+        .resize({ height, fit: "inside" })
+        .toBuffer();
+
+    await sharp(backdrop)
+        .composite([{ input: photo, gravity: "centre" }])
+        .jpeg({ quality })
         .toFile(outPath);
 
     return (await stat(outPath)).size;
@@ -100,6 +136,19 @@ async function main() {
         srcTotal += srcStat.size;
         outTotal += await convert(srcPath, outPath, single);
         console.log(`  ${single.source}  ${mb(srcStat.size)}`);
+    }
+
+    const sharePath = path.join(optDir, SHARE.out);
+    try {
+        const shareSize = await convertShareCard(
+            path.join(SRC_DIR, SHARE.source),
+            sharePath,
+            SHARE
+        );
+        outTotal += shareSize;
+        console.log(`  ${SHARE.out}  ${SHARE.width}x${SHARE.height}  ${mb(shareSize)}`);
+    } catch {
+        console.warn(`  건너뜀 — ${SHARE.source} 없음`);
     }
 
     await writeFile(
