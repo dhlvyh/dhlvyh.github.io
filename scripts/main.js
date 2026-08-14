@@ -13,14 +13,7 @@ const KAKAO_JS_KEY = "779686afc372d325a6fe9a8dadcad2d0";
 const SITE_URL = "https://dhlvyh.github.io/";
 
 document.addEventListener("DOMContentLoaded", function () {
-    if (window.AOS) {
-        window.AOS.init({
-            duration: 700,
-            easing: "ease-out-cubic",
-            offset: 80,
-            once: true
-        });
-    }
+    initScrollReveal();
 
     if (window.WeddingUtils) {
         const countdown = window.WeddingUtils.buildCountdown(WEDDING_DATE);
@@ -66,6 +59,48 @@ document.addEventListener("DOMContentLoaded", function () {
     initMusicToggle();
     initKakaoShare();
 });
+
+// AOS(css 26KB + js 12KB)를 대체한다. 쓰던 효과가 fade-up 하나뿐이라
+// IntersectionObserver 한 개면 충분하다.
+//
+// 숨김 CSS는 html.has-reveal 아래에만 걸려 있다. 여기서 클래스를 붙이기
+// 전까지는 아무것도 숨지 않으므로, JS가 실패해도 본문이 사라지지 않는다.
+function initScrollReveal() {
+    const targets = document.querySelectorAll("[data-aos]");
+
+    if (targets.length === 0) {
+        return;
+    }
+
+    // IntersectionObserver가 없으면 그냥 다 보이는 상태로 둔다
+    if (!("IntersectionObserver" in window)) {
+        return;
+    }
+
+    document.documentElement.classList.add("has-reveal");
+
+    targets.forEach(function (target) {
+        const delay = Number(target.dataset.aosDelay || 0);
+        if (delay > 0) {
+            target.style.setProperty("--reveal-delay", delay + "ms");
+        }
+    });
+
+    const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (!entry.isIntersecting) {
+                return;
+            }
+
+            entry.target.classList.add("is-revealed");
+            observer.unobserve(entry.target); // once: true
+        });
+    }, {rootMargin: "0px 0px -80px 0px"});
+
+    targets.forEach(function (target) {
+        observer.observe(target);
+    });
+}
 
 function setText(selector, value) {
     const element = document.querySelector(selector);
@@ -380,8 +415,7 @@ function initMusicToggle() {
     function render(playing) {
         button.setAttribute("aria-pressed", String(playing));
         button.setAttribute("aria-label", playing ? "배경음악 정지" : "배경음악 재생");
-        icon.classList.toggle("fa-music", !playing);
-        icon.classList.toggle("fa-pause", playing);
+        icon.setAttribute("href", playing ? "#i-pause" : "#i-music");
     }
 
     button.addEventListener("click", function () {
@@ -423,7 +457,7 @@ function shareToKakao() {
         content: {
             title: "안용현 ♥ 안다혜 결혼식에 초대합니다",
             description: "2026년 11월 1일 일요일 11:00 AM · 더뉴컨벤션 2층 더뉴홀",
-            imageUrl: SITE_URL + "images/main.jpg",
+            imageUrl: SITE_URL + "images/opt/share.jpg",
             link: {
                 mobileWebUrl: SITE_URL,
                 webUrl: SITE_URL

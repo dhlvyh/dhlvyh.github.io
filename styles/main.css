@@ -38,6 +38,41 @@ html {
     background-color: rgba(250, 247, 243, 0.72) !important;
 }
 
+/* 아이콘 — index.html 상단 <symbol> 스프라이트를 <use>로 참조한다.
+   스프라이트 자체는 자리를 차지하면 안 되므로 완전히 빼둔다. */
+.icon-sprite {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    fill: currentColor;
+    flex: none;
+}
+
+/* 스크롤 등장 효과 — AOS(css 26KB + js 12KB)를 대체한다. 쓰던 건
+   fade-up 하나뿐이라 이 정도면 충분하다.
+   숨김 상태를 html.has-reveal로 가둬서, JS가 죽으면 아무것도 안 숨는다. */
+.has-reveal [data-aos] {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+    transition: opacity 700ms cubic-bezier(0.22, 0.61, 0.36, 1),
+                transform 700ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+}
+
+.has-reveal [data-aos].is-revealed {
+    opacity: 1;
+    transform: none;
+}
+
 /* 고정 UI는 뷰포트가 아니라 프레임 폭에 붙여야 한다 */
 .frame-overlay {
     position: fixed;
@@ -128,9 +163,9 @@ body {
     flex-direction: column;
     justify-content: center;
     gap: 4px;
-    width: 42px;
-    height: 42px;
-    padding: 0 11px;
+    width: 44px;
+    height: 44px;
+    padding: 0 12px;
     border: 0;
     border-radius: 999px;
     background: rgba(253, 251, 249, 0.82);
@@ -259,7 +294,7 @@ body {
     cursor: pointer;
 }
 
-.nav-drawer-action i {
+.nav-drawer-action .icon {
     font-size: 1.15rem;
     color: var(--ww-accent);
 }
@@ -524,21 +559,29 @@ body.is-drawer-open {
 
 .bottom_right {
     position: absolute;
-    bottom: 15px;
-    right: 15px;
+    bottom: 8px;
+    right: 8px;
 }
 
 .bottom_left {
     position: absolute;
-    bottom: 15px;
-    left: 15px;
+    bottom: 8px;
+    left: 8px;
 }
 
-.music-toggle {
+/* 떠 있는 원형 컨트롤 — 아이콘은 그대로 두고 패딩으로 44px 터치 타겟을 만든다 */
+.floating-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
     padding: 0;
     border: 0;
+    border-radius: 999px;
     background: none;
-    color: inherit;
+    color: var(--ww-ink);
+    font-size: 1.6rem;
     line-height: 1;
     cursor: pointer;
 }
@@ -742,8 +785,8 @@ body.is-drawer-open {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 38px;
-    height: 38px;
+    width: 44px;
+    height: 44px;
     border-radius: 999px;
     background: var(--ww-accent-soft);
     color: var(--ww-accent);
@@ -897,6 +940,9 @@ body.is-contact-sheet-open {
     margin: 0;
     padding: 0;
     position: relative;
+    /* 레터박스 바탕. 흐린 배경을 이 크림색 위에 반투명으로 얹어
+       사진이 어두워도 띠가 사이트 팔레트 밖으로 나가지 않게 한다 */
+    background: var(--ww-paper-alt);
 }
 
 .gallery-main-slide-backdrop {
@@ -905,7 +951,10 @@ body.is-contact-sheet-open {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: blur(24px) brightness(0.65);
+    /* 원본이 세로 4:5 박스에 cover로 들어가면 사진 하단(소파·바닥)이 띠로
+       깔려 회색으로 죽는다. 크림 바탕 위에 반투명으로 섞어 톤을 끌어올린다 */
+    opacity: 0.5;
+    filter: blur(28px) saturate(0.8);
     transform: scale(1.15);
     pointer-events: none;
     -webkit-user-drag: none;
@@ -933,8 +982,8 @@ body.is-contact-sheet-open {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
+    width: 44px;
+    height: 44px;
     padding: 0;
     border: 0;
     border-radius: 999px;
@@ -1191,11 +1240,18 @@ body.is-contact-sheet-open {
     color: var(--ww-ink-muted);
 }
 
+.map-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 4px;
+}
+
 .map-icon {
     width: 48px;
-    height: auto;
-    margin-left: 5px;
-    margin-right: 5px;
+    height: 48px;
 }
 
 .map-copy {
@@ -1539,4 +1595,25 @@ body.is-contact-sheet-open {
 .kakao-share-button:hover,
 .kakao-share-button:focus-visible {
     filter: brightness(0.96);
+}
+
+/* 모션 최소화 설정을 켠 사용자에게는 등장/전환 애니메이션을 걷어낸다
+   (꽃잎은 petal-fall.js가 이미 자체적으로 처리한다) */
+@media (prefers-reduced-motion: reduce) {
+    .has-reveal [data-aos] {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .gallery-main-track.is-animating,
+    .nav-drawer-panel,
+    .contact-sheet-panel,
+    .account-accordion-icon {
+        transition: none;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
 }

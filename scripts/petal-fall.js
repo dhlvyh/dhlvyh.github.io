@@ -30,7 +30,9 @@
             swayFrequency: 0.01 + rand() * 0.01,
             rotationSpeed: (rand() - 0.5) * 2,
             size: 4 + rand() * 5,
-            opacity: 0.55 + rand() * 0.3,
+            // 캔버스가 본문 위(z-index 1000)에 깔리므로 진하면 글자를 가린다.
+            // 0.55~0.85에서는 인사말 음절과 달력 숫자가 실제로 지워졌다.
+            opacity: 0.28 + rand() * 0.17,
             color: PETAL_COLORS[Math.floor(rand() * PETAL_COLORS.length)]
         };
     }

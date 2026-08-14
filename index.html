@@ -10,29 +10,71 @@
     <meta property="og:url" content="https://dhlvyh.github.io/">
     <meta property="og:title" content="안용현 ♥ 안다혜 결혼식에 초대합니다">
     <meta property="og:description" content="2026년 11월 1일 일요일 오전 11시, 더뉴컨벤션 2층 더뉴홀 · 소중한 분들을 초대합니다.">
-    <meta property="og:image" content="https://dhlvyh.github.io/images/opt/main.webp">
+    <!-- 공유 카드는 카카오 스크래퍼가 읽을 수 있도록 반드시 JPG를 쓴다 (WebP 미지원) -->
+    <meta property="og:image" content="https://dhlvyh.github.io/images/opt/share.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="안용현 ♥ 안다혜 결혼식에 초대합니다">
     <meta name="twitter:description" content="2026년 11월 1일 일요일 오전 11시, 더뉴컨벤션 2층 더뉴홀 · 소중한 분들을 초대합니다.">
-    <meta name="twitter:image" content="https://dhlvyh.github.io/images/opt/main.webp">
+    <meta name="twitter:image" content="https://dhlvyh.github.io/images/opt/share.jpg">
+    <meta name="theme-color" content="#fdfbf9">
     <link href="images/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
     <link href="images/favicon/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
     <link href="images/favicon/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
-    <link href="https://fonts.googleapis.com/css?family=Dosis:400,500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Dosis:wght@400;500&family=Noto+Serif+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="styles/base.css" rel="stylesheet">
     <link href="styles/main.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Noto+Serif+KR:400,500,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond:500,600,500i,600i" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/aos.css" rel="stylesheet">
 </head>
 
 <body id="top">
+<!-- 아이콘 스프라이트 — FontAwesome 4.7(CSS 30KB + woff2 77KB)을 대체한다.
+     쓰는 아이콘이 12개뿐이라 인라인 심볼이 훨씬 싸고 외부 도메인도 하나 준다. -->
+<svg aria-hidden="true" class="icon-sprite" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-phone" viewBox="0 0 24 24">
+        <path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C11 21 3 13 3 3c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .7-.2 1l-2.3 2.2z"/>
+    </symbol>
+    <symbol id="i-comment" viewBox="0 0 24 24">
+        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+    </symbol>
+    <symbol id="i-angle-down" viewBox="0 0 24 24">
+        <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-angle-up" viewBox="0 0 24 24">
+        <path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 24 24">
+        <path d="M12 20V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-link" viewBox="0 0 24 24">
+        <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+    </symbol>
+    <symbol id="i-music" viewBox="0 0 24 24">
+        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+    </symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24">
+        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+    </symbol>
+    <symbol id="i-info" viewBox="0 0 24 24">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+    </symbol>
+    <symbol id="i-subway" viewBox="0 0 24 24">
+        <path d="M12 2c-4 0-8 .5-8 4v9.5C4 17.43 5.57 19 7.5 19L6 20.5v.5h12v-.5L16.5 19c1.93 0 3.5-1.57 3.5-3.5V6c0-3.5-3.58-4-8-4zM7.5 17c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm3.5-7H6V6h5v4zm5.5 7c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-7h-5V6h5v4z"/>
+    </symbol>
+    <symbol id="i-bus" viewBox="0 0 24 24">
+        <path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"/>
+    </symbol>
+    <symbol id="i-car" viewBox="0 0 24 24">
+        <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+    </symbol>
+</svg>
 <div class="page-content">
     <div class="div">
         <div class="ww-home-page" id="home">
             <div class="hero-photo-full">
-                <img alt="안용현 안다혜 커플 사진" class="hero-photo" decoding="async" src="images/opt/main.webp"/>
+                <img alt="안용현 안다혜 커플 사진" class="hero-photo" decoding="async" fetchpriority="high" src="images/opt/main.webp"/>
                 <p class="hero-eyebrow ww-eyebrow">| Wedding Invitation |</p>
             </div>
             <p class="hero-date" style="font-family: 'Noto Serif KR', serif;">
@@ -110,7 +152,7 @@
                     <br>함께해 주셔서 자리를 빛내주세요.
                 </p>
                 <button aria-controls="contact-sheet" aria-expanded="false" class="couple-contact-open" id="contact-sheet-open" type="button" data-aos="fade-up" data-aos-delay="300">
-                    <i aria-hidden="true" class="fa fa-phone"></i>
+                    <svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg>
                     연락하기
                 </button>
             </div>
@@ -156,7 +198,7 @@
                                 </div>
                                 <div class="countdown-unit">
                                     <span class="countdown-unit-value" data-countdown-hours>00</span>
-                                    <span class="countdown-unit-label">HOUR</span>
+                                    <span class="countdown-unit-label">HOURS</span>
                                 </div>
                                 <div class="countdown-unit">
                                     <span class="countdown-unit-value" data-countdown-minutes>00</span>
@@ -254,35 +296,35 @@
 
                 <div>
                         <div class="my-3 text-center" data-aos="fade-up" data-aos-delay="150">
-                            <a href="https://naver.me/5UEc8GRX">
-                                <img alt="naver-map" class="map-icon" id="naver-map"
-                                     src="images/map/naver-map.png"/>
+                            <a class="map-link" href="https://naver.me/5UEc8GRX" target="_blank" rel="noopener noreferrer">
+                                <img alt="네이버 지도로 길찾기" class="map-icon" id="naver-map"
+                                     decoding="async" loading="lazy" src="images/map/naver-map.png"/>
                             </a>
-                            <a href="https://kko.to/s4ftXMYcTa">
-                                <img alt="kakao-map" class="map-icon" id="kakao-map"
-                                     src="images/map/kakao-map.png"/>
+                            <a class="map-link" href="https://kko.to/s4ftXMYcTa" target="_blank" rel="noopener noreferrer">
+                                <img alt="카카오맵으로 길찾기" class="map-icon" id="kakao-map"
+                                     decoding="async" loading="lazy" src="images/map/kakao-map.png"/>
                             </a>
-                            <a href="https://maps.app.goo.gl/eVCn8dj1MvDUHPUU6">
-                                <img alt="google-map" class="map-icon" id="google-map"
-                                     src="images/map/google-map.png"/>
+                            <a class="map-link" href="https://maps.app.goo.gl/eVCn8dj1MvDUHPUU6" target="_blank" rel="noopener noreferrer">
+                                <img alt="구글 지도로 길찾기" class="map-icon" id="google-map"
+                                     decoding="async" loading="lazy" src="images/map/google-map.png"/>
                             </a>
                         </div>
                         <p class="text-center map-copy" style="font-family: 'Noto Serif KR', serif; font-size: 15px;">
                             원하시는 지도 서비스를 눌러 길찾기를 바로 열 수 있습니다.
                         </p>
                         <div class="my-3">
-                            <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDV2ayoFF-WacFSMb0SzTlWsPBytpbn2J8&q=%EB%8D%94%EB%89%B4%EC%BB%A8%EB%B2%A4%EC%85%98%EC%9B%A8%EB%94%A9%2C%20%EC%84%9C%EC%9A%B8%20%EA%B0%95%EC%84%9C%EA%B5%AC%20%EA%B3%B5%ED%95%AD%EB%8C%80%EB%A1%9C36%EA%B8%B8%2057" width="100%" height="400" frameborder="0" style="border:0" allowfullscreen></iframe>
+                            <iframe title="더뉴컨벤션웨딩 위치 지도" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDV2ayoFF-WacFSMb0SzTlWsPBytpbn2J8&q=%EB%8D%94%EB%89%B4%EC%BB%A8%EB%B2%A4%EC%85%98%EC%9B%A8%EB%94%A9%2C%20%EC%84%9C%EC%9A%B8%20%EA%B0%95%EC%84%9C%EA%B5%AC%20%EA%B3%B5%ED%95%AD%EB%8C%80%EB%A1%9C36%EA%B8%B8%2057" width="100%" height="400" style="border:0" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
                         </div>
                         <div class="transit-info" data-aos="fade-up" data-aos-delay="150">
                             <div class="transit-item">
-                                <i class="fa fa-subway transit-icon" aria-hidden="true"></i>
+                                <svg aria-hidden="true" class="icon transit-icon" focusable="false"><use href="#i-subway"/></svg>
                                 <div>
                                     <p class="transit-title">지하철 이용 시</p>
                                     <p class="transit-desc">5호선 발산역 7번 출구 앞 200m (도보 약 3분)</p>
                                 </div>
                             </div>
                             <div class="transit-item">
-                                <i class="fa fa-bus transit-icon" aria-hidden="true"></i>
+                                <svg aria-hidden="true" class="icon transit-icon" focusable="false"><use href="#i-bus"/></svg>
                                 <div>
                                     <p class="transit-title">버스 이용 시</p>
                                     <p class="transit-desc">
@@ -297,14 +339,14 @@
                                 </div>
                             </div>
                             <div class="transit-item">
-                                <i class="fa fa-car transit-icon" aria-hidden="true"></i>
+                                <svg aria-hidden="true" class="icon transit-icon" focusable="false"><use href="#i-car"/></svg>
                                 <div>
                                     <p class="transit-title">자가용 이용 시</p>
                                     <p class="transit-desc">내비게이션에 "더뉴컨벤션웨딩" 입력</p>
                                 </div>
                             </div>
                             <div class="transit-item">
-                                <i class="fa fa-info-circle transit-icon" aria-hidden="true"></i>
+                                <svg aria-hidden="true" class="icon transit-icon" focusable="false"><use href="#i-info"/></svg>
                                 <div>
                                     <p class="transit-title">주차 안내</p>
                                     <p class="transit-desc">
@@ -337,11 +379,11 @@
                     <div class="account-accordion-buttons">
                         <button class="account-accordion-toggle" type="button" data-accordion-toggle aria-expanded="false" aria-controls="account-panel-groom">
                             <span>신랑측</span>
-                            <i class="fa fa-angle-down account-accordion-icon" aria-hidden="true"></i>
+                            <svg aria-hidden="true" class="icon account-accordion-icon" focusable="false"><use href="#i-angle-down"/></svg>
                         </button>
                         <button class="account-accordion-toggle" type="button" data-accordion-toggle aria-expanded="false" aria-controls="account-panel-bride">
                             <span>신부측</span>
-                            <i class="fa fa-angle-down account-accordion-icon" aria-hidden="true"></i>
+                            <svg aria-hidden="true" class="icon account-accordion-icon" focusable="false"><use href="#i-angle-down"/></svg>
                         </button>
                     </div>
                     <div class="account-accordion-panel" id="account-panel-groom" hidden>
@@ -412,7 +454,7 @@
                 </p>
                 <p class="closing-signoff">안용현 · 안다혜 드림</p>
                 <button class="kakao-share-button" id="kakao-share-button" type="button">
-                    <i aria-hidden="true" class="fa fa-comment"></i>
+                    <svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg>
                     카카오톡으로 초대장 보내기
                 </button>
             </div>
@@ -433,24 +475,24 @@
                     <span class="contact-sheet-role">신랑</span>
                     <span class="contact-sheet-name">안용현</span>
                     <span class="contact-sheet-actions">
-                        <a aria-label="안용현에게 전화" class="contact-sheet-action" href="tel:01094884712"><i aria-hidden="true" class="fa fa-phone"></i></a>
-                        <a aria-label="안용현에게 문자" class="contact-sheet-action" href="sms:01094884712"><i aria-hidden="true" class="fa fa-comment"></i></a>
+                        <a aria-label="안용현에게 전화" class="contact-sheet-action" href="tel:01094884712"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg></a>
+                        <a aria-label="안용현에게 문자" class="contact-sheet-action" href="sms:01094884712"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg></a>
                     </span>
                 </li>
                 <li class="contact-sheet-row">
                     <span class="contact-sheet-role">아버지</span>
                     <span class="contact-sheet-name">안대삼</span>
                     <span class="contact-sheet-actions">
-                        <a aria-label="신랑 아버지께 전화" class="contact-sheet-action" href="tel:01088726169"><i aria-hidden="true" class="fa fa-phone"></i></a>
-                        <a aria-label="신랑 아버지께 문자" class="contact-sheet-action" href="sms:01088726169"><i aria-hidden="true" class="fa fa-comment"></i></a>
+                        <a aria-label="신랑 아버지께 전화" class="contact-sheet-action" href="tel:01088726169"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg></a>
+                        <a aria-label="신랑 아버지께 문자" class="contact-sheet-action" href="sms:01088726169"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg></a>
                     </span>
                 </li>
                 <li class="contact-sheet-row">
                     <span class="contact-sheet-role">어머니</span>
                     <span class="contact-sheet-name">양정분</span>
                     <span class="contact-sheet-actions">
-                        <a aria-label="신랑 어머니께 전화" class="contact-sheet-action" href="tel:01032343335"><i aria-hidden="true" class="fa fa-phone"></i></a>
-                        <a aria-label="신랑 어머니께 문자" class="contact-sheet-action" href="sms:01032343335"><i aria-hidden="true" class="fa fa-comment"></i></a>
+                        <a aria-label="신랑 어머니께 전화" class="contact-sheet-action" href="tel:01032343335"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg></a>
+                        <a aria-label="신랑 어머니께 문자" class="contact-sheet-action" href="sms:01032343335"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg></a>
                     </span>
                 </li>
             </ul>
@@ -462,24 +504,24 @@
                     <span class="contact-sheet-role">신부</span>
                     <span class="contact-sheet-name">안다혜</span>
                     <span class="contact-sheet-actions">
-                        <a aria-label="안다혜에게 전화" class="contact-sheet-action" href="tel:01045201205"><i aria-hidden="true" class="fa fa-phone"></i></a>
-                        <a aria-label="안다혜에게 문자" class="contact-sheet-action" href="sms:01045201205"><i aria-hidden="true" class="fa fa-comment"></i></a>
+                        <a aria-label="안다혜에게 전화" class="contact-sheet-action" href="tel:01045201205"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg></a>
+                        <a aria-label="안다혜에게 문자" class="contact-sheet-action" href="sms:01045201205"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg></a>
                     </span>
                 </li>
                 <li class="contact-sheet-row">
                     <span class="contact-sheet-role">아버지</span>
                     <span class="contact-sheet-name">안금용</span>
                     <span class="contact-sheet-actions">
-                        <a aria-label="신부 아버지께 전화" class="contact-sheet-action" href="tel:01054737698"><i aria-hidden="true" class="fa fa-phone"></i></a>
-                        <a aria-label="신부 아버지께 문자" class="contact-sheet-action" href="sms:01054737698"><i aria-hidden="true" class="fa fa-comment"></i></a>
+                        <a aria-label="신부 아버지께 전화" class="contact-sheet-action" href="tel:01054737698"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg></a>
+                        <a aria-label="신부 아버지께 문자" class="contact-sheet-action" href="sms:01054737698"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg></a>
                     </span>
                 </li>
                 <li class="contact-sheet-row">
                     <span class="contact-sheet-role">어머니</span>
                     <span class="contact-sheet-name">김윤순</span>
                     <span class="contact-sheet-actions">
-                        <a aria-label="신부 어머니께 전화" class="contact-sheet-action" href="tel:01047237698"><i aria-hidden="true" class="fa fa-phone"></i></a>
-                        <a aria-label="신부 어머니께 문자" class="contact-sheet-action" href="sms:01047237698"><i aria-hidden="true" class="fa fa-comment"></i></a>
+                        <a aria-label="신부 어머니께 전화" class="contact-sheet-action" href="tel:01047237698"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg></a>
+                        <a aria-label="신부 어머니께 문자" class="contact-sheet-action" href="sms:01047237698"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg></a>
                     </span>
                 </li>
             </ul>
@@ -487,17 +529,17 @@
     </div>
 </div>
 
+<!-- 전부 DOMContentLoaded를 기다리므로 defer로 내려도 안전하다. 파싱을 막지 않는다. -->
 <script defer src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js"></script>
-<script src="js/aos.js"></script>
-<script src="scripts/wedding-utils.js"></script>
-<script src="scripts/odometer.js"></script>
-<script src="scripts/gallery-utils.js"></script>
-<script src="scripts/gallery-viewer.js"></script>
-<script src="scripts/gallery-loader.js"></script>
-<script src="scripts/account-utils.js"></script>
-<script src="scripts/account-info.js"></script>
-<script src="scripts/petal-fall.js"></script>
-<script src="scripts/main.js"></script>
+<script defer src="scripts/wedding-utils.js"></script>
+<script defer src="scripts/odometer.js"></script>
+<script defer src="scripts/gallery-utils.js"></script>
+<script defer src="scripts/gallery-viewer.js"></script>
+<script defer src="scripts/gallery-loader.js"></script>
+<script defer src="scripts/account-utils.js"></script>
+<script defer src="scripts/account-info.js"></script>
+<script defer src="scripts/petal-fall.js"></script>
+<script defer src="scripts/main.js"></script>
 
 <div class="frame-overlay">
     <canvas id="petal-fall-canvas" aria-hidden="true"></canvas>
@@ -508,16 +550,17 @@
         <span class="nav-drawer-open-bar"></span>
     </button>
 
-    <div class="bottom_right"><i class="fa fa-arrow-up fa-2x" id="go-to-top"></i>
+    <div class="bottom_right">
+        <button aria-label="맨 위로 이동" class="floating-button" id="go-to-top" type="button">
+            <svg aria-hidden="true" class="icon" focusable="false"><use href="#i-arrow-up"/></svg>
+        </button>
     </div>
 
     <div class="bottom_left">
         <audio id="player" loop preload="none" src="mus.mp3"></audio>
-        <div>
-            <button aria-label="배경음악 재생" aria-pressed="false" class="music-toggle" id="music-toggle" type="button">
-                <i aria-hidden="true" class="fa fa-music fa-2x" id="music-toggle-icon"></i>
-            </button>
-        </div>
+        <button aria-label="배경음악 재생" aria-pressed="false" class="floating-button music-toggle" id="music-toggle" type="button">
+            <svg aria-hidden="true" class="icon" focusable="false"><use href="#i-music" id="music-toggle-icon"/></svg>
+        </button>
     </div>
 </div>
 
@@ -528,6 +571,7 @@
         <p class="nav-drawer-title">안용현 · 안다혜</p>
         <ul class="nav-drawer-list">
             <li><a class="smooth-scroll" href="#home">홈</a></li>
+            <li><a class="smooth-scroll" href="#greeting">인사말</a></li>
             <li><a class="smooth-scroll" href="#couple">두 사람</a></li>
             <li><a class="smooth-scroll" href="#events">예식 안내</a></li>
             <li><a class="smooth-scroll" href="#together">함께한 시간</a></li>
@@ -537,15 +581,15 @@
         </ul>
         <div class="nav-drawer-actions">
             <button class="nav-drawer-action" id="copy-invitation-link" type="button">
-                <i aria-hidden="true" class="fa fa-link"></i>
+                <svg aria-hidden="true" class="icon" focusable="false"><use href="#i-link"/></svg>
                 <span>청첩장<br>링크복사</span>
             </button>
             <button class="nav-drawer-action" id="kakao-share-drawer-button" type="button">
-                <i aria-hidden="true" class="fa fa-comment"></i>
+                <svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg>
                 <span>카카오톡<br>공유하기</span>
             </button>
             <a class="nav-drawer-action" href="#home" data-drawer-close>
-                <i aria-hidden="true" class="fa fa-angle-up"></i>
+                <svg aria-hidden="true" class="icon" focusable="false"><use href="#i-angle-up"/></svg>
                 <span>맨 위로<br>이동</span>
             </a>
         </div>
