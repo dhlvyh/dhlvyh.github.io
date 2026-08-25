@@ -58,7 +58,8 @@ test("index.html shows the wedding date and venue as two plain lines with no ven
     assert.doesNotMatch(html, /images\/opt\/hall\.webp/);
 
     assert.match(html, /class="event-datetime">2026년 11월 1일 일요일 11:00 AM<\/p>/);
-    assert.match(html, /class="event-venue"><a href="https:\/\/thenewwed\.kr\/"[^>]*>더뉴컨벤션 2층 더뉴홀<\/a><\/p>/);
+    assert.match(html, /class="event-venue">더뉴컨벤션 2층 더뉴홀<\/p>/);
+    assert.doesNotMatch(html, /class="event-venue">\s*<a\b/);
 
     const datetimeIndex = html.indexOf('class="event-datetime"');
     const venueIndex = html.indexOf('class="event-venue"');
@@ -200,6 +201,12 @@ test("the section order places together after the gallery and keeps the drawer i
     const drawer = html.slice(html.indexOf('class="nav-drawer-list"'));
     assert.ok(drawer.indexOf('href="#gallery"') < drawer.indexOf('href="#together"'),
         "expected gallery before together in the drawer");
+});
+
+test("the together section uses the approved lead copy", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.match(html, /class="[^"]*together-lead[^"]*"[^>]*>\s*처음 만난 날부터 오늘까지, 안용현과 안다혜가 함께 걸어온 시간입니다\.\s*<\/p>/);
 });
 
 test("the countdown uses enlarged circular units and the couple-specific copy", () => {
@@ -567,6 +574,7 @@ test("couple cards center names and use icon-only contact links", () => {
     }
 
     assert.match(cssBlock(".couple-card img"), /aspect-ratio:\s*4\s*\/\s*5;/i);
+    assert.match(cssBlock(".couple-card img"), /box-shadow:\s*0 4px 14px rgba\(51,\s*48,\s*44,\s*0\.12\);/i);
     assert.match(cssBlock(".couple-card-name"), /text-align:\s*center;/i);
     assert.match(cssBlock(".couple-card-heading"), /gap:\s*0\.25rem;/i);
     assert.match(cssBlock(".couple-card-heading"), /padding:\s*0;/i);
@@ -590,4 +598,20 @@ test("the event calendar spans the card and marks the wedding day in pink", () =
     assert.match(cssBlock(".event-card-calendar"), /max-width:\s*none;/i);
     assert.match(cssBlock(".event-card-calendar"), /margin:\s*0;/i);
     assert.match(cssBlock(".calendar-day.is-wedding-day::before"), /background:\s*var\(--ww-accent\);/i);
+});
+
+test("event details are de-emphasized and sit closer to the calendar", () => {
+    const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
+
+    function cssBlock(selector) {
+        const start = css.indexOf(selector + " {");
+        assert.notEqual(start, -1, `missing CSS block: ${selector}`);
+        const end = css.indexOf("}", start);
+        return css.slice(start, end);
+    }
+
+    assert.match(cssBlock(".event-datetime"), /color:\s*var\(--ww-ink-muted\);/i);
+    assert.match(cssBlock(".event-datetime"), /font-weight:\s*400;/i);
+    assert.match(cssBlock(".event-venue"), /color:\s*var\(--ww-ink-muted\);/i);
+    assert.match(cssBlock(".ww-wedding-event > .stack"), /gap:\s*0\.75rem;/i);
 });

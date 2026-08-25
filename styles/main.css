@@ -643,6 +643,7 @@ body.is-drawer-open {
     aspect-ratio: 4 / 5;
     object-fit: cover;
     border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(51, 48, 44, 0.12);
 }
 
 .couple-card-name {
@@ -897,6 +898,10 @@ body.is-contact-sheet-open {
     padding: 0 1.25rem;
 }
 
+.ww-wedding-event > .stack {
+    gap: 0.75rem;
+}
+
 .event-card-calendar {
     max-width: none;
     margin: 0;
@@ -905,21 +910,17 @@ body.is-contact-sheet-open {
 
 .event-datetime {
     margin-bottom: 0.5rem;
-    color: var(--ww-ink);
-    font-weight: 600;
+    color: var(--ww-ink-muted);
+    font-weight: 400;
     text-align: center;
     font-size: 0.875rem;
 }
 
 .event-venue {
     margin-bottom: 0;
+    color: var(--ww-ink-muted);
     text-align: center;
     font-size: 0.875rem;
-}
-
-.event-venue a {
-    color: var(--ww-ink);
-    font-weight: 400;
 }
 
 .event-kicker {
