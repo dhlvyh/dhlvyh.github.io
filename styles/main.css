@@ -1605,15 +1605,144 @@ body.is-gallery-lightbox-open {
     font-weight: 700;
 }
 
-/* 함께한 시간 — 초 단위로 굴러가는 오도미터. JS는 --n 커스텀 프로퍼티만 바꾼다 */
-.together-lead {
-    max-width: 480px;
-    margin: 0 auto;
-    color: var(--ww-ink-muted);
-    line-height: 1.8;
+/* 우리의 시간 — 사진과 글이 중앙 타임라인을 따라 번갈아 이어진다 */
+.time-section {
+    padding-bottom: 0;
 }
 
-.together-odometer {
+.time-section-lead {
+    max-width: 300px;
+    margin: 0 auto;
+    color: var(--ww-ink-muted);
+    font-size: 0.85rem;
+    line-height: 1.9;
+}
+
+.time-line {
+    position: relative;
+    max-width: 380px;
+    margin: 3rem auto 0;
+}
+
+.time-line::before {
+    position: absolute;
+    top: 1rem;
+    bottom: 1rem;
+    left: 50%;
+    width: 1px;
+    background: rgba(76, 91, 67, 0.18);
+    content: "";
+    transform: translateX(-50%);
+}
+
+.time-line-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 2rem minmax(0, 1fr);
+    column-gap: 0.75rem;
+    align-items: center;
+    min-height: 174px;
+    padding: 0.9rem 0;
+}
+
+.time-line-panel,
+.time-line-final,
+.time-line-marker {
+    position: relative;
+    z-index: 1;
+    grid-row: 1;
+}
+
+.time-line-panel-photo {
+    width: 148px;
+}
+
+.time-line-panel-photo .time-line-photo {
+    display: block;
+    width: 148px;
+    height: 148px;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 7px 18px rgba(51, 48, 44, 0.14);
+}
+
+.is-photo-left .time-line-panel-photo {
+    grid-column: 1;
+    justify-self: end;
+}
+
+.is-photo-right .time-line-panel-photo {
+    grid-column: 3;
+    justify-self: start;
+}
+
+.time-line-panel-copy {
+    max-width: 148px;
+}
+
+.is-copy-right .time-line-panel-copy {
+    grid-column: 3;
+    justify-self: start;
+    text-align: left;
+}
+
+.time-line-marker {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+    width: 10px;
+    height: 10px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: #4c5b43;
+    box-shadow: 0 1px 5px rgba(51, 48, 44, 0.16);
+    box-sizing: content-box;
+}
+
+.time-line-label {
+    margin: 0 0 0.55rem;
+    color: var(--ww-ink);
+    font-size: 1.05rem;
+    line-height: 1.4;
+}
+
+.time-line-item.is-final {
+    min-height: 116px;
+}
+
+.time-line-final {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: start;
+}
+
+.time-line-final .time-line-label {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 360px) {
+    .time-line-item {
+        grid-template-columns: minmax(0, 1fr) 1.5rem minmax(0, 1fr);
+        column-gap: 0.4rem;
+    }
+
+    .time-line-panel-photo,
+    .time-line-panel-photo .time-line-photo {
+        width: 120px;
+    }
+
+    .time-line-panel-photo .time-line-photo {
+        height: 120px;
+    }
+
+    .time-line-panel-copy {
+        max-width: 120px;
+    }
+}
+
+/* 우리의 시간 — 타임라인 아래에서 초 단위로 굴러가는 오도미터 */
+.time-odometer {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
@@ -1673,16 +1802,6 @@ body.is-gallery-lightbox-open {
     position: relative;
     background: var(--ww-paper);
     overflow: hidden;
-}
-
-.closing-together {
-    position: relative;
-    width: 100%;
-    padding: 4rem 1.5rem;
-    background: #fff;
-    color: var(--ww-ink);
-    text-align: center;
-    box-sizing: border-box;
 }
 
 .closing-photo-stage {

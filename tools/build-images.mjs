@@ -2,9 +2,10 @@
 //
 // 사용법: npm run images
 // 출력물은 images/gallery/main, images/gallery/thumb, images/opt 에 생성된다.
+// 타임라인 원본은 images/timeline 에 별도 저장한다.
 // 실행할 때마다 기존 결과물을 덮어쓰고 다시 변환한다(원본 교체 후 재실행 용도).
 
-import { mkdir, readdir, stat, writeFile } from "node:fs/promises";
+import { mkdir, readdir, stat, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
@@ -28,6 +29,17 @@ const SINGLES = [
     { source: "main.jpg", out: "main.webp", width: 1024, quality: 82 },
     { source: "person1.jpg", out: "person1.webp", width: 1024, quality: 82 },
     { source: "person2.jpg", out: "person2.webp", width: 1024, quality: 82 }
+];
+
+// 우리의 시간 타임라인용 사진.
+const TIMELINE = [
+    { source: "timeline1.jpg", out: "timeline1.webp", width: 1024, quality: 82 },
+    { source: "timeline2.jpg", out: "timeline2.webp", width: 1024, quality: 82 },
+    { source: "timeline3.jpg", out: "timeline3.webp", width: 1024, quality: 82 },
+    { source: "timeline4.jpg", out: "timeline4.webp", width: 1024, quality: 82 },
+    { source: "timeline5.jpg", out: "timeline5.webp", width: 1024, quality: 82 },
+    { source: "timeline6.jpg", out: "timeline6.webp", width: 1024, quality: 82 },
+    { source: "timeline7.jpg", out: "timeline7.webp", width: 1024, quality: 82 }
 ];
 
 // 카카오톡/OG 공유 카드용. 카카오 스크래퍼는 WebP를 지원하지 않고 대용량
@@ -85,6 +97,25 @@ async function convertShareCard(srcPath, outPath, { width, height, quality }) {
     return (await stat(outPath)).size;
 }
 
+async function removeStaleGalleryOutputs(galleryIndices) {
+    const activeIndices = new Set(galleryIndices.map((index) => String(index)));
+
+    for (const variant of VARIANTS) {
+        const variantDir = path.join(OUT_DIR, variant.name);
+        const files = await readdir(variantDir);
+
+        for (const name of files) {
+            const match = name.match(/^(\d+)\.webp$/i);
+            if (!match || activeIndices.has(String(Number(match[1])))) {
+                continue;
+            }
+
+            await unlink(path.join(variantDir, name));
+            console.log(`  제거 — ${path.join("gallery", variant.name, name).replace(/\\/g, "/")}`);
+        }
+    }
+}
+
 async function main() {
     await Promise.all(
         VARIANTS.map((v) => mkdir(path.join(OUT_DIR, v.name), { recursive: true }))
@@ -95,6 +126,7 @@ async function main() {
     let outTotal = 0;
 
     const galleryIndices = await discoverGalleryIndices();
+    await removeStaleGalleryOutputs(galleryIndices);
 
     for (const i of galleryIndices) {
         const srcPath = path.join(SRC_DIR, `gallery${i}.jpg`);
@@ -136,6 +168,25 @@ async function main() {
         srcTotal += srcStat.size;
         outTotal += await convert(srcPath, outPath, single);
         console.log(`  ${single.source}  ${mb(srcStat.size)}`);
+    }
+
+    const timelineDir = path.join(SRC_DIR, "timeline");
+    await mkdir(timelineDir, { recursive: true });
+
+    for (const image of TIMELINE) {
+        const srcPath = path.join(SRC_DIR, image.source);
+        const outPath = path.join(timelineDir, image.out);
+
+        let srcStat;
+        try {
+            srcStat = await stat(srcPath);
+        } catch {
+            console.warn(`  건너뜀 — ${image.source} 없음`);
+            continue;
+        }
+        srcTotal += srcStat.size;
+        outTotal += await convert(srcPath, outPath, image);
+        console.log(`  ${image.source}  ${mb(srcStat.size)}`);
     }
 
     const sharePath = path.join(optDir, SHARE.out);

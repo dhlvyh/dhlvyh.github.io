@@ -3,6 +3,102 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 
+test("우리의 시간은 8개의 시점과 순서로 구성된다", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const start = html.indexOf('<div class="ww-section time-section" id="our-time">');
+    const end = html.indexOf('<div class="ww-section" id="gallery">');
+    const section = html.slice(start, end);
+    const labels = [...section.matchAll(/data-time-label="([^"]+)"/g)].map((match) => match[1]);
+
+    assert.notEqual(start, -1);
+    assert.notEqual(end, -1);
+    assert.ok(start < end);
+    assert.deepEqual(labels, ["첫 만남", "0.5주년", "1주년", "1.5주년", "2주년", "2.5주년", "3주년", "결혼"]);
+});
+
+test("우리의 시간은 시점별 사진과 설명 규칙을 지킨다", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const start = html.indexOf('<div class="ww-section time-section" id="our-time">');
+    const end = html.indexOf('<div class="ww-section" id="gallery">');
+    const section = html.slice(start, end);
+    const items = [...section.matchAll(/<article class="time-line-item[\s\S]*?<\/article>/g)].map((match) => match[0]);
+
+    assert.equal(items.length, 8);
+    assert.equal(items.filter((item) => item.includes("class=\"time-line-photo\"")).length, 7);
+    assert.equal(items.filter((item) => item.includes("time-line-panel-copy")).length, 4);
+    assert.equal(items.filter((item) => item.includes("data-time-label=\"결혼\"") && item.includes("time-line-photo")).length, 0);
+    assert.equal(items.filter((item) => item.includes("data-time-label=\"0.5주년\"") && item.includes("time-line-panel-copy")).length, 0);
+    assert.equal(items.filter((item) => item.includes("data-time-label=\"1.5주년\"") && item.includes("time-line-panel-copy")).length, 0);
+    assert.equal(items.filter((item) => item.includes("data-time-label=\"2.5주년\"") && item.includes("time-line-panel-copy")).length, 0);
+});
+
+test("사진과 설명 패널은 같은 타임라인 행에 배치된다", () => {
+    const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
+
+    assert.match(css, /\.time-line-panel\s*,\s*\.time-line-final\s*,\s*\.time-line-marker\s*\{[^}]*grid-row:\s*1;/);
+});
+
+test("좁은 모바일 폭에서는 타임라인 사진이 줄어든다", () => {
+    const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
+
+    assert.match(css, /@media\s*\(max-width:\s*360px\)[\s\S]*?\.time-line-panel-photo\s*,\s*\.time-line-panel-photo \.time-line-photo\s*\{[\s\S]*?width:\s*120px;/);
+    assert.match(css, /@media\s*\(max-width:\s*360px\)[\s\S]*?\.time-line-panel-photo \.time-line-photo\s*\{[\s\S]*?height:\s*120px;/);
+});
+
+test("오도미터 명칭은 우리의 시간 구조에 맞고 투게터 잔여 소스는 없다", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
+    const mainJs = fs.readFileSync(path.resolve(__dirname, "../scripts/main.js"), "utf8");
+
+    assert.match(html, /class="time-odometer" id="time-odometer"/);
+    assert.doesNotMatch(html, /together-odometer|id="together"/);
+    assert.match(css, /\.time-odometer\s*\{/);
+    assert.doesNotMatch(css, /\.together-odometer|\.time-together|\.together-lead/);
+    assert.match(mainJs, /initTimeOdometer\(\)/);
+    assert.doesNotMatch(mainJs, /initTogetherOdometer/);
+});
+
+test("타임라인은 다섯 개 제목만 표시하고 사진을 좌우로 번갈아 배치한다", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const start = html.indexOf('<div class="ww-section time-section" id="our-time">');
+    const end = html.indexOf('<div class="ww-section" id="gallery">');
+    const section = html.slice(start, end);
+    const items = [...section.matchAll(/<article class="time-line-item[\s\S]*?<\/article>/g)].map((match) => match[0]);
+    const labels = [...section.matchAll(/data-time-label="([^"]+)"/g)].map((match) => match[1]);
+    const titleItems = items.filter((item) => item.includes("time-line-label"));
+    const titleLabels = titleItems.map((item) => item.match(/data-time-label="([^"]+)"/)[1]);
+    const photoSides = items.slice(0, 7).map((item) => item.includes("is-photo-left") ? "left" : "right");
+
+    assert.deepEqual(titleLabels, [labels[0], labels[2], labels[4], labels[6], labels[7]]);
+    assert.doesNotMatch(section, /time-line-body|<mark\b/);
+    assert.deepEqual(photoSides, ["left", "right", "left", "right", "left", "right", "left"]);
+});
+
+test("타임라인 원본은 전용 WebP 폴더로 변환되고 HTML은 변환 결과를 참조한다", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const buildImages = fs.readFileSync(path.resolve(__dirname, "../tools/build-images.mjs"), "utf8");
+    const sources = ["timeline1.jpg", "timeline2.jpg", "timeline3.jpg", "timeline4.jpg", "timeline5.jpg", "timeline6.jpg", "timeline7.jpg"];
+
+    assert.match(buildImages, /const TIMELINE = \[/);
+    sources.forEach((source) => assert.match(buildImages, new RegExp(`source: "${source}"`)));
+    assert.match(buildImages, /path\.join\(SRC_DIR, "timeline"\)/);
+    assert.match(buildImages, /unlink/);
+    assert.equal((html.match(/images\/timeline\/[^"']+\.webp/g) || []).length, 7);
+    assert.doesNotMatch(html, /images\/gallery\/main\/(10|11|16|22|29|35|38)\.webp/);
+});
+
+test("갤러리 원본 파일은 1부터 빈자리 없이 연속 번호를 사용한다", () => {
+    const imagesDir = path.resolve(__dirname, "../images");
+    const indices = fs.readdirSync(imagesDir)
+        .map((name) => name.match(/^gallery(\d+)\.jpg$/i))
+        .filter(Boolean)
+        .map((match) => Number(match[1]))
+        .sort((a, b) => a - b);
+    const expected = Array.from({length: indices.length}, (_, index) => index + 1);
+
+    assert.deepEqual(indices, expected);
+});
+
 test("index.html exposes the lightbox viewer and thumbnail grid mounts, populated at runtime", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
@@ -201,7 +297,7 @@ test("index.html keeps the event flow flat and removes the countdown header", ()
 
 test("the section order follows the invitation flow and removes the standalone together section", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
-    const sectionOrder = ["home", "greeting", "couple", "gallery", "events", "map", "account-info", "closing"]
+    const sectionOrder = ["home", "greeting", "couple", "our-time", "gallery", "events", "map", "account-info", "closing"]
         .map((id) => html.indexOf(`id="${id}"`));
 
     assert.ok(sectionOrder.every((index) => index !== -1), "expected all invitation sections");
@@ -210,27 +306,12 @@ test("the section order follows the invitation flow and removes the standalone t
     assert.equal(html.indexOf('id="together"'), -1, "expected no standalone together section");
 
     const drawer = html.slice(html.indexOf('class="nav-drawer-list"'));
-    const drawerOrder = ["home", "greeting", "couple", "gallery", "events", "map", "account-info"]
+    const drawerOrder = ["home", "greeting", "couple", "our-time", "gallery", "events", "map", "account-info"]
         .map((id) => drawer.indexOf(`href="#${id}"`));
 
     assert.deepEqual([...drawerOrder].sort((a, b) => a - b), drawerOrder,
         "expected the drawer to follow the requested page flow");
     assert.doesNotMatch(drawer, /href="#together"/);
-});
-
-test("the together content is a separate block above the closing photo", () => {
-    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
-    const closingIndex = html.indexOf('class="closing-section" id="closing"');
-    const togetherIndex = html.indexOf('class="closing-together"');
-    const photoStageIndex = html.indexOf('class="closing-photo-stage"');
-    const messageIndex = html.indexOf('class="closing-message"');
-
-    assert.equal(html.indexOf('id="together"'), -1);
-    assert.ok(closingIndex !== -1 && togetherIndex !== -1 && photoStageIndex !== -1 && messageIndex !== -1);
-    assert.ok(closingIndex < togetherIndex && togetherIndex < photoStageIndex && photoStageIndex < messageIndex,
-        "expected together content above the separate closing photo stage");
-    assert.match(html, /class="[^"]*together-lead[^"]*"[^>]*>\s*처음 만난 날부터 오늘까지, 안용현과 안다혜가 함께 걸어온 시간입니다\.\s*<\/p>/);
-    assert.match(html, /data-odometer-role="years"/);
 });
 
 test("the countdown uses enlarged circular units and the couple-specific copy", () => {
@@ -320,7 +401,7 @@ test("index.html adds a full-bleed farewell section after the account section", 
 
     assert.match(html, /class="closing-section"[^>]+id="closing"/);
     assert.match(html, /class="closing-photo"/);
-    assert.match(html, /class="closing-together"/);
+    assert.doesNotMatch(html, /class="closing-together"/);
     assert.match(html, /class="closing-photo-stage"/);
     assert.match(html, /class="closing-message"/);
 
@@ -331,14 +412,12 @@ test("index.html adds a full-bleed farewell section after the account section", 
         "expected the closing section after the account-info section");
 });
 
-test("the closing together block keeps the moved content separate from the photo", () => {
+test("the closing photo keeps its full-bleed layout", () => {
     const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
 
     assert.match(css, /\.closing-section\s*\{[\s\S]*?background:\s*var\(--ww-paper\);/);
     assert.match(css, /\.closing-photo-stage\s*\{[\s\S]*?position:\s*relative;[\s\S]*?min-height:\s*600px;[\s\S]*?overflow:\s*hidden;/);
     assert.match(css, /\.closing-overlay\s*\{[\s\S]*?justify-content:\s*flex-end;/);
-    assert.match(css, /\.closing-together\s*\{[\s\S]*?width:\s*100%;[\s\S]*?padding:\s*4rem 1\.5rem;/);
-    assert.match(css, /\.closing-together\s*\{[\s\S]*?background:\s*#fff;[\s\S]*?color:\s*var\(--ww-ink\);/);
 });
 
 test("hero typewriter characters preserve visible spaces", () => {
@@ -584,7 +663,7 @@ test("the invitation uses a flat white page and smaller type scale", () => {
 });
 
 test("content buttons use white rectangular surfaces without outlines", () => {
-    const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
+    const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8").replace(/\r\n/g, "\n");
 
     function cssBlock(selector) {
         const start = css.indexOf(selector + " {");

@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     initCountdownTicker();
-    initTogetherOdometer();
+    initTimeOdometer();
 
     loadGallery();
 
@@ -140,7 +140,7 @@ function initCountdownTicker() {
     window.setInterval(tick, 1000);
 }
 
-function initTogetherOdometer() {
+function initTimeOdometer() {
     if (!window.WeddingUtils || !window.Odometer) {
         return;
     }
