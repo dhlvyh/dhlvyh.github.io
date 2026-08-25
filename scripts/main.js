@@ -15,6 +15,10 @@ const SITE_URL = "https://dhlvyh.github.io/";
 document.addEventListener("DOMContentLoaded", function () {
     initScrollReveal();
 
+    if (window.HeroTypewriter) {
+        window.HeroTypewriter.initHeroTypewriter({selector: ".hero-eyebrow", stepMs: 60});
+    }
+
     if (window.WeddingUtils) {
         const countdown = window.WeddingUtils.buildCountdown(WEDDING_DATE);
         const weeks = window.WeddingUtils.buildCalendarWeeks(WEDDING_YEAR, WEDDING_MONTH_INDEX);
