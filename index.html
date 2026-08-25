@@ -259,28 +259,22 @@
             <div class="ww-photo-gallery">
                 <div class="container">
                     <p class="section-eyebrow" data-aos="fade-up">GALLERY</p>
-                    <h2 class="h1 text-center pb-3 ww-title" style="font-family: 'Noto Serif KR', serif;" data-aos="fade-up">포토 갤러리</h2>
+                    <h2 class="h1 text-center pb-3 ww-title" style="font-family: 'Noto Serif KR', serif;" data-aos="fade-up">갤러리</h2>
                     <p class="gallery-lead text-center" style="font-family: 'Noto Serif KR', serif;" data-aos="fade-up">
-                        위 사진을 좌우로 넘기거나, 아래 작은 사진을 누르면 바로 이동합니다.
+                        작은 사진을 누르면 크게 볼 수 있어요. 하단 페이지 번호로 더 많은 사진을 확인하세요.
                     </p>
                 </div>
-                <div class="gallery-main" data-aos="fade-up" data-aos-delay="150" id="gallery-main">
-                    <div class="gallery-main-viewport" id="gallery-main-viewport">
-                        <div aria-label="웨딩 사진 갤러리" class="gallery-main-track" id="gallery-main-track"></div>
-                    </div>
-                    <button aria-label="이전 사진" class="gallery-main-nav gallery-main-prev" id="gallery-main-prev" type="button">‹</button>
-                    <button aria-label="다음 사진" class="gallery-main-nav gallery-main-next" id="gallery-main-next" type="button">›</button>
-                </div>
-                <div aria-label="갤러리 사진 목록" class="gallery-thumb-grid" data-aos="fade-up" data-aos-delay="200" id="gallery-thumb-grid"></div>
-                <!-- 사진이 30장을 넘을 때만 gallery-collapse.js가 hidden을 푼다.
-                     그리드 바깥이어야 한다 — gallery-viewer가 그리드의 자식
-                     인덱스로 활성 썸네일을 추적하기 때문이다. -->
-                <div class="gallery-thumb-more" id="gallery-thumb-more" hidden>
-                    <button aria-controls="gallery-thumb-grid" aria-expanded="false" class="gallery-more-button" id="gallery-thumb-toggle" type="button">
-                        <span data-collapse-label>더보기</span>
-                        <svg aria-hidden="true" class="icon gallery-more-icon" focusable="false"><use href="#i-angle-down"/></svg>
-                    </button>
-                </div>
+                <div aria-label="갤러리 사진 목록" class="gallery-thumb-grid" data-aos="fade-up" data-aos-delay="150" id="gallery-thumb-grid"></div>
+                <!-- 사진이 12장(4열x3행)을 넘을 때만 gallery-pagination.js가 페이지네이션을 보여준다.
+                     썸네일은 DOM에서 제거되지 않고 hidden만 걸린다 — gallery-viewer가 그리드의
+                     자식 인덱스로 활성 썸네일을 추적하기 때문이다. -->
+                <nav aria-label="갤러리 페이지" class="gallery-pagination" id="gallery-pagination" hidden>
+                    <button aria-label="처음 페이지" class="gallery-page-nav" data-page-action="first" type="button">«</button>
+                    <button aria-label="이전 페이지" class="gallery-page-nav" data-page-action="prev" type="button">‹</button>
+                    <div class="gallery-page-numbers" id="gallery-page-numbers"></div>
+                    <button aria-label="다음 페이지" class="gallery-page-nav" data-page-action="next" type="button">›</button>
+                    <button aria-label="마지막 페이지" class="gallery-page-nav" data-page-action="last" type="button">»</button>
+                </nav>
             </div>
         </div>
         <div class="ww-section ww-rsvp-detail" id="map">
@@ -579,6 +573,18 @@
     </div>
 </div>
 
+<div class="gallery-lightbox" id="gallery-lightbox" hidden>
+    <div class="gallery-lightbox-backdrop" data-lightbox-close></div>
+    <div aria-label="갤러리 사진 크게 보기" aria-modal="true" class="gallery-lightbox-panel" role="dialog">
+        <button aria-label="닫기" class="gallery-lightbox-close" id="gallery-lightbox-close" type="button">×</button>
+        <div class="gallery-main-viewport" id="gallery-lightbox-viewport">
+            <div aria-label="웨딩 사진 갤러리" class="gallery-main-track" id="gallery-lightbox-track"></div>
+        </div>
+        <button aria-label="이전 사진" class="gallery-main-nav gallery-main-prev" id="gallery-lightbox-prev" type="button">‹</button>
+        <button aria-label="다음 사진" class="gallery-main-nav gallery-main-next" id="gallery-lightbox-next" type="button">›</button>
+    </div>
+</div>
+
 <!-- 전부 DOMContentLoaded를 기다리므로 defer로 내려도 안전하다. 파싱을 막지 않는다. -->
 <script defer src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js"></script>
 <script defer src="scripts/wedding-utils.js"></script>
@@ -586,7 +592,7 @@
 <script defer src="scripts/gallery-utils.js"></script>
 <script defer src="scripts/gallery-viewer.js"></script>
 <script defer src="scripts/gallery-loader.js"></script>
-<script defer src="scripts/gallery-collapse.js"></script>
+<script defer src="scripts/gallery-pagination.js"></script>
 <script defer src="scripts/account-utils.js"></script>
 <script defer src="scripts/account-info.js"></script>
 <script defer src="scripts/petal-fall.js"></script>

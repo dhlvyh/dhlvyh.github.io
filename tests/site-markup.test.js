@@ -3,23 +3,39 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 
-test("index.html exposes the full-bleed main viewer and thumbnail grid mounts, populated at runtime", () => {
+test("index.html exposes the lightbox viewer and thumbnail grid mounts, populated at runtime", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
-    assert.match(html, /id="gallery-main-viewport"/);
-    assert.match(html, /id="gallery-main-prev"/);
-    assert.match(html, /id="gallery-main-next"/);
+    assert.match(html, /id="gallery-lightbox-viewport"/);
+    assert.match(html, /id="gallery-lightbox-prev"/);
+    assert.match(html, /id="gallery-lightbox-next"/);
 
     // 슬라이드/썸네일은 더 이상 정적 마크업이 아니라 gallery-loader.js가
     // images/gallery/manifest.json을 읽어 런타임에 채운다 (사진 개수가 바뀌어도
     // index.html을 다시 손댈 필요가 없도록).
-    assert.match(html, /<div aria-label="웨딩 사진 갤러리" class="gallery-main-track" id="gallery-main-track"><\/div>/);
+    assert.match(html, /<div aria-label="웨딩 사진 갤러리" class="gallery-main-track" id="gallery-lightbox-track"><\/div>/);
     assert.match(html, /<div aria-label="갤러리 사진 목록"[^>]+id="gallery-thumb-grid"><\/div>/);
     assert.doesNotMatch(html, /data-gallery-slide-index="\d+"/);
     assert.doesNotMatch(html, /data-gallery-thumb-index="\d+"/);
 
     assert.doesNotMatch(html, /id="gallery-viewer"/);
     assert.doesNotMatch(html, /class="gallery-pager"/);
+    assert.doesNotMatch(html, /id="gallery-main-track"/);
+});
+
+test("index.html titles the section 갤러리, not 포토 갤러리", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.match(html, />갤러리<\/h2>/);
+    assert.doesNotMatch(html, /포토 갤러리/);
+});
+
+test("index.html exposes a full-screen gallery lightbox modal", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.match(html, /class="gallery-lightbox" id="gallery-lightbox" hidden/);
+    assert.match(html, /id="gallery-lightbox-close"/);
+    assert.match(html, /data-lightbox-close/);
 });
 
 test("index.html includes the gallery helper scripts before main.js", () => {
@@ -387,31 +403,34 @@ test("countdown unit labels are consistently pluralised", () => {
     assert.deepEqual(labels, ["DAYS", "HOURS", "MIN", "SEC"]);
 });
 
-test("index.html mounts the thumbnail collapse toggle outside the grid", () => {
+test("index.html mounts the pagination nav outside the thumbnail grid", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
-    assert.match(html, /id="gallery-thumb-more"[^>]*hidden/);
-    assert.match(html, /id="gallery-thumb-toggle"/);
-    assert.match(html, /aria-controls="gallery-thumb-grid"/);
-    assert.match(html, /data-collapse-label/);
+    assert.match(html, /id="gallery-pagination"[^>]*hidden/);
+    assert.match(html, /id="gallery-page-numbers"/);
+    assert.match(html, /data-page-action="first"/);
+    assert.match(html, /data-page-action="prev"/);
+    assert.match(html, /data-page-action="next"/);
+    assert.match(html, /data-page-action="last"/);
 
-    // 토글이 그리드 안에 들어가면 gallery-viewer의 children 인덱스가 밀린다
+    // 페이지네이션이 그리드 안에 들어가면 gallery-viewer의 children 인덱스가 밀린다
     const gridTag = html.match(/<div[^>]*id="gallery-thumb-grid"[^>]*><\/div>/);
     assert.ok(gridTag, "expected the thumb grid to stay an empty container");
 
     const gridEnd = html.indexOf(gridTag[0]) + gridTag[0].length;
-    const toggleIndex = html.indexOf('id="gallery-thumb-more"');
-    assert.ok(toggleIndex > gridEnd, "expected the toggle to sit after the grid, not inside it");
+    const paginationIndex = html.indexOf('id="gallery-pagination"');
+    assert.ok(paginationIndex > gridEnd, "expected the pagination nav to sit after the grid, not inside it");
 });
 
-test("index.html loads gallery-collapse.js before main.js", () => {
+test("index.html loads gallery-pagination.js before main.js", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
-    assert.match(html, /<script defer src="scripts\/gallery-collapse\.js"><\/script>/);
+    assert.match(html, /<script defer src="scripts\/gallery-pagination\.js"><\/script>/);
+    assert.doesNotMatch(html, /gallery-collapse\.js/);
 
-    const collapseIndex = html.indexOf("scripts/gallery-collapse.js");
+    const paginationIndex = html.indexOf("scripts/gallery-pagination.js");
     const mainJsIndex = html.indexOf("scripts/main.js");
 
-    assert.ok(collapseIndex !== -1 && collapseIndex < mainJsIndex,
-        "expected gallery-collapse.js before main.js");
+    assert.ok(paginationIndex !== -1 && paginationIndex < mainJsIndex,
+        "expected gallery-pagination.js before main.js");
 });

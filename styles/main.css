@@ -1014,7 +1014,7 @@ body.is-contact-sheet-open {
 
 .gallery-thumb-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 4px;
     margin-top: 4px;
 }
@@ -1038,49 +1038,6 @@ body.is-contact-sheet-open {
     user-select: none;
 }
 
-/* 더보기 토글 — 사진이 30장을 넘을 때만 노출된다.
-   버튼 언어는 .couple-contact-open과 맞춘다 */
-.gallery-thumb-more {
-    display: flex;
-    justify-content: center;
-    padding: 1.25rem 15px 0;
-}
-
-.gallery-thumb-more[hidden] {
-    display: none;
-}
-
-.gallery-more-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    min-height: 44px;
-    padding: 0.7rem 1.75rem;
-    border: 1px solid var(--ww-card-border);
-    border-radius: 999px;
-    background: var(--ww-card-bg);
-    box-shadow: var(--ww-card-shadow);
-    color: var(--ww-accent);
-    font-family: "Noto Serif KR", serif;
-    font-size: 0.95rem;
-    font-weight: 600;
-    transition: box-shadow 0.2s ease;
-}
-
-.gallery-more-button:hover,
-.gallery-more-button:focus-visible {
-    box-shadow: 0 8px 22px rgba(51, 48, 44, 0.1);
-}
-
-.gallery-more-icon {
-    transition: transform 0.2s ease;
-}
-
-.gallery-thumb-more.is-expanded .gallery-more-icon {
-    transform: rotate(180deg);
-}
-
 .gallery-thumb::after {
     content: "";
     position: absolute;
@@ -1091,6 +1048,125 @@ body.is-contact-sheet-open {
 
 .gallery-thumb.is-active::after {
     box-shadow: inset 0 0 0 3px var(--ww-accent);
+}
+
+.gallery-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1.25rem;
+    padding: 0 15px;
+}
+
+.gallery-pagination[hidden] {
+    display: none;
+}
+
+.gallery-page-nav,
+.gallery-page-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 0.5rem;
+    border: 1.5px solid var(--ww-accent);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ww-accent);
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+.gallery-page-nav:hover,
+.gallery-page-nav:focus-visible,
+.gallery-page-number:hover,
+.gallery-page-number:focus-visible {
+    background: var(--ww-accent-soft);
+}
+
+.gallery-page-nav:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.gallery-page-number.is-active {
+    background: var(--ww-accent);
+    color: #fff;
+}
+
+.gallery-page-numbers {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.gallery-page-ellipsis {
+    color: var(--ww-ink-muted);
+    padding: 0 0.15rem;
+}
+
+/* 라이트박스 — 썸네일 클릭 시 전체 사진을 스와이프로 볼 수 있는 풀스크린 모달 */
+.gallery-lightbox[hidden] {
+    display: none !important;
+}
+
+.gallery-lightbox {
+    position: fixed;
+    inset: 0;
+    max-width: var(--ww-frame-width);
+    margin: 0 auto;
+    z-index: 1200;
+}
+
+.gallery-lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 15, 12, 0.92);
+}
+
+.gallery-lightbox-panel {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.gallery-lightbox.is-open .gallery-lightbox-panel {
+    opacity: 1;
+}
+
+.gallery-lightbox-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    z-index: 2;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #fff;
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+/* 라이트박스는 어두운 배경 위에서 바로 사진을 보여준다 — 인라인 뷰어의
+   크림색 블러 배경 트릭은 여기서는 쓰지 않는다 */
+.gallery-lightbox-panel .gallery-main-slide {
+    background: transparent;
+}
+
+.gallery-lightbox-panel .gallery-main-slide-backdrop {
+    display: none;
+}
+
+body.is-gallery-lightbox-open {
+    overflow: hidden;
 }
 
 .countdown-header {
@@ -1623,8 +1699,8 @@ body.is-contact-sheet-open {
     .gallery-main-track.is-animating,
     .nav-drawer-panel,
     .contact-sheet-panel,
-    .account-accordion-icon,
-    .gallery-more-icon {
+    .gallery-lightbox-panel,
+    .account-accordion-icon {
         transition: none;
     }
 

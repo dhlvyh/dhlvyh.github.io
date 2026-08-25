@@ -78,7 +78,7 @@ npm run images
 
 ### 3. 갤러리가 화면에 뿌려지는 방식
 
-`index.html`의 갤러리 영역(`#gallery-main-track`, `#gallery-thumb-grid`)은 빈
+`index.html`의 갤러리 영역(`#gallery-lightbox-track`, `#gallery-thumb-grid`)은 빈
 컨테이너만 갖고 있다. 페이지가 열리면 `scripts/main.js`가 `images/gallery/manifest.json`을
 fetch해서, `scripts/gallery-loader.js`의 `buildGallerySlidesMarkup`/`buildGalleryThumbsMarkup`
 함수로 슬라이드·썸네일 HTML을 만들어 그 컨테이너에 채워 넣은 뒤 갤러리 스와이프
@@ -88,23 +88,24 @@ fetch해서, `scripts/gallery-loader.js`의 `buildGallerySlidesMarkup`/`buildGal
 배포(GitHub Pages)에서 정상 동작하려면 `images/gallery/manifest.json`과
 `images/gallery/main|thumb/*.webp`가 실제로 커밋되어 있어야 한다는 점에 유의한다.
 
-### 4. 썸네일 더보기(접기/펼치기)
+### 4. 썸네일 페이지네이션 + 라이트박스
 
-사진이 **30장을 넘으면** 앞 30장만 보이고 나머지는 접힌다. 그리드 아래
-"더보기 (N장)" 버튼으로 펼치고 "접기"로 되돌린다. 30장 이하면 버튼 자체가
-나타나지 않고 기존과 똑같이 전부 노출된다. 한도는
-`scripts/gallery-collapse.js`의 `DEFAULT_LIMIT` 한 줄이다.
+썸네일은 4열 그리드로 표시되며, 사진이 **12장(4열×3행)을 넘으면** 첫
+페이지만 보이고 나머지는 하단 페이지네이션(« ‹ 1 2 3 … › »)으로 넘긴다.
+12장 이하면 페이지네이션 자체가 나타나지 않고 기존과 똑같이 전부 노출된다.
+페이지당 장수는 `scripts/gallery-pagination.js`의 `PER_PAGE` 한 줄이다.
 
-접힌 썸네일은 `hidden`(= `display: none`)이라 `loading="lazy"` 이미지가
-아예 요청되지 않는다. 40장 기준으로 접힌 상태에서 10장분(약 145KB)을 아낀다.
+썸네일을 누르면 풀스크린 라이트박스가 열리고, 그 안에서는 페이지 구분 없이
+전체 사진을 스와이프로 넘길 수 있다. 라이트박스에서 다른 페이지의 사진으로
+이동한 뒤 닫으면, 그 사진이 포함된 페이지로 그리드가 자동 전환된다.
 
-위쪽 큰 사진을 접힌 구간까지 스와이프하면 그리드가 자동으로 펼쳐진다.
-활성 썸네일 테두리가 숨어 있으면 안 되기 때문이다.
+다른 페이지의 썸네일은 `hidden`(= `display: none`)이라 `loading="lazy"`
+이미지가 아예 요청되지 않는다.
 
-> 더보기 버튼은 반드시 `#gallery-thumb-grid` **바깥**에 있어야 한다.
+> 페이지네이션은 반드시 `#gallery-thumb-grid` **바깥**에 있어야 한다.
 > `gallery-viewer.js`가 그리드의 자식 인덱스로 활성 썸네일을 추적해서,
-> 버튼이 자식으로 섞이면 인덱스가 통째로 밀린다. 같은 이유로 접힌 썸네일도
-> DOM에서 제거하지 않고 `hidden`만 건다.
+> 페이지 전환 버튼이 자식으로 섞이면 인덱스가 통째로 밀린다. 같은 이유로
+> 다른 페이지의 썸네일도 DOM에서 제거하지 않고 `hidden`만 건다.
 
 ## 텍스트·정보 배치
 

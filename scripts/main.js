@@ -198,12 +198,14 @@ function loadGallery() {
         return;
     }
 
+    const lightbox = initGalleryLightbox();
+
     fetch("images/gallery/manifest.json")
         .then(function (response) {
             return response.json();
         })
         .then(function (manifest) {
-            const track = document.querySelector("#gallery-main-track");
+            const track = document.querySelector("#gallery-lightbox-track");
             const thumbGrid = document.querySelector("#gallery-thumb-grid");
 
             if (!track || !thumbGrid || !Array.isArray(manifest) || manifest.length === 0) {
@@ -214,26 +216,82 @@ function loadGallery() {
             thumbGrid.innerHTML = window.GalleryLoader.buildGalleryThumbsMarkup(manifest);
 
             // 뷰어보다 먼저 초기화해야 첫 goToIndex(0)에서 이미 배선돼 있다
-            const collapse = window.GalleryCollapse
-                ? window.GalleryCollapse.initCollapse({
+            const pagination = window.GalleryPagination
+                ? window.GalleryPagination.initPagination({
                     gridSelector: "#gallery-thumb-grid",
-                    wrapperSelector: "#gallery-thumb-more",
-                    toggleSelector: "#gallery-thumb-toggle"
+                    paginationSelector: "#gallery-pagination",
+                    numbersSelector: "#gallery-page-numbers"
                 })
                 : null;
 
             window.GalleryViewer.initGallery({
-                viewportSelector: "#gallery-main-viewport",
-                trackSelector: "#gallery-main-track",
+                viewportSelector: "#gallery-lightbox-viewport",
+                trackSelector: "#gallery-lightbox-track",
                 thumbGridSelector: "#gallery-thumb-grid",
-                prevSelector: "#gallery-main-prev",
-                nextSelector: "#gallery-main-next",
-                onIndexChange: collapse ? collapse.ensureIndexVisible : null
+                prevSelector: "#gallery-lightbox-prev",
+                nextSelector: "#gallery-lightbox-next",
+                onIndexChange: pagination ? pagination.ensurePageVisible : null,
+                onThumbActivate: lightbox.open
             });
         })
         .catch(function () {
             // 매니페스트를 불러오지 못해도 나머지 페이지 기능은 그대로 동작해야 한다
         });
+}
+
+function initGalleryLightbox() {
+    const modal = document.getElementById("gallery-lightbox");
+    const closeButton = document.getElementById("gallery-lightbox-close");
+
+    if (!modal) {
+        return {open: function () {}};
+    }
+
+    let lastFocused = null;
+
+    function open() {
+        lastFocused = document.activeElement;
+        modal.hidden = false;
+        requestAnimationFrame(function () {
+            modal.classList.add("is-open");
+        });
+        document.body.classList.add("is-gallery-lightbox-open");
+
+        if (closeButton) {
+            closeButton.focus();
+        }
+    }
+
+    function close() {
+        modal.classList.remove("is-open");
+        document.body.classList.remove("is-gallery-lightbox-open");
+
+        window.setTimeout(function () {
+            modal.hidden = true;
+        }, 300);
+
+        if (lastFocused) {
+            lastFocused.focus({preventScroll: true});
+        }
+    }
+
+    modal.addEventListener("click", function (event) {
+        if (event.target.closest("[data-lightbox-close]")) {
+            close();
+        }
+    }, true);
+
+    if (closeButton) {
+        closeButton.addEventListener("click", close);
+    }
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && !modal.hidden) {
+            close();
+        }
+    });
+
+    return {open: open};
 }
 
 function initNavDrawer() {

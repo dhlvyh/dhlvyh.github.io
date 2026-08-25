@@ -40,19 +40,19 @@ test("gallery-viewer drives the main track through GalleryUtils snap/edge-resist
     assert.match(source, /window\.GalleryUtils\.computeContainSize/);
 });
 
-test("index.html wraps the gallery in a full-bleed main viewer with a 5-column thumbnail grid", () => {
+test("index.html wraps the gallery lightbox around a shared viewport/track pair", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
-    assert.match(html, /class="gallery-main"/);
-    assert.match(html, /class="gallery-main-viewport"/);
-    assert.match(html, /id="gallery-main-track"[^>]*class="gallery-main-track"|class="gallery-main-track"[^>]*id="gallery-main-track"/);
+    assert.match(html, /class="gallery-lightbox"/);
+    assert.match(html, /class="gallery-main-viewport" id="gallery-lightbox-viewport"/);
+    assert.match(html, /class="gallery-main-track" id="gallery-lightbox-track"/);
     assert.match(html, /class="gallery-thumb-grid"/);
 
-    const mainIndex = html.indexOf('class="gallery-main"');
+    const lightboxIndex = html.indexOf('class="gallery-lightbox"');
     const thumbIndex = html.indexOf('class="gallery-thumb-grid"');
 
-    assert.ok(mainIndex !== -1 && thumbIndex !== -1 && mainIndex < thumbIndex,
-        "expected the thumbnail grid after the main viewer");
+    assert.ok(lightboxIndex !== -1 && thumbIndex !== -1 && lightboxIndex > thumbIndex,
+        "expected the thumbnail grid before the lightbox modal");
 });
 
 test("gallery-loader builds each slide with a blurred backdrop image and a contain-fit photo", () => {
