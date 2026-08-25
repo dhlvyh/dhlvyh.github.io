@@ -347,6 +347,16 @@ test("hero typewriter characters preserve visible spaces", () => {
     assert.match(css, /\.hero-eyebrow-char\s*\{[\s\S]*?white-space:\s*pre;/);
 });
 
+test("the hero typewriter label stays on one line with a container-aware size", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
+
+    assert.match(html, /class="hero-eyebrow ww-eyebrow">Wedding Invitation<\/p>/);
+    assert.doesNotMatch(html, /class="hero-eyebrow ww-eyebrow">Wedding\r?\nInvitation<\/p>/);
+    assert.match(css, /\.hero-photo-full\s*\{[\s\S]*?container-type:\s*inline-size;/);
+    assert.match(css, /\.hero-eyebrow\s*\{[\s\S]*?font-size:\s*clamp\(1\.8rem,\s*9\.5cqw,\s*2\.7rem\);[\s\S]*?white-space:\s*nowrap;/);
+});
+
 test("index.html mounts the petal-fall canvas inside frame-overlay and loads the script", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
@@ -566,8 +576,8 @@ test("the invitation uses a flat white page and smaller type scale", () => {
     assert.match(css, /--ww-paper:\s*#fff;/i);
     assert.match(cssBlock(".page-content"), /background-color:\s*#fff;/i);
     assert.match(cssBlock(".page-content"), /background-image:\s*none;/i);
-    assert.match(cssBlock(".hero-eyebrow"), /font-size:\s*2\.7rem;/i);
-    assert.match(css, /@media\s*\(max-width:\s*768px\)[\s\S]*?\.hero-eyebrow\s*\{[\s\S]*?font-size:\s*2\.5rem;/i);
+    assert.match(cssBlock(".hero-eyebrow"), /font-size:\s*clamp\(1\.8rem,\s*9\.5cqw,\s*2\.7rem\);/i);
+    assert.doesNotMatch(css, /\.hero-eyebrow\s*\{[\s\S]*?font-size:\s*2\.5rem;/i);
     assert.match(cssBlock(".hero-photo-full .hero-eyebrow"), /color:\s*#fff;/i);
     assert.match(cssBlock(".ww-title"), /font-size:\s*1\.45rem;/i);
     assert.match(cssBlock(".greeting-message"), /font-size:\s*0\.875rem;/i);

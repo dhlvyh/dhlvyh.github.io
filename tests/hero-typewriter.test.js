@@ -13,6 +13,13 @@ test("buildTypewriterMarkup wraps each character in a timed span", () => {
     );
 });
 
+test("buildTypewriterMarkup preserves the space in the single-line hero phrase", () => {
+    const markup = buildTypewriterMarkup("Wedding Invitation", 60);
+
+    assert.match(markup, /<span class="hero-eyebrow-char" aria-hidden="true" style="animation-delay:420ms"> <\/span>/);
+    assert.doesNotMatch(markup, /<br>/);
+});
+
 test("buildTypewriterMarkup escapes HTML-sensitive characters", () => {
     const markup = buildTypewriterMarkup('<&">', 10);
 
