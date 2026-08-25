@@ -845,33 +845,24 @@ body.is-contact-sheet-open {
 }
 
 .event-card {
-    height: 100%;
     padding: 2rem;
-    background: var(--ww-card-bg);
-    border: 1px solid var(--ww-card-border);
-    border-radius: 14px;
-    box-shadow: var(--ww-card-shadow);
 }
 
-/* 홀 사진이 카드 헤더라 패딩을 걷고, 라운드 모서리로 사진을 클리핑한다.
-   본문 패딩은 .event-card-body가 대신 맡는다.
-
-   클래스를 둘 다 쓴 건 아래 @media (max-width: 768px)의 `.event-card`가
-   같은 명시도로 더 뒤에 있어서, 한 클래스로는 패딩이 되살아나기 때문이다. */
-.event-card.event-card-copy {
-    padding: 0;
-    overflow: hidden;
-    background: var(--ww-card-bg);
+.event-datetime {
+    margin-bottom: 0.5rem;
+    color: var(--ww-ink);
+    font-weight: 600;
+    text-align: center;
 }
 
-/* 좌우 패딩은 옆 달력 카드(.event-card)와 같은 값을 써야 두 카드의
-   본문 시작선이 맞는다. 아래 미디어쿼리에서 함께 줄인다. */
-.event-card-body {
-    padding: 1.5rem 2rem 2rem;
+.event-venue {
+    margin-bottom: 0;
+    text-align: center;
 }
 
-.event-card-calendar {
-    background: var(--ww-card-bg);
+.event-venue a {
+    color: var(--ww-accent);
+    font-weight: 600;
 }
 
 .event-kicker {
@@ -896,14 +887,6 @@ body.is-contact-sheet-open {
     margin-bottom: 1.5rem;
     color: var(--ww-ink-muted);
     line-height: 1.9;
-}
-
-/* aspect-ratio를 CSS로 고정해 이미지가 로드되기 전에도 자리를 잡는다(CLS 0 유지) */
-.event-venue-image {
-    display: block;
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    object-fit: cover;
 }
 
 .event-venue-note {
@@ -1110,39 +1093,6 @@ body.is-contact-sheet-open {
     box-shadow: inset 0 0 0 3px var(--ww-accent);
 }
 
-.event-meta {
-    list-style: none;
-    padding-left: 0;
-    margin-bottom: 0;
-}
-
-.event-meta li {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    gap: 0.35rem;
-    padding: 1rem 0;
-    border-top: 1px solid var(--ww-card-border);
-    color: var(--ww-ink);
-}
-
-.event-meta li:first-child {
-    border-top: 0;
-    padding-top: 0;
-}
-
-.event-meta-label {
-    color: var(--ww-accent);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-}
-
 .countdown-header {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1342,10 +1292,6 @@ body.is-contact-sheet-open {
 
     .event-card {
         padding: 1.5rem;
-    }
-
-    .event-card-body {
-        padding: 1.25rem 1.5rem 1.5rem;
     }
 
     .countdown-header {

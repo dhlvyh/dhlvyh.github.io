@@ -35,26 +35,22 @@ test("index.html includes the gallery helper scripts before main.js", () => {
         "expected gallery-loader.js before main.js");
 });
 
-test("index.html leads the invitation card with the venue photo as its header", () => {
+test("index.html shows the wedding date and venue as two plain lines with no venue photo", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
-    assert.match(html, /class="event-venue-image"[^>]+src="images\/opt\/hall\.webp"/);
-    assert.match(html, /href="https:\/\/thenewwed\.kr\/"/);
+    assert.doesNotMatch(html, /class="event-venue-image"/);
+    assert.doesNotMatch(html, /images\/opt\/hall\.webp/);
+
+    assert.match(html, /class="event-datetime">2026년 11월 1일 일요일 11:00 AM<\/p>/);
+    assert.match(html, /class="event-venue"><a href="https:\/\/thenewwed\.kr\/"[^>]*>더뉴컨벤션 2층 더뉴홀<\/a><\/p>/);
+
+    const datetimeIndex = html.indexOf('class="event-datetime"');
+    const venueIndex = html.indexOf('class="event-venue"');
+    assert.ok(datetimeIndex !== -1 && venueIndex !== -1 && datetimeIndex < venueIndex,
+        "expected the date line before the venue line");
+
     assert.match(html, /target="_blank"/);
     assert.match(html, /rel="noopener noreferrer"/);
-
-    // 사진이 카드 헤더이므로 일시/주소/장소 목록보다 먼저 와야 한다
-    const venueImageIndex = html.indexOf('class="event-venue-image"');
-    const cardBodyIndex = html.indexOf('class="event-card-body"');
-    const metaListIndex = html.indexOf('class="event-meta"');
-
-    assert.notEqual(venueImageIndex, -1, "expected the venue photo");
-    assert.notEqual(cardBodyIndex, -1, "expected a padded card body");
-    assert.ok(venueImageIndex < cardBodyIndex, "expected the photo above the card body");
-    assert.ok(cardBodyIndex < metaListIndex, "expected the metadata list inside the card body");
-
-    // 인셋 액자는 걷어냈다 — 사진이 카드 폭을 그대로 쓴다
-    assert.doesNotMatch(html, /class="event-venue-preview"/);
 });
 
 test("index.html embeds Google Maps for 더뉴컨벤션웨딩", () => {
@@ -274,8 +270,8 @@ test("index.html removes the duplicate invitation copy from the events section",
     assert.doesNotMatch(html, /class="event-copy"/);
     assert.doesNotMatch(html, /안용현, 안다혜의 결혼식에 초대합니다/);
 
-    assert.match(html, /class="event-meta"/);
-    assert.match(html, /class="event-venue-image"/);
+    assert.match(html, /class="event-datetime"/);
+    assert.match(html, /class="event-venue"/);
 });
 
 test("index.html points every share surface at the optimized JPG card", () => {

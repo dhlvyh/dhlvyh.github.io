@@ -42,6 +42,8 @@ npm test           # node --test 기반 테스트 실행
 | 히어로(첫 화면) 사진 | `images/main.jpg` | 1장 |
 | 두 사람 소개 인물사진 | `images/person1.jpg`(신랑), `images/person2.jpg`(신부) | 각 1장 |
 
+> `hall.jpg`는 계속 변환되지만, 예식 안내 섹션에는 더 이상 표시되지 않는다(일시·장소 2라인 텍스트로 대체).
+
 - 갤러리는 `gallery{번호}.jpg` 형식의 파일을 `images/` 폴더에서 직접 스캔해서 찾는다.
   몇 장을 넣든(1장이든 100장이든) 자동으로 그만큼만 변환하고, 번호가 중간에
   비어 있어도(`gallery1.jpg`, `gallery3.jpg`만 있어도) 있는 파일만 순서대로 처리한다.
