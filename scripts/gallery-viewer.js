@@ -368,7 +368,12 @@
                 return;
             }
 
-            goToIndex(Number(thumb.dataset.galleryThumbIndex), true);
+            const index = Number(thumb.dataset.galleryThumbIndex);
+            goToIndex(index, true);
+
+            if (typeof config.onThumbActivate === "function") {
+                config.onThumbActivate(index);
+            }
         });
 
         if (prev) {
