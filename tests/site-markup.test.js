@@ -479,7 +479,8 @@ test("the invitation uses a flat white page and smaller type scale", () => {
     assert.match(css, /--ww-paper:\s*#fff;/i);
     assert.match(cssBlock(".page-content"), /background-color:\s*#fff;/i);
     assert.match(cssBlock(".page-content"), /background-image:\s*none;/i);
-    assert.match(cssBlock(".hero-eyebrow"), /font-size:\s*1\.5rem;/i);
+    assert.match(cssBlock(".hero-eyebrow"), /font-size:\s*2\.7rem;/i);
+    assert.match(css, /@media\s*\(max-width:\s*768px\)[\s\S]*?\.hero-eyebrow\s*\{[\s\S]*?font-size:\s*2\.5rem;/i);
     assert.match(cssBlock(".hero-photo-full .hero-eyebrow"), /color:\s*#fff;/i);
     assert.match(cssBlock(".ww-title"), /font-size:\s*1\.45rem;/i);
     assert.match(cssBlock(".greeting-message"), /font-size:\s*0\.875rem;/i);

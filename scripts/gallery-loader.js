@@ -17,7 +17,7 @@
             return "" +
                 '<div class="gallery-main-slide" data-gallery-slide-index="' + index + '">' +
                 '<img class="gallery-main-slide-backdrop" src="' + item.main + '" alt="" aria-hidden="true" loading="lazy"/>' +
-                '<img class="gallery-main-slide-photo" alt="안용현 안다혜 갤러리 사진 ' + displayNumber + '" decoding="async" loading="lazy" src="' + item.main + '"/>' +
+                '<img class="gallery-main-slide-photo" alt="갤러리 사진 ' + displayNumber + '" decoding="async" loading="lazy" src="' + item.main + '"/>' +
                 "</div>";
         }).join("");
     }
