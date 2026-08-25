@@ -341,6 +341,12 @@ test("the closing together block keeps the moved content separate from the photo
     assert.match(css, /\.closing-together\s*\{[\s\S]*?background:\s*#fff;[\s\S]*?color:\s*var\(--ww-ink\);/);
 });
 
+test("hero typewriter characters preserve visible spaces", () => {
+    const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
+
+    assert.match(css, /\.hero-eyebrow-char\s*\{[\s\S]*?white-space:\s*pre;/);
+});
+
 test("index.html mounts the petal-fall canvas inside frame-overlay and loads the script", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 

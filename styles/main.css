@@ -156,6 +156,7 @@ body {
 
 .hero-eyebrow-char {
     display: inline-block;
+    white-space: pre;
     opacity: 0;
     animation: heroCharIn 220ms ease forwards;
 }
