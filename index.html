@@ -112,9 +112,9 @@
                             <img alt="신랑 안용현" class="img-fluid" src="images/opt/person1.webp"/>
                             <div class="couple-card-heading">
                                 <h3 class="couple-card-name ww-title">신랑 안용현</h3>
-                                <div aria-label="신랑 안용현 연락하기" class="couple-card-actions">
-                                    <a aria-label="안용현에게 전화" class="couple-card-action" href="tel:01094884712"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg></a>
-                                    <a aria-label="안용현에게 문자" class="couple-card-action" href="sms:01094884712"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg></a>
+                                <div aria-label="신랑 연락하기" class="couple-card-actions">
+                                    <a aria-label="신랑 전화" class="couple-card-action" href="tel:01094884712"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg></a>
+                                    <!--<a aria-label="신랑 문자" class="couple-card-action" href="sms:01094884712"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg></a> -->
                                 </div>
                             </div>
                             <p class="couple-parents" style="font-family: 'Noto Serif KR', serif;">
@@ -125,9 +125,9 @@
                             <img alt="신부 안다혜" class="img-fluid" src="images/opt/person2.webp"/>
                             <div class="couple-card-heading">
                                 <h3 class="couple-card-name ww-title">신부 안다혜</h3>
-                                <div aria-label="신부 안다혜 연락하기" class="couple-card-actions">
-                                    <a aria-label="안다혜에게 전화" class="couple-card-action" href="tel:01045201205"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg></a>
-                                    <a aria-label="안다혜에게 문자" class="couple-card-action" href="sms:01045201205"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg></a>
+                                <div aria-label="신부 연락하기" class="couple-card-actions">
+                                    <a aria-label="신부 전화" class="couple-card-action" href="tel:01045201205"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg></a>
+                                    <!-- <a aria-label="신부 문자" class="couple-card-action" href="sms:01045201205"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg></a> -->
                                 </div>
                             </div>
                             <p class="couple-parents" style="font-family: 'Noto Serif KR', serif;">
@@ -217,10 +217,29 @@
                                 </div>
                             </div>
                             <p class="countdown-copy" id="wedding-countdown-copy">
-                                예식일까지 남은 날짜를 계산하고 있습니다.
+                                용현 ♥ 다혜  예식일까지 00일 남았습니다.
                             </p>
                         </div>
                 </div>
+            </div>
+        </div>
+        <div class="ww-section" id="gallery">
+            <div class="ww-photo-gallery">
+                <div class="container">
+                    <p class="section-eyebrow" data-aos="fade-up">GALLERY</p>
+                    <h2 class="h1 text-center pb-3 ww-title" style="font-family: 'Noto Serif KR', serif;" data-aos="fade-up">갤러리</h2>
+                </div>
+                <div aria-label="갤러리 사진 목록" class="gallery-thumb-grid" data-aos="fade-up" data-aos-delay="150" id="gallery-thumb-grid"></div>
+                <!-- 사진이 12장(4열x3행)을 넘을 때만 gallery-pagination.js가 페이지네이션을 보여준다.
+                     썸네일은 DOM에서 제거되지 않고 hidden만 걸린다 — gallery-viewer가 그리드의
+                     자식 인덱스로 활성 썸네일을 추적하기 때문이다. -->
+                <nav aria-label="갤러리 페이지" class="gallery-pagination" id="gallery-pagination" hidden>
+                    <button aria-label="처음 페이지" class="gallery-page-nav" data-page-action="first" type="button">«</button>
+                    <button aria-label="이전 페이지" class="gallery-page-nav" data-page-action="prev" type="button">‹</button>
+                    <div class="gallery-page-numbers" id="gallery-page-numbers"></div>
+                    <button aria-label="다음 페이지" class="gallery-page-nav" data-page-action="next" type="button">›</button>
+                    <button aria-label="마지막 페이지" class="gallery-page-nav" data-page-action="last" type="button">»</button>
+                </nav>
             </div>
         </div>
         <div class="ww-section" id="together">
@@ -252,25 +271,6 @@
                         <span class="odometer-unit">초</span>
                     </span>
                 </div>
-            </div>
-        </div>
-        <div class="ww-section" id="gallery">
-            <div class="ww-photo-gallery">
-                <div class="container">
-                    <p class="section-eyebrow" data-aos="fade-up">GALLERY</p>
-                    <h2 class="h1 text-center pb-3 ww-title" style="font-family: 'Noto Serif KR', serif;" data-aos="fade-up">갤러리</h2>
-                </div>
-                <div aria-label="갤러리 사진 목록" class="gallery-thumb-grid" data-aos="fade-up" data-aos-delay="150" id="gallery-thumb-grid"></div>
-                <!-- 사진이 12장(4열x3행)을 넘을 때만 gallery-pagination.js가 페이지네이션을 보여준다.
-                     썸네일은 DOM에서 제거되지 않고 hidden만 걸린다 — gallery-viewer가 그리드의
-                     자식 인덱스로 활성 썸네일을 추적하기 때문이다. -->
-                <nav aria-label="갤러리 페이지" class="gallery-pagination" id="gallery-pagination" hidden>
-                    <button aria-label="처음 페이지" class="gallery-page-nav" data-page-action="first" type="button">«</button>
-                    <button aria-label="이전 페이지" class="gallery-page-nav" data-page-action="prev" type="button">‹</button>
-                    <div class="gallery-page-numbers" id="gallery-page-numbers"></div>
-                    <button aria-label="다음 페이지" class="gallery-page-nav" data-page-action="next" type="button">›</button>
-                    <button aria-label="마지막 페이지" class="gallery-page-nav" data-page-action="last" type="button">»</button>
-                </nav>
             </div>
         </div>
         <div class="ww-section ww-rsvp-detail" id="map">
@@ -562,8 +562,8 @@
             <li><a class="smooth-scroll" href="#greeting">인사말</a></li>
             <li><a class="smooth-scroll" href="#couple">두 사람</a></li>
             <li><a class="smooth-scroll" href="#events">예식 안내</a></li>
-            <li><a class="smooth-scroll" href="#together">함께한 시간</a></li>
             <li><a class="smooth-scroll" href="#gallery">갤러리</a></li>
+            <li><a class="smooth-scroll" href="#together">함께한 시간</a></li>
             <li><a class="smooth-scroll" href="#map">오시는 길</a></li>
             <li><a class="smooth-scroll" href="#account-info">마음 전하실 곳</a></li>
         </ul>

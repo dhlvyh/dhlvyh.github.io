@@ -27,6 +27,18 @@ test("gallery-viewer notifies onThumbActivate only from the thumbnail click hand
     assert.match(clickHandlerMatch[0], /config\.onThumbActivate/);
 });
 
+test("gallery-viewer opens the lightbox before positioning the selected slide", () => {
+    const source = fs.readFileSync(path.resolve(__dirname, "../scripts/gallery-viewer.js"), "utf8");
+    const clickHandlerMatch = source.match(/thumbGrid\.addEventListener\("click", function \(event\) \{[\s\S]*?\}\);/);
+    assert.ok(clickHandlerMatch, "expected a thumbGrid click listener");
+
+    const handler = clickHandlerMatch[0];
+    assert.ok(
+        handler.indexOf("config.onThumbActivate") < handler.indexOf("goToIndex(index, true)"),
+        "expected the lightbox to be visible before measuring the selected slide position"
+    );
+});
+
 test("gallery-viewer drives the main track through GalleryUtils snap/edge-resistance/pinch math", () => {
     const source = fs.readFileSync(path.resolve(__dirname, "../scripts/gallery-viewer.js"), "utf8");
 

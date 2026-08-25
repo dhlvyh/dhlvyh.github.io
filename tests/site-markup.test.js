@@ -176,7 +176,7 @@ test("index.html exposes a host-only contact sheet with just the four parents", 
 
 test("index.html keeps the event flow flat and removes the countdown header", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
-    const events = html.slice(html.indexOf('<div class="ww-section" id="events">'), html.indexOf('<div class="ww-section" id="together">'));
+    const events = html.slice(html.indexOf('<div class="ww-section" id="events">'), html.indexOf('<div class="ww-section" id="gallery">'));
 
     assert.doesNotMatch(events, /class="countdown-header"/);
     assert.match(events, /class="event-datetime"/);
@@ -186,6 +186,42 @@ test("index.html keeps the event flow flat and removes the countdown header", ()
     assert.ok(events.indexOf('class="event-venue"') < events.indexOf('id="wedding-countdown-label"'));
     assert.ok(events.indexOf('id="wedding-calendar-grid"') < events.indexOf('id="wedding-countdown-label"'));
     assert.doesNotMatch(events, /calendar-time-caption|wedding-calendar-time/);
+});
+
+test("the section order places together after the gallery and keeps the drawer in sync", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const sectionOrder = ["events", "gallery", "together", "map"]
+        .map((id) => html.indexOf(`id="${id}"`));
+
+    assert.ok(sectionOrder.every((index) => index !== -1), "expected all reordered sections");
+    assert.deepEqual([...sectionOrder].sort((a, b) => a - b), sectionOrder,
+        "expected gallery before together in the page flow");
+
+    const drawer = html.slice(html.indexOf('class="nav-drawer-list"'));
+    assert.ok(drawer.indexOf('href="#gallery"') < drawer.indexOf('href="#together"'),
+        "expected gallery before together in the drawer");
+});
+
+test("the countdown uses enlarged circular units and the couple-specific copy", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
+    const mainJs = fs.readFileSync(path.resolve(__dirname, "../scripts/main.js"), "utf8");
+
+    function cssBlock(selector) {
+        const start = css.indexOf(selector + " {");
+        assert.notEqual(start, -1, `missing CSS block: ${selector}`);
+        const end = css.indexOf("}", start);
+        return css.slice(start, end);
+    }
+
+    const countdownValues = cssBlock(".countdown-unit-value");
+    assert.match(countdownValues, /width:\s*68px;/i);
+    assert.match(countdownValues, /height:\s*68px;/i);
+    assert.match(countdownValues, /border-radius:\s*50%;/i);
+    assert.match(countdownValues, /font-size:\s*1\.45rem;/i);
+    assert.match(html, /id="wedding-countdown-copy">\s*용현 ♥ 다혜\s+예식일까지/);
+    assert.match(mainJs, /setText\("#wedding-countdown-copy",\s*"용현 ♥ 다혜\s+예식일까지/);
+    assert.match(mainJs, /parts\.days/);
 });
 
 test("the gallery omits the instructional lead copy", () => {
@@ -531,9 +567,10 @@ test("couple cards center names and use icon-only contact links", () => {
     }
 
     assert.match(cssBlock(".couple-card img"), /aspect-ratio:\s*4\s*\/\s*5;/i);
-    assert.match(cssBlock(".couple-card-heading"), /position:\s*relative;/i);
     assert.match(cssBlock(".couple-card-name"), /text-align:\s*center;/i);
-    assert.match(cssBlock(".couple-card-actions"), /position:\s*absolute;/i);
+    assert.match(cssBlock(".couple-card-heading"), /gap:\s*0\.25rem;/i);
+    assert.match(cssBlock(".couple-card-heading"), /padding:\s*0;/i);
+    assert.match(cssBlock(".couple-card-actions"), /position:\s*static;/i);
     assert.match(cssBlock(".couple-card-action"), /background:\s*transparent;/i);
     assert.match(cssBlock(".couple-card-action"), /box-shadow:\s*none;/i);
     assert.match(cssBlock(".couple-card-action"), /width:\s*auto;/i);

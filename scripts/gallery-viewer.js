@@ -369,11 +369,14 @@
             }
 
             const index = Number(thumb.dataset.galleryThumbIndex);
-            goToIndex(index, true);
 
             if (typeof config.onThumbActivate === "function") {
                 config.onThumbActivate(index);
             }
+
+            // 숨김 상태에서는 viewport.clientWidth가 0이므로, 라이트박스를
+            // 먼저 표시한 뒤 선택 슬라이드의 실제 위치를 계산한다.
+            goToIndex(index, true);
         });
 
         if (prev) {

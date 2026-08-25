@@ -20,11 +20,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (window.WeddingUtils) {
-        const countdown = window.WeddingUtils.buildCountdown(WEDDING_DATE);
         const weeks = window.WeddingUtils.buildCalendarWeeks(WEDDING_YEAR, WEDDING_MONTH_INDEX);
         const calendarMarkup = window.WeddingUtils.buildCalendarMarkup(weeks, WEDDING_DAY);
-
-        setText("#wedding-countdown-copy", countdown.copy);
 
         const grid = document.querySelector("#wedding-calendar-grid");
         if (grid) {
@@ -136,6 +133,7 @@ function initCountdownTicker() {
         hours.textContent = pad(parts.hours);
         minutes.textContent = pad(parts.minutes);
         seconds.textContent = pad(parts.seconds);
+        setText("#wedding-countdown-copy", "용현 ♥ 다혜  예식일까지 " + parts.days + "일 남았습니다.");
     }
 
     tick();
