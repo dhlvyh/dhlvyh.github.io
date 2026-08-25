@@ -27,16 +27,25 @@ test("gallery-viewer notifies onThumbActivate only from the thumbnail click hand
     assert.match(clickHandlerMatch[0], /config\.onThumbActivate/);
 });
 
-test("gallery-viewer opens the lightbox before positioning the selected slide", () => {
+test("gallery-viewer opens the lightbox before positioning the selected slide without an opening transition", () => {
     const source = fs.readFileSync(path.resolve(__dirname, "../scripts/gallery-viewer.js"), "utf8");
     const clickHandlerMatch = source.match(/thumbGrid\.addEventListener\("click", function \(event\) \{[\s\S]*?\}\);/);
     assert.ok(clickHandlerMatch, "expected a thumbGrid click listener");
 
     const handler = clickHandlerMatch[0];
     assert.ok(
-        handler.indexOf("config.onThumbActivate") < handler.indexOf("goToIndex(index, true)"),
-        "expected the lightbox to be visible before measuring the selected slide position"
+        handler.indexOf("config.onThumbActivate") < handler.indexOf("goToIndex(index, false)"),
+        "expected the lightbox to be visible before positioning the selected slide without transition"
     );
+});
+
+test("gallery-viewer updates the current photo counter when the active slide changes", () => {
+    const source = fs.readFileSync(path.resolve(__dirname, "../scripts/gallery-viewer.js"), "utf8");
+
+    assert.match(source, /config\.counterSelector/);
+    assert.match(source, /function updateCounter\(\)/);
+    assert.match(source, /activeIndex \+ 1/);
+    assert.match(source, /updateCounter\(\);/);
 });
 
 test("gallery-viewer drives the main track through GalleryUtils snap/edge-resistance/pinch math", () => {

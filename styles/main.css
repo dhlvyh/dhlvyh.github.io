@@ -1177,12 +1177,13 @@ body.is-contact-sheet-open {
 .gallery-lightbox-backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(20, 15, 12, 0.92);
+    background: #fff;
 }
 
 .gallery-lightbox-panel {
     position: absolute;
     inset: 0;
+    background: #fff;
     opacity: 0;
     transition: opacity 0.25s ease;
 }
@@ -1201,7 +1202,7 @@ body.is-contact-sheet-open {
     padding: 0;
     border: 0;
     background: none;
-    color: #fff;
+    color: var(--ww-ink-muted);
     font-size: 1.8rem;
     line-height: 1;
     cursor: pointer;
@@ -1210,11 +1211,25 @@ body.is-contact-sheet-open {
 /* 라이트박스는 어두운 배경 위에서 바로 사진을 보여준다 — 인라인 뷰어의
    크림색 블러 배경 트릭은 여기서는 쓰지 않는다 */
 .gallery-lightbox-panel .gallery-main-slide {
-    background: transparent;
+    background: #fff;
 }
 
 .gallery-lightbox-panel .gallery-main-slide-backdrop {
     display: none;
+}
+
+.gallery-lightbox-counter {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    z-index: 2;
+    margin: 0;
+    color: var(--ww-ink-muted);
+    font-family: "Dosis", sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    transform: translateX(-50%);
 }
 
 body.is-gallery-lightbox-open {
@@ -1656,6 +1671,22 @@ body.is-gallery-lightbox-open {
 
 /* 마지막 인사 — full-bleed 사진 + 그라데이션 오버레이 + 인사말 */
 .closing-section {
+    position: relative;
+    background: var(--ww-paper);
+    overflow: hidden;
+}
+
+.closing-together {
+    position: relative;
+    width: 100%;
+    padding: 4rem 1.5rem;
+    background: #fff;
+    color: var(--ww-ink);
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.closing-photo-stage {
     position: relative;
     min-height: 600px;
     overflow: hidden;

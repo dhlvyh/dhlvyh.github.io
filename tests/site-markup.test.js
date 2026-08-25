@@ -35,7 +35,17 @@ test("index.html exposes a full-screen gallery lightbox modal", () => {
 
     assert.match(html, /class="gallery-lightbox" id="gallery-lightbox" hidden/);
     assert.match(html, /id="gallery-lightbox-close"/);
+    assert.match(html, /aria-live="polite"[^>]+class="gallery-lightbox-counter" id="gallery-lightbox-counter"/);
     assert.match(html, /data-lightbox-close/);
+});
+
+test("gallery lightbox uses a white fixed frame and centered photo counter", () => {
+    const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
+
+    assert.match(css, /\.gallery-lightbox-backdrop\s*\{[\s\S]*?background:\s*#fff;/);
+    assert.match(css, /\.gallery-lightbox-panel\s*\{[\s\S]*?background:\s*#fff;/);
+    assert.match(css, /\.gallery-lightbox-panel \.gallery-main-slide\s*\{[\s\S]*?background:\s*#fff;/);
+    assert.match(css, /\.gallery-lightbox-counter\s*\{[\s\S]*?position:\s*absolute;[\s\S]*?bottom:\s*12px;[\s\S]*?left:\s*50%;[\s\S]*?transform:\s*translateX\(-50%\);/);
 });
 
 test("index.html includes the gallery helper scripts before main.js", () => {
@@ -177,7 +187,7 @@ test("index.html exposes a host-only contact sheet with just the four parents", 
 
 test("index.html keeps the event flow flat and removes the countdown header", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
-    const events = html.slice(html.indexOf('<div class="ww-section" id="events">'), html.indexOf('<div class="ww-section" id="gallery">'));
+    const events = html.slice(html.indexOf('<div class="ww-section" id="events">'), html.indexOf('<div class="ww-section ww-rsvp-detail" id="map">'));
 
     assert.doesNotMatch(events, /class="countdown-header"/);
     assert.match(events, /class="event-datetime"/);
@@ -189,24 +199,38 @@ test("index.html keeps the event flow flat and removes the countdown header", ()
     assert.doesNotMatch(events, /calendar-time-caption|wedding-calendar-time/);
 });
 
-test("the section order places together after the gallery and keeps the drawer in sync", () => {
+test("the section order follows the invitation flow and removes the standalone together section", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
-    const sectionOrder = ["events", "gallery", "together", "map"]
+    const sectionOrder = ["home", "greeting", "couple", "gallery", "events", "map", "account-info", "closing"]
         .map((id) => html.indexOf(`id="${id}"`));
 
-    assert.ok(sectionOrder.every((index) => index !== -1), "expected all reordered sections");
+    assert.ok(sectionOrder.every((index) => index !== -1), "expected all invitation sections");
     assert.deepEqual([...sectionOrder].sort((a, b) => a - b), sectionOrder,
-        "expected gallery before together in the page flow");
+        "expected the sections to follow the requested page flow");
+    assert.equal(html.indexOf('id="together"'), -1, "expected no standalone together section");
 
     const drawer = html.slice(html.indexOf('class="nav-drawer-list"'));
-    assert.ok(drawer.indexOf('href="#gallery"') < drawer.indexOf('href="#together"'),
-        "expected gallery before together in the drawer");
+    const drawerOrder = ["home", "greeting", "couple", "gallery", "events", "map", "account-info"]
+        .map((id) => drawer.indexOf(`href="#${id}"`));
+
+    assert.deepEqual([...drawerOrder].sort((a, b) => a - b), drawerOrder,
+        "expected the drawer to follow the requested page flow");
+    assert.doesNotMatch(drawer, /href="#together"/);
 });
 
-test("the together section uses the approved lead copy", () => {
+test("the together content is a separate block above the closing photo", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const closingIndex = html.indexOf('class="closing-section" id="closing"');
+    const togetherIndex = html.indexOf('class="closing-together"');
+    const photoStageIndex = html.indexOf('class="closing-photo-stage"');
+    const messageIndex = html.indexOf('class="closing-message"');
 
+    assert.equal(html.indexOf('id="together"'), -1);
+    assert.ok(closingIndex !== -1 && togetherIndex !== -1 && photoStageIndex !== -1 && messageIndex !== -1);
+    assert.ok(closingIndex < togetherIndex && togetherIndex < photoStageIndex && photoStageIndex < messageIndex,
+        "expected together content above the separate closing photo stage");
     assert.match(html, /class="[^"]*together-lead[^"]*"[^>]*>\s*처음 만난 날부터 오늘까지, 안용현과 안다혜가 함께 걸어온 시간입니다\.\s*<\/p>/);
+    assert.match(html, /data-odometer-role="years"/);
 });
 
 test("the countdown uses enlarged circular units and the couple-specific copy", () => {
@@ -296,6 +320,8 @@ test("index.html adds a full-bleed farewell section after the account section", 
 
     assert.match(html, /class="closing-section"[^>]+id="closing"/);
     assert.match(html, /class="closing-photo"/);
+    assert.match(html, /class="closing-together"/);
+    assert.match(html, /class="closing-photo-stage"/);
     assert.match(html, /class="closing-message"/);
 
     const accountSectionIndex = html.indexOf('id="account-info"');
@@ -303,6 +329,16 @@ test("index.html adds a full-bleed farewell section after the account section", 
 
     assert.ok(accountSectionIndex !== -1 && closingSectionIndex !== -1 && accountSectionIndex < closingSectionIndex,
         "expected the closing section after the account-info section");
+});
+
+test("the closing together block keeps the moved content separate from the photo", () => {
+    const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
+
+    assert.match(css, /\.closing-section\s*\{[\s\S]*?background:\s*var\(--ww-paper\);/);
+    assert.match(css, /\.closing-photo-stage\s*\{[\s\S]*?position:\s*relative;[\s\S]*?min-height:\s*600px;[\s\S]*?overflow:\s*hidden;/);
+    assert.match(css, /\.closing-overlay\s*\{[\s\S]*?justify-content:\s*flex-end;/);
+    assert.match(css, /\.closing-together\s*\{[\s\S]*?width:\s*100%;[\s\S]*?padding:\s*4rem 1\.5rem;/);
+    assert.match(css, /\.closing-together\s*\{[\s\S]*?background:\s*#fff;[\s\S]*?color:\s*var\(--ww-ink\);/);
 });
 
 test("index.html mounts the petal-fall canvas inside frame-overlay and loads the script", () => {
@@ -456,9 +492,11 @@ test("index.html lists the greeting section in the drawer table of contents", ()
     const drawer = html.slice(html.indexOf('class="nav-drawer-list"'));
     const linked = [...drawer.matchAll(/href="#([a-z-]+)"/g)].map((m) => m[1]);
 
-    for (const id of ["home", "greeting", "couple", "events", "together", "gallery", "map", "account-info"]) {
+    for (const id of ["home", "greeting", "couple", "gallery", "events", "map", "account-info"]) {
         assert.ok(linked.includes(id), `drawer is missing a link to #${id}`);
     }
+
+    assert.doesNotMatch(html, /href="#together">함께한 시간<\/a>/);
 });
 
 test("index.html exposes the scroll-to-top control as a real button", () => {

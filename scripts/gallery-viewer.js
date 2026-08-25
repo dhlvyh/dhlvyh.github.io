@@ -20,6 +20,9 @@
         const thumbGrid = document.querySelector(config.thumbGridSelector);
         const prev = document.querySelector(config.prevSelector);
         const next = document.querySelector(config.nextSelector);
+        const counter = config.counterSelector
+            ? document.querySelector(config.counterSelector)
+            : null;
 
         if (!viewport || !track || !thumbGrid) {
             return;
@@ -127,6 +130,12 @@
             });
         }
 
+        function updateCounter() {
+            if (counter) {
+                counter.textContent = (activeIndex + 1) + " / " + length;
+            }
+        }
+
         function goToIndex(index, useTransition) {
             if (zoomStates[activeIndex].scale > 1) {
                 resetZoom(activeIndex);
@@ -135,6 +144,7 @@
             activeIndex = window.GalleryUtils.clampIndex(index, length);
             setTrackPosition(activeIndex, 0, useTransition);
             updateActiveThumb();
+            updateCounter();
 
             // 썸네일이 접혀 있을 수 있다. 접힘 모듈이 필요하면 펼치도록 알린다.
             if (typeof config.onIndexChange === "function") {
@@ -376,7 +386,7 @@
 
             // 숨김 상태에서는 viewport.clientWidth가 0이므로, 라이트박스를
             // 먼저 표시한 뒤 선택 슬라이드의 실제 위치를 계산한다.
-            goToIndex(index, true);
+            goToIndex(index, false);
         });
 
         if (prev) {

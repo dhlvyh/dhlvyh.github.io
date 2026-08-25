@@ -225,6 +225,7 @@ function loadGallery() {
                 thumbGridSelector: "#gallery-thumb-grid",
                 prevSelector: "#gallery-lightbox-prev",
                 nextSelector: "#gallery-lightbox-next",
+                counterSelector: "#gallery-lightbox-counter",
                 onIndexChange: pagination ? pagination.ensurePageVisible : null,
                 onThumbActivate: lightbox.open
             });
