@@ -125,31 +125,20 @@ test("index.html adds parent names to each couple card", () => {
     assert.match(html, /class="couple-parents"[^>]*>[\s\S]*?아들/);
 });
 
-test("index.html exposes the main contact sheet listing all six family members", () => {
+test("index.html exposes direct couple contact links and removes the general contact sheet", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
-    const openButtonTag = html.match(/<button[^>]*id="contact-sheet-open"[^>]*>/);
-    assert.ok(openButtonTag, "expected a button with id=contact-sheet-open");
-    assert.match(openButtonTag[0], /aria-controls="contact-sheet"/);
+    const coupleStart = html.indexOf('class="couple-grid"');
+    const coupleEnd = html.indexOf('<div class="ww-section" id="events">');
+    const coupleHtml = html.slice(coupleStart, coupleEnd);
 
-    assert.match(html, /id="contact-sheet"[^>]*hidden/);
-
-    const sheetStart = html.indexOf('<div class="contact-sheet" id="contact-sheet"');
-    const sheetEnd = html.indexOf('<div class="contact-sheet" id="host-contact-sheet"');
-    const sheetHtml = html.slice(sheetStart, sheetEnd);
-
-    const rows = sheetHtml.match(/class="contact-sheet-row"/g) || [];
-    assert.equal(rows.length, 6);
-
-    const telLinks = sheetHtml.match(/href="tel:[0-9]+"/g) || [];
-    const smsLinks = sheetHtml.match(/href="sms:[0-9]+"/g) || [];
-    assert.equal(telLinks.length, 6);
-    assert.equal(smsLinks.length, 6);
-
-    const openIndex = html.indexOf('id="contact-sheet-open"');
-    const sheetIndex = html.indexOf('id="contact-sheet"');
-    assert.ok(openIndex !== -1 && sheetIndex !== -1 && openIndex < sheetIndex,
-        "expected the open button to appear before the contact sheet markup");
+    assert.equal((coupleHtml.match(/class="couple-card-actions"/g) || []).length, 2);
+    assert.match(coupleHtml, /href="tel:01094884712"/);
+    assert.match(coupleHtml, /href="sms:01094884712"/);
+    assert.match(coupleHtml, /href="tel:01045201205"/);
+    assert.match(coupleHtml, /href="sms:01045201205"/);
+    assert.doesNotMatch(html, /id="contact-sheet-open"/);
+    assert.doesNotMatch(html, /id="contact-sheet"/);
 });
 
 test("index.html exposes a host-only contact sheet with just the four parents", () => {
@@ -176,6 +165,27 @@ test("index.html exposes a host-only contact sheet with just the four parents", 
     const sheetIndex = html.indexOf('id="host-contact-sheet"');
     assert.ok(openIndex !== -1 && sheetIndex !== -1 && openIndex < sheetIndex,
         "expected the open button to appear before the host contact sheet markup");
+});
+
+test("index.html keeps the event flow flat and removes the countdown header", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const events = html.slice(html.indexOf('<div class="ww-section" id="events">'), html.indexOf('<div class="ww-section" id="together">'));
+
+    assert.doesNotMatch(events, /class="countdown-header"/);
+    assert.match(events, /class="event-datetime"/);
+    assert.match(events, /class="event-venue"/);
+    assert.match(events, /id="wedding-countdown-label"/);
+    assert.match(events, /id="wedding-calendar-grid"/);
+    assert.ok(events.indexOf('class="event-venue"') < events.indexOf('id="wedding-countdown-label"'));
+    assert.ok(events.indexOf('id="wedding-countdown-label"') < events.indexOf('id="wedding-calendar-grid"'));
+});
+
+test("the removed venue image is absent from the project", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const venueImage = path.resolve(__dirname, "../images/opt/hall.webp");
+
+    assert.equal(fs.existsSync(venueImage), false);
+    assert.doesNotMatch(html, /hall\.webp/);
 });
 
 test("index.html adds detailed transit info to the map section", () => {
@@ -433,4 +443,42 @@ test("index.html loads gallery-pagination.js before main.js", () => {
 
     assert.ok(paginationIndex !== -1 && paginationIndex < mainJsIndex,
         "expected gallery-pagination.js before main.js");
+});
+
+test("the invitation uses a flat white page and smaller type scale", () => {
+    const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
+
+    function cssBlock(selector) {
+        const start = css.indexOf(selector + " {");
+        assert.notEqual(start, -1, `missing CSS block: ${selector}`);
+        const end = css.indexOf("}", start);
+        return css.slice(start, end);
+    }
+
+    assert.match(css, /--ww-paper:\s*#fff;/i);
+    assert.match(cssBlock(".page-content"), /background-color:\s*#fff;/i);
+    assert.match(cssBlock(".page-content"), /background-image:\s*none;/i);
+    assert.match(cssBlock(".hero-eyebrow"), /font-size:\s*1\.5rem;/i);
+    assert.match(cssBlock(".hero-photo-full .hero-eyebrow"), /color:\s*#fff;/i);
+    assert.match(cssBlock(".ww-title"), /font-size:\s*1\.45rem;/i);
+    assert.match(cssBlock(".greeting-message"), /font-size:\s*0\.875rem;/i);
+});
+
+test("content buttons use white rectangular surfaces without outlines", () => {
+    const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
+
+    function cssBlock(selector) {
+        const start = css.indexOf(selector + " {");
+        assert.notEqual(start, -1, `missing CSS block: ${selector}`);
+        const end = css.indexOf("}", start);
+        return css.slice(start, end);
+    }
+
+    for (const selector of [".couple-contact-open", ".account-accordion-toggle", ".gallery-page-nav,\n.gallery-page-number"]) {
+        const block = cssBlock(selector);
+        assert.match(block, /border:\s*0;/i, selector);
+        assert.match(block, /border-radius:\s*4px;/i, selector);
+        assert.match(block, /background:\s*#fff;/i, selector);
+        assert.match(block, /box-shadow:/i, selector);
+    }
 });

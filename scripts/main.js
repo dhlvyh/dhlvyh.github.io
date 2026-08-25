@@ -58,7 +58,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     initNavDrawer();
-    initContactSheet({sheetId: "contact-sheet", openId: "contact-sheet-open", closeId: "contact-sheet-close"});
     initContactSheet({sheetId: "host-contact-sheet", openId: "host-contact-sheet-open", closeId: "host-contact-sheet-close"});
     initSmoothScroll();
     initMusicToggle();

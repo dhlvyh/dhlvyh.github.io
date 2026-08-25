@@ -86,8 +86,8 @@
         <div class="ww-section" id="greeting">
             <div class="container">
                 <p class="section-eyebrow" data-aos="fade-up">GREETING</p>
-                <h2 class="h1 text-center pb-3 ww-title" style="font-family: 'Noto Serif KR', serif;font-size: 30px;" data-aos="fade-up">소중한 분들을 초대합니다</h2>
-                <p class="greeting-message text-center" style="font-family: 'Noto Serif KR', serif;font-size: 16px;" data-aos="fade-up" data-aos-delay="150">
+                <h2 class="h1 text-center pb-3 ww-title" style="font-family: 'Noto Serif KR', serif;" data-aos="fade-up">소중한 분들을 초대합니다</h2>
+                <p class="greeting-message text-center" style="font-family: 'Noto Serif KR', serif;" data-aos="fade-up" data-aos-delay="150">
                     두 사람이 만나 사랑을 배우고, 
                     <br>이해를 배우며 함께 성장했습니다.
                     <br>
@@ -110,18 +110,26 @@
                 <div class="couple-grid" data-aos="fade-up" data-aos-delay="150">
                     <div class="couple-card">
                             <img alt="신랑 안용현" class="img-fluid" src="images/opt/person1.webp"/>
-                            <h3 class="couple-card-name ww-title">
-                                신랑 안용현
-                            </h3>
+                            <div class="couple-card-heading">
+                                <h3 class="couple-card-name ww-title">신랑 안용현</h3>
+                                <div aria-label="신랑 안용현 연락하기" class="couple-card-actions">
+                                    <a aria-label="안용현에게 전화" class="couple-card-action" href="tel:01094884712"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg></a>
+                                    <a aria-label="안용현에게 문자" class="couple-card-action" href="sms:01094884712"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg></a>
+                                </div>
+                            </div>
                             <p class="couple-parents" style="font-family: 'Noto Serif KR', serif;">
                                 안대삼 · 양정분의 아들
                             </p>
                         </div>
                         <div class="couple-card">
                             <img alt="신부 안다혜" class="img-fluid" src="images/opt/person2.webp"/>
-                            <h3 class="couple-card-name ww-title">
-                                신부 안다혜
-                            </h3>
+                            <div class="couple-card-heading">
+                                <h3 class="couple-card-name ww-title">신부 안다혜</h3>
+                                <div aria-label="신부 안다혜 연락하기" class="couple-card-actions">
+                                    <a aria-label="안다혜에게 전화" class="couple-card-action" href="tel:01045201205"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg></a>
+                                    <a aria-label="안다혜에게 문자" class="couple-card-action" href="sms:01045201205"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg></a>
+                                </div>
+                            </div>
                             <p class="couple-parents" style="font-family: 'Noto Serif KR', serif;">
                                 안금용 · 김윤순의 딸
                             </p>
@@ -152,10 +160,6 @@
                     <br>함께해 주셔서 자리를 빛내주세요.
                 </p>
                 <div class="couple-contact-actions" data-aos="fade-up" data-aos-delay="300">
-                    <button aria-controls="contact-sheet" aria-expanded="false" class="couple-contact-open" id="contact-sheet-open" type="button">
-                        <svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg>
-                        연락하기
-                    </button>
                     <button aria-controls="host-contact-sheet" aria-expanded="false" class="couple-contact-open" id="host-contact-sheet-open" type="button">
                         <svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg>
                         혼주에게 연락하기
@@ -179,9 +183,6 @@
                             <p class="event-venue"><a href="https://thenewwed.kr/" target="_blank" rel="noopener noreferrer">더뉴컨벤션 2층 더뉴홀</a></p>
                         </div>
                         <div class="event-card event-card-calendar">
-                            <div class="countdown-header">
-                                <span class="event-kicker">Countdown</span>
-                            </div>
                             <div class="countdown-ticker" id="wedding-countdown-label">
                                 <div class="countdown-unit">
                                     <span class="countdown-unit-value" data-countdown-days>00</span>
@@ -206,7 +207,6 @@
                             <div class="calendar-card">
                                 <div class="calendar-header">
                                     <strong>2026. 11</strong>
-                                    <span class="ww-eyebrow">Wedding Calendar</span>
                                 </div>
                                 <div class="calendar-weekdays">
                                     <span>일</span>
@@ -454,72 +454,6 @@
             </div>
         </div>
 
-    </div>
-</div>
-
-<div class="contact-sheet" id="contact-sheet" hidden>
-    <div class="contact-sheet-backdrop" data-contact-close></div>
-    <div aria-label="연락하기" aria-modal="true" class="contact-sheet-panel" role="dialog">
-        <button aria-label="닫기" class="contact-sheet-close" id="contact-sheet-close" type="button">×</button>
-        <h3 class="contact-sheet-title ww-title">연락하기</h3>
-        <div class="contact-sheet-group">
-            <p class="contact-sheet-group-title">신랑측</p>
-            <ul class="contact-sheet-list">
-                <li class="contact-sheet-row">
-                    <span class="contact-sheet-role">신랑</span>
-                    <span class="contact-sheet-name">안용현</span>
-                    <span class="contact-sheet-actions">
-                        <a aria-label="안용현에게 전화" class="contact-sheet-action" href="tel:01094884712"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg></a>
-                        <a aria-label="안용현에게 문자" class="contact-sheet-action" href="sms:01094884712"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg></a>
-                    </span>
-                </li>
-                <li class="contact-sheet-row">
-                    <span class="contact-sheet-role">아버지</span>
-                    <span class="contact-sheet-name">안대삼</span>
-                    <span class="contact-sheet-actions">
-                        <a aria-label="신랑 아버지께 전화" class="contact-sheet-action" href="tel:01088726169"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg></a>
-                        <a aria-label="신랑 아버지께 문자" class="contact-sheet-action" href="sms:01088726169"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg></a>
-                    </span>
-                </li>
-                <li class="contact-sheet-row">
-                    <span class="contact-sheet-role">어머니</span>
-                    <span class="contact-sheet-name">양정분</span>
-                    <span class="contact-sheet-actions">
-                        <a aria-label="신랑 어머니께 전화" class="contact-sheet-action" href="tel:01032343335"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg></a>
-                        <a aria-label="신랑 어머니께 문자" class="contact-sheet-action" href="sms:01032343335"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg></a>
-                    </span>
-                </li>
-            </ul>
-        </div>
-        <div class="contact-sheet-group">
-            <p class="contact-sheet-group-title">신부측</p>
-            <ul class="contact-sheet-list">
-                <li class="contact-sheet-row">
-                    <span class="contact-sheet-role">신부</span>
-                    <span class="contact-sheet-name">안다혜</span>
-                    <span class="contact-sheet-actions">
-                        <a aria-label="안다혜에게 전화" class="contact-sheet-action" href="tel:01045201205"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg></a>
-                        <a aria-label="안다혜에게 문자" class="contact-sheet-action" href="sms:01045201205"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg></a>
-                    </span>
-                </li>
-                <li class="contact-sheet-row">
-                    <span class="contact-sheet-role">아버지</span>
-                    <span class="contact-sheet-name">안금용</span>
-                    <span class="contact-sheet-actions">
-                        <a aria-label="신부 아버지께 전화" class="contact-sheet-action" href="tel:01054737698"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg></a>
-                        <a aria-label="신부 아버지께 문자" class="contact-sheet-action" href="sms:01054737698"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg></a>
-                    </span>
-                </li>
-                <li class="contact-sheet-row">
-                    <span class="contact-sheet-role">어머니</span>
-                    <span class="contact-sheet-name">김윤순</span>
-                    <span class="contact-sheet-actions">
-                        <a aria-label="신부 어머니께 전화" class="contact-sheet-action" href="tel:01047237698"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-phone"/></svg></a>
-                        <a aria-label="신부 어머니께 문자" class="contact-sheet-action" href="sms:01047237698"><svg aria-hidden="true" class="icon" focusable="false"><use href="#i-comment"/></svg></a>
-                    </span>
-                </li>
-            </ul>
-        </div>
     </div>
 </div>
 
