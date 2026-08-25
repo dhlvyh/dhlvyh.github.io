@@ -13,7 +13,6 @@
     --ww-card-border: rgba(51, 48, 44, 0.08);
     --ww-card-shadow: 0 3px 12px rgba(51, 48, 44, 0.08);
     --ww-button-shadow: 0 2px 8px rgba(51, 48, 44, 0.1);
-    --ww-calendar-mark: #7C927D;
     --ww-shell: #E7E2DC;
     --ww-frame-width: 430px;
 }
@@ -118,8 +117,8 @@ body {
 
 .hero-photo-full {
     position: relative;
-    flex: 1;
-    min-height: 0;
+    flex: 1 1 auto;
+    min-height: 78%;
     overflow: hidden;
 }
 
@@ -616,19 +615,20 @@ body.is-drawer-open {
 }
 
 .hero-date {
+    flex: 0 0 auto;
     margin: 0;
-    padding: 1.75rem 1.5rem 2rem;
+    padding: 0.75rem 1rem 1rem;
     color: var(--ww-ink);
-    font-size: 0.9rem;
-    line-height: 1.9;
+    font-size: 0.8rem;
+    line-height: 1.55;
     letter-spacing: 0;
     text-align: center;
 }
 
 .hero-date b {
     display: inline-block;
-    margin-bottom: 0.5rem;
-    font-size: 1.15rem;
+    margin-bottom: 0.25rem;
+    font-size: 0.95rem;
 }
 
 .couple-grid {
@@ -640,7 +640,7 @@ body.is-drawer-open {
 
 .couple-card img {
     width: 100%;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 4 / 5;
     object-fit: cover;
     border-radius: 14px;
 }
@@ -648,31 +648,39 @@ body.is-drawer-open {
 .couple-card-name {
     margin: 0;
     font-size: 0.9rem;
+    text-align: center;
 }
 
 .couple-card-heading {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.4rem;
+    min-height: 28px;
+    padding: 0 2.5rem;
     margin-top: 0.75rem;
 }
 
 .couple-card-actions {
+    position: absolute;
+    top: 50%;
+    right: 0;
     display: inline-flex;
-    gap: 0.25rem;
+    gap: 0.2rem;
+    transform: translateY(-50%);
 }
 
 .couple-card-action {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: auto;
+    height: auto;
+    padding: 0.15rem;
     border: 0;
-    border-radius: 4px;
-    background: #fff;
-    box-shadow: var(--ww-button-shadow);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
     color: var(--ww-accent);
     font-size: 0.75rem;
 }
@@ -702,7 +710,7 @@ body.is-drawer-open {
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.75rem;
-    margin-top: 1.75rem;
+    margin-top: 1rem;
 }
 
 .couple-contact-open {
@@ -893,8 +901,8 @@ body.is-contact-sheet-open {
 }
 
 .event-card-calendar {
-    max-width: 380px;
-    margin: 0 auto;
+    max-width: none;
+    margin: 0;
     padding-top: 0.75rem;
 }
 
@@ -945,14 +953,6 @@ body.is-contact-sheet-open {
     margin: 0.9rem 0 0;
     color: var(--ww-ink-muted);
     line-height: 1.75;
-}
-
-.gallery-lead {
-    max-width: 600px;
-    margin: 0 auto 2rem;
-    color: var(--ww-ink-muted);
-    line-height: 1.8;
-    font-size: 0.875rem;
 }
 
 /* 갤러리 — full-bleed 메인 뷰어 + 5열 썸네일 그리드, 별도 라이트박스 없음 */
@@ -1228,7 +1228,7 @@ body.is-gallery-lightbox-open {
     align-items: flex-start;
     justify-content: center;
     gap: 1rem;
-    margin-bottom: 0.75rem;
+    margin: 1rem 0 0.75rem;
     padding: 0.5rem 0;
 }
 
@@ -1355,16 +1355,9 @@ body.is-gallery-lightbox-open {
     width: 26px;
     height: 26px;
     border-radius: 50%;
-    background: var(--ww-calendar-mark);
+    background: var(--ww-accent);
     box-shadow: none;
     z-index: -1;
-}
-
-.calendar-time-caption {
-    margin: 0.75rem 0 0;
-    text-align: center;
-    font-size: 0.75rem;
-    color: var(--ww-ink-muted);
 }
 
 .map-link {

@@ -141,6 +141,13 @@ test("index.html exposes direct couple contact links and removes the general con
     assert.doesNotMatch(html, /id="contact-sheet"/);
 });
 
+test("the couple contact button sits directly below the couple grid", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const couple = html.slice(html.indexOf('<div class="ww-section" id="couple">'), html.indexOf('<div class="ww-section" id="events">'));
+
+    assert.ok(couple.indexOf('id="host-contact-sheet-open"') < couple.indexOf('class="couple-ornament"'));
+});
+
 test("index.html exposes a host-only contact sheet with just the four parents", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
@@ -177,7 +184,21 @@ test("index.html keeps the event flow flat and removes the countdown header", ()
     assert.match(events, /id="wedding-countdown-label"/);
     assert.match(events, /id="wedding-calendar-grid"/);
     assert.ok(events.indexOf('class="event-venue"') < events.indexOf('id="wedding-countdown-label"'));
-    assert.ok(events.indexOf('id="wedding-countdown-label"') < events.indexOf('id="wedding-calendar-grid"'));
+    assert.ok(events.indexOf('id="wedding-calendar-grid"') < events.indexOf('id="wedding-countdown-label"'));
+    assert.doesNotMatch(events, /calendar-time-caption|wedding-calendar-time/);
+});
+
+test("the gallery omits the instructional lead copy", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    assert.doesNotMatch(html, /class="gallery-lead"/);
+    assert.doesNotMatch(html, /작은 사진을 누르면 크게 볼 수 있어요/);
+});
+
+test("main.js does not populate the removed calendar time caption", () => {
+    const mainJs = fs.readFileSync(path.resolve(__dirname, "../scripts/main.js"), "utf8");
+
+    assert.doesNotMatch(mainJs, /wedding-calendar-time/);
 });
 
 test("the removed venue image is absent from the project", () => {
@@ -481,4 +502,54 @@ test("content buttons use white rectangular surfaces without outlines", () => {
         assert.match(block, /background:\s*#fff;/i, selector);
         assert.match(block, /box-shadow:/i, selector);
     }
+});
+
+test("the revised layout prioritizes the hero photo and compact date block", () => {
+    const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
+
+    function cssBlock(selector) {
+        const start = css.indexOf(selector + " {");
+        assert.notEqual(start, -1, `missing CSS block: ${selector}`);
+        const end = css.indexOf("}", start);
+        return css.slice(start, end);
+    }
+
+    assert.match(cssBlock(".hero-photo-full"), /flex:\s*1\s+1\s+auto;/i);
+    assert.match(cssBlock(".hero-photo-full"), /min-height:\s*78%;/i);
+    assert.match(cssBlock(".hero-date"), /padding:\s*0\.75rem\s+1rem\s+1rem;/i);
+});
+
+test("couple cards center names and use icon-only contact links", () => {
+    const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
+
+    function cssBlock(selector) {
+        const start = css.indexOf(selector + " {");
+        assert.notEqual(start, -1, `missing CSS block: ${selector}`);
+        const end = css.indexOf("}", start);
+        return css.slice(start, end);
+    }
+
+    assert.match(cssBlock(".couple-card img"), /aspect-ratio:\s*4\s*\/\s*5;/i);
+    assert.match(cssBlock(".couple-card-heading"), /position:\s*relative;/i);
+    assert.match(cssBlock(".couple-card-name"), /text-align:\s*center;/i);
+    assert.match(cssBlock(".couple-card-actions"), /position:\s*absolute;/i);
+    assert.match(cssBlock(".couple-card-action"), /background:\s*transparent;/i);
+    assert.match(cssBlock(".couple-card-action"), /box-shadow:\s*none;/i);
+    assert.match(cssBlock(".couple-card-action"), /width:\s*auto;/i);
+    assert.match(cssBlock(".couple-card-action"), /height:\s*auto;/i);
+});
+
+test("the event calendar spans the card and marks the wedding day in pink", () => {
+    const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
+
+    function cssBlock(selector) {
+        const start = css.indexOf(selector + " {");
+        assert.notEqual(start, -1, `missing CSS block: ${selector}`);
+        const end = css.indexOf("}", start);
+        return css.slice(start, end);
+    }
+
+    assert.match(cssBlock(".event-card-calendar"), /max-width:\s*none;/i);
+    assert.match(cssBlock(".event-card-calendar"), /margin:\s*0;/i);
+    assert.match(cssBlock(".calendar-day.is-wedding-day::before"), /background:\s*var\(--ww-accent\);/i);
 });
