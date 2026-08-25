@@ -58,7 +58,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     initNavDrawer();
-    initContactSheet();
+    initContactSheet({sheetId: "contact-sheet", openId: "contact-sheet-open", closeId: "contact-sheet-close"});
+    initContactSheet({sheetId: "host-contact-sheet", openId: "host-contact-sheet-open", closeId: "host-contact-sheet-close"});
     initSmoothScroll();
     initMusicToggle();
     initKakaoShare();
@@ -304,10 +305,10 @@ function initNavDrawer() {
     }
 }
 
-function initContactSheet() {
-    const sheet = document.getElementById("contact-sheet");
-    const openButton = document.getElementById("contact-sheet-open");
-    const closeButton = document.getElementById("contact-sheet-close");
+function initContactSheet(config) {
+    const sheet = document.getElementById(config.sheetId);
+    const openButton = document.getElementById(config.openId);
+    const closeButton = document.getElementById(config.closeId);
 
     if (!sheet || !openButton) {
         return;

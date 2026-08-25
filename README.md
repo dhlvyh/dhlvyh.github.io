@@ -123,4 +123,6 @@ fetch해서, `scripts/gallery-loader.js`의 `buildGallerySlidesMarkup`/`buildGal
 | 카카오톡 공유 앱키 | `scripts/main.js` 상단 `KAKAO_JS_KEY` | 완료 | [Kakao Developers](https://developers.kakao.com)에서 발급, 앱의 플랫폼 > Web에 배포 도메인 등록 필요 |
 | 주차 안내 문구 | `index.html` `.transit-info` 내 주차 관련 문단 | 완료 | 예식장 실제 정책이 바뀌면 다시 확인 |
 
+> "혼주에게 연락하기" 시트(`#host-contact-sheet`)는 이 중 양가 부모님 4명분 번호를 그대로 재사용한다.
+
 **아직 채워야 할 것은 계좌 정보(`.account-number` 6곳)뿐이다.**

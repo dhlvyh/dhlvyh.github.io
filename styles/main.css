@@ -657,14 +657,20 @@ body.is-drawer-open {
 }
 
 /* 연락하기 — 카드마다 있던 아코디언을 버튼 1개 + 전체 시트로 통합했다 */
+.couple-contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
 .couple-contact-open {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     width: fit-content;
-    margin-top: 2rem;
-    margin-left: auto;
     padding: 0.7rem 1.75rem;
     border: 1.5px solid var(--ww-accent);
     border-radius: 999px;

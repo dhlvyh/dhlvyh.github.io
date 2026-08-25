@@ -113,7 +113,7 @@ test("index.html adds parent names to each couple card", () => {
     assert.match(html, /class="couple-parents"[^>]*>[\s\S]*?아들/);
 });
 
-test("index.html exposes a single contact sheet listing all six family members", () => {
+test("index.html exposes the main contact sheet listing all six family members", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
     const openButtonTag = html.match(/<button[^>]*id="contact-sheet-open"[^>]*>/);
@@ -122,11 +122,15 @@ test("index.html exposes a single contact sheet listing all six family members",
 
     assert.match(html, /id="contact-sheet"[^>]*hidden/);
 
-    const rows = html.match(/class="contact-sheet-row"/g) || [];
+    const sheetStart = html.indexOf('<div class="contact-sheet" id="contact-sheet"');
+    const sheetEnd = html.indexOf('<div class="contact-sheet" id="host-contact-sheet"');
+    const sheetHtml = html.slice(sheetStart, sheetEnd);
+
+    const rows = sheetHtml.match(/class="contact-sheet-row"/g) || [];
     assert.equal(rows.length, 6);
 
-    const telLinks = html.match(/href="tel:[0-9]+"/g) || [];
-    const smsLinks = html.match(/href="sms:[0-9]+"/g) || [];
+    const telLinks = sheetHtml.match(/href="tel:[0-9]+"/g) || [];
+    const smsLinks = sheetHtml.match(/href="sms:[0-9]+"/g) || [];
     assert.equal(telLinks.length, 6);
     assert.equal(smsLinks.length, 6);
 
@@ -134,6 +138,32 @@ test("index.html exposes a single contact sheet listing all six family members",
     const sheetIndex = html.indexOf('id="contact-sheet"');
     assert.ok(openIndex !== -1 && sheetIndex !== -1 && openIndex < sheetIndex,
         "expected the open button to appear before the contact sheet markup");
+});
+
+test("index.html exposes a host-only contact sheet with just the four parents", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+
+    const openButtonTag = html.match(/<button[^>]*id="host-contact-sheet-open"[^>]*>/);
+    assert.ok(openButtonTag, "expected a button with id=host-contact-sheet-open");
+    assert.match(openButtonTag[0], /aria-controls="host-contact-sheet"/);
+
+    assert.match(html, /id="host-contact-sheet"[^>]*hidden/);
+
+    const sheetStart = html.indexOf('<div class="contact-sheet" id="host-contact-sheet"');
+    const sheetHtml = html.slice(sheetStart);
+
+    const rows = sheetHtml.match(/class="contact-sheet-row"/g) || [];
+    assert.equal(rows.length, 4);
+
+    const telLinks = sheetHtml.match(/href="tel:[0-9]+"/g) || [];
+    const smsLinks = sheetHtml.match(/href="sms:[0-9]+"/g) || [];
+    assert.equal(telLinks.length, 4);
+    assert.equal(smsLinks.length, 4);
+
+    const openIndex = html.indexOf('id="host-contact-sheet-open"');
+    const sheetIndex = html.indexOf('id="host-contact-sheet"');
+    assert.ok(openIndex !== -1 && sheetIndex !== -1 && openIndex < sheetIndex,
+        "expected the open button to appear before the host contact sheet markup");
 });
 
 test("index.html adds detailed transit info to the map section", () => {
