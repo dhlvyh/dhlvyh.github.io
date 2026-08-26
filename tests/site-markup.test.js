@@ -357,6 +357,16 @@ test("the removed venue image is absent from the project", () => {
     assert.doesNotMatch(html, /hall\.webp/);
 });
 
+test("background music attempts autoplay and resumes on the first user interaction", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const mainJs = fs.readFileSync(path.resolve(__dirname, "../scripts/main.js"), "utf8");
+
+    assert.match(html, /<audio(?=[^>]*\bid="player")(?=[^>]*\bautoplay\b)(?=[^>]*\bsrc="mus\.mp3")[^>]*>/);
+    assert.match(mainJs, /player\.play\(\)\.catch\(function \(\) \{/);
+    assert.match(mainJs, /document\.addEventListener\("pointerdown", resumeOnInteraction/);
+    assert.match(mainJs, /document\.addEventListener\("keydown", resumeOnInteraction/);
+});
+
 test("index.html adds detailed transit info to the map section", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 

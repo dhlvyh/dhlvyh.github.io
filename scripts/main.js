@@ -500,11 +500,27 @@ function initMusicToggle() {
         icon.setAttribute("href", playing ? "#i-pause" : "#i-music");
     }
 
+    function stopInteractionFallback() {
+        document.removeEventListener("pointerdown", resumeOnInteraction, true);
+        document.removeEventListener("keydown", resumeOnInteraction, true);
+    }
+
+    function attemptPlayback() {
+        player.play().catch(function () {
+            render(false);
+        });
+    }
+
+    function resumeOnInteraction(event) {
+        if (event.target && event.target.closest && event.target.closest("#music-toggle")) {
+            return;
+        }
+        attemptPlayback();
+    }
+
     button.addEventListener("click", function () {
         if (player.paused) {
-            player.play().catch(function () {
-                render(false);
-            });
+            attemptPlayback();
         } else {
             player.pause();
         }
@@ -512,11 +528,22 @@ function initMusicToggle() {
 
     player.addEventListener("play", function () {
         render(true);
+        stopInteractionFallback();
     });
 
     player.addEventListener("pause", function () {
         render(false);
     });
+
+    document.addEventListener("pointerdown", resumeOnInteraction, true);
+    document.addEventListener("keydown", resumeOnInteraction, true);
+
+    if (player.paused) {
+        attemptPlayback();
+    } else {
+        render(true);
+        stopInteractionFallback();
+    }
 }
 
 function shareToKakao() {
