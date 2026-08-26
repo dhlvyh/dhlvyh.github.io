@@ -37,6 +37,7 @@ npm test           # node --test 기반 테스트 실행
 | 용도 | 파일명 | 매수 |
 |---|---|---|
 | 갤러리 | `images/gallery1.jpg`, `images/gallery2.jpg`, … | 제한 없음 |
+| 타임라인 | `images/timeline1.jpg` ~ `images/timeline7.jpg` | 7장 |
 | 예식장 사진 | `images/hall.jpg` | 1장 |
 | 마지막 인사 사진 | `images/end.jpg` | 1장 |
 | 히어로(첫 화면) 사진 | `images/main.jpg` | 1장 |
@@ -45,9 +46,10 @@ npm test           # node --test 기반 테스트 실행
 > `hall.jpg`는 계속 변환되지만, 예식 안내 섹션에는 더 이상 표시되지 않는다(일시·장소 2라인 텍스트로 대체).
 
 - 갤러리는 `gallery{번호}.jpg` 형식의 파일을 `images/` 폴더에서 직접 스캔해서 찾는다.
-  몇 장을 넣든(1장이든 100장이든) 자동으로 그만큼만 변환하고, 번호가 중간에
-  비어 있어도(`gallery1.jpg`, `gallery3.jpg`만 있어도) 있는 파일만 순서대로 처리한다.
-  **코드를 따로 고칠 필요가 없다.**
+  파일명은 `gallery1.jpg`부터 빈자리 없이 연속 번호로 관리한다. 사진을 추가하거나
+  삭제하면 먼저 번호를 다시 정리한 뒤 변환을 실행한다. **코드를 따로 고칠 필요가 없다.**
+- 타임라인은 `timeline1.jpg`부터 `timeline7.jpg`까지 사용하며, 변환 결과는
+  `images/timeline/` 폴더에 저장된다.
 
 ### 2. 변환 실행
 
@@ -56,8 +58,8 @@ npm run images
 ```
 
 `tools/build-images.mjs`가 실행되며 다음을 생성한다. **실행할 때마다 기존 결과물을
-무조건 덮어쓰고 다시 변환**하므로(재사용/스킵 없음), 사진을 교체한 뒤에는 항상 다시
-실행해야 한다.
+무조건 덮어쓰고 다시 변환**하고, 현재 원본에 대응하지 않는 갤러리 WebP 결과물은
+자동으로 삭제한다. 사진을 교체·추가·삭제한 뒤에는 항상 다시 실행해야 한다.
 
 - `images/gallery/main/{번호}.webp` — 1280px, 메인 뷰어용
 - `images/gallery/thumb/{번호}.webp` — 260px, 썸네일 그리드용
@@ -66,6 +68,7 @@ npm run images
   예식장 카드·마지막 인사·히어로·인물 소개용
 - `images/opt/share.jpg` — 1200×630, 카카오톡/OG 공유 카드용
 - `images/gallery/manifest.json` — 변환된 갤러리 사진 목록(경로, 가로/세로 크기 포함)
+- `images/timeline/timeline1.webp` ~ `timeline7.webp` — 1024px, 우리의 시간 타임라인용
 
 콘솔에 원본 대비 감소 배율이 출력되니 확인만 하면 된다.
 
@@ -82,11 +85,14 @@ npm run images
 컨테이너만 갖고 있다. 페이지가 열리면 `scripts/main.js`가 `images/gallery/manifest.json`을
 fetch해서, `scripts/gallery-loader.js`의 `buildGallerySlidesMarkup`/`buildGalleryThumbsMarkup`
 함수로 슬라이드·썸네일 HTML을 만들어 그 컨테이너에 채워 넣은 뒤 갤러리 스와이프
-동작(`scripts/gallery-viewer.js`)을 초기화한다. 즉 **사진을 추가·삭제하고
-`npm run images`만 다시 실행하면 `index.html`은 손댈 필요가 없다.**
+동작(`scripts/gallery-viewer.js`)을 초기화한다. 즉 **사진을 추가·삭제하고 갤러리 번호를
+연속으로 정리한 뒤 `npm run images`만 다시 실행하면 `index.html`은 손댈 필요가 없다.**
+타임라인 사진은 이 매니페스트와 별개로 `index.html`이
+`images/timeline/timeline1.webp`~`timeline7.webp`를 직접 참조한다.
 
-배포(GitHub Pages)에서 정상 동작하려면 `images/gallery/manifest.json`과
-`images/gallery/main|thumb/*.webp`가 실제로 커밋되어 있어야 한다는 점에 유의한다.
+배포(GitHub Pages)에서 정상 동작하려면 `images/gallery/manifest.json`,
+`images/gallery/main|thumb/*.webp`, `images/timeline/*.webp`가 실제로 커밋되어 있어야
+한다는 점에 유의한다.
 
 ### 4. 썸네일 페이지네이션 + 라이트박스
 
