@@ -24,7 +24,6 @@ const GALLERY_PATTERN = /^gallery(\d+)\.jpg$/i;
 
 // 갤러리 외 단일 이미지. 카드/배경 안에서만 쓰이므로 1024면 충분하다.
 const SINGLES = [
-    { source: "hall.jpg", out: "hall.webp", width: 1024, quality: 82 },
     { source: "end.jpg", out: "end.webp", width: 1024, quality: 82 },
     { source: "main.jpg", out: "main.webp", width: 1024, quality: 82 },
     { source: "person1.jpg", out: "person1.webp", width: 1024, quality: 82 },

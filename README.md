@@ -38,12 +38,9 @@ npm test           # node --test 기반 테스트 실행
 |---|---|---|
 | 갤러리 | `images/gallery1.jpg`, `images/gallery2.jpg`, … | 제한 없음 |
 | 타임라인 | `images/timeline1.jpg` ~ `images/timeline7.jpg` | 7장 |
-| 예식장 사진 | `images/hall.jpg` | 1장 |
 | 마지막 인사 사진 | `images/end.jpg` | 1장 |
 | 히어로(첫 화면) 사진 | `images/main.jpg` | 1장 |
 | 두 사람 소개 인물사진 | `images/person1.jpg`(신랑), `images/person2.jpg`(신부) | 각 1장 |
-
-> `hall.jpg`는 계속 변환되지만, 예식 안내 섹션에는 더 이상 표시되지 않는다(일시·장소 2라인 텍스트로 대체).
 
 - 갤러리는 `gallery{번호}.jpg` 형식의 파일을 `images/` 폴더에서 직접 스캔해서 찾는다.
   파일명은 `gallery1.jpg`부터 빈자리 없이 연속 번호로 관리한다. 사진을 추가하거나
@@ -64,8 +61,9 @@ npm run images
 - `images/gallery/main/{번호}.webp` — 1280px, 메인 뷰어용
 - `images/gallery/thumb/{번호}.webp` — 260px, 썸네일 그리드용
   (5열 그리드라 표시 폭이 최대 86px뿐이다. DPR 3을 감안해도 260이면 충분하다)
-- `images/opt/hall.webp`, `end.webp`, `main.webp`, `person1.webp`, `person2.webp` — 1024px,
-  예식장 카드·마지막 인사·히어로·인물 소개용
+- `images/opt/end.webp`, `images/opt/main.webp`, `images/opt/person1.webp`,
+  `images/opt/person2.webp` — 1024px,
+  카드·마지막 인사·히어로·인물 소개용
 - `images/opt/share.jpg` — 1200×630, 카카오톡/OG 공유 카드용
 - `images/gallery/manifest.json` — 변환된 갤러리 사진 목록(경로, 가로/세로 크기 포함)
 - `images/timeline/timeline1.webp` ~ `timeline7.webp` — 1024px, 우리의 시간 타임라인용
