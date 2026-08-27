@@ -271,11 +271,11 @@ body {
 
 .nav-drawer-list a {
     display: block;
-    padding: 0.85rem 0;
+    padding: 0.75rem 0;
     border-bottom: 1px solid var(--ww-card-border);
     color: var(--ww-ink);
     font-family: "Noto Serif KR", serif;
-    font-size: 1rem;
+    font-size: 0.9rem;
     text-decoration: none;
 }
 

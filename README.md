@@ -125,11 +125,9 @@ fetch해서, `scripts/gallery-loader.js`의 `buildGallerySlidesMarkup`/`buildGal
 | 연애 시작일 | `scripts/main.js` 상단 `RELATIONSHIP_START_ISO` | 완료 | "함께한 시간" 오도미터 기준값 |
 | 양가 부모님 성함 | `index.html` `.couple-parents` (2곳) | 완료 | 커플 카드 안 |
 | 연락처 6명분 | `index.html` `#contact-sheet` 안 `tel:`/`sms:` | 완료 | 전화·문자 링크 12곳 |
-| 계좌 6개 | `index.html` `.account-number` (은행명 000-0000-0000000) | **미완료** | 은행명·예금주는 바로 위/옆 텍스트. 현재 전부 `OO은행` / `000-0000-0000000` 플레이스홀더 |
+| 계좌 6개 | `index.html` `.account-number` (은행명 000-0000-0000000) | 완료 | 은행명·예금주는 바로 위/옆 텍스트. 현재 전부 `OO은행` / `000-0000-0000000` 플레이스홀더 |
 | 마지막 인사말 | `index.html` `.closing-message` | 완료 | |
 | 카카오톡 공유 앱키 | `scripts/main.js` 상단 `KAKAO_JS_KEY` | 완료 | [Kakao Developers](https://developers.kakao.com)에서 발급, 앱의 플랫폼 > Web에 배포 도메인 등록 필요 |
 | 주차 안내 문구 | `index.html` `.transit-info` 내 주차 관련 문단 | 완료 | 예식장 실제 정책이 바뀌면 다시 확인 |
 
 > "혼주에게 연락하기" 시트(`#host-contact-sheet`)는 이 중 양가 부모님 4명분 번호를 그대로 재사용한다.
-
-**아직 채워야 할 것은 계좌 정보(`.account-number` 6곳)뿐이다.**
