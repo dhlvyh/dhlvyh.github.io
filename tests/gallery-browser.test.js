@@ -141,3 +141,53 @@ test("gallery progress bar and counter reflect the active slide", {skip: hasPlay
 
     await browser.close();
 });
+
+test("dragging the progress bar scrubs the active slide in real time and snaps to a whole slide on release", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
+    const {browser, page} = await launch();
+
+    await page.waitForTimeout(400);
+
+    const progress = page.locator("#gallery-progress");
+    const track = page.locator("#gallery-track");
+    const box = await progress.boundingBox();
+    const slideCount = await page.locator("[data-gallery-slide-index]").count();
+
+    await page.mouse.move(box.x + 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2, {steps: 8});
+    await page.waitForTimeout(100);
+
+    const midDragCounter = await page.locator("#gallery-counter").textContent();
+    assert.notEqual(midDragCounter, "1 / " + slideCount, "expected the counter to already move mid-drag");
+
+    await page.mouse.up();
+    await page.waitForTimeout(400);
+
+    const viewportWidth = await page.locator("#gallery-viewport").evaluate((node) => node.clientWidth);
+    const transform = await track.evaluate((node) => node.style.transform);
+    const activeIndex = Number(transform.match(/translateX\((-?\d+)px\)/)[1]) / -viewportWidth;
+
+    assert.ok(Number.isInteger(activeIndex), `expected the track to land on a whole slide index, got ${activeIndex}`);
+
+    await browser.close();
+});
+
+test("dragging the progress bar past either end clamps at the first or last slide instead of wrapping", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
+    const {browser, page} = await launch();
+
+    await page.waitForTimeout(400);
+
+    const progress = page.locator("#gallery-progress");
+    const box = await progress.boundingBox();
+    const slideCount = await page.locator("[data-gallery-slide-index]").count();
+
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width + 200, box.y + box.height / 2, {steps: 8});
+    await page.mouse.up();
+    await page.waitForTimeout(400);
+
+    assert.equal(await page.locator("#gallery-counter").textContent(), slideCount + " / " + slideCount);
+
+    await browser.close();
+});
