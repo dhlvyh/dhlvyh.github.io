@@ -6,7 +6,8 @@ const {
     getWrappedIndex,
     shouldSuppressClick,
     applyEdgeResistance,
-    resolveSnapIndex
+    resolveSnapIndex,
+    resolveScrubPosition
 } = require("../scripts/gallery-utils");
 
 test("resolveSwipeAction returns next for a left swipe beyond threshold", () => {
@@ -55,4 +56,24 @@ test("resolveSnapIndex wraps past the first and last slides instead of stopping"
 test("resolveSnapIndex stays put and never throws when there is one slide or none", () => {
     assert.equal(resolveSnapIndex(0, 240, 0, 360, 1), 0);
     assert.equal(resolveSnapIndex(0, 240, 0, 360, 0), 0);
+});
+
+test("resolveScrubPosition maps the left and right edges to the first and last slide", () => {
+    assert.equal(resolveScrubPosition(0, 0, 300, 6), 0);
+    assert.equal(resolveScrubPosition(300, 0, 300, 6), 5);
+});
+
+test("resolveScrubPosition maps the midpoint proportionally between slides", () => {
+    assert.equal(resolveScrubPosition(150, 0, 300, 6), 2.5);
+});
+
+test("resolveScrubPosition clamps positions outside the track", () => {
+    assert.equal(resolveScrubPosition(-50, 0, 300, 6), 0);
+    assert.equal(resolveScrubPosition(500, 0, 300, 6), 5);
+});
+
+test("resolveScrubPosition returns 0 when there is one slide, none, or no track width", () => {
+    assert.equal(resolveScrubPosition(150, 0, 300, 1), 0);
+    assert.equal(resolveScrubPosition(150, 0, 300, 0), 0);
+    assert.equal(resolveScrubPosition(150, 0, 0, 6), 0);
 });

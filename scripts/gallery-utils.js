@@ -71,11 +71,21 @@
         return activeIndex;
     }
 
+    function resolveScrubPosition(clientX, trackLeft, trackWidth, length) {
+        if (length <= 1 || trackWidth <= 0) {
+            return 0;
+        }
+
+        const fraction = Math.min(Math.max((clientX - trackLeft) / trackWidth, 0), 1);
+        return fraction * (length - 1);
+    }
+
     return {
         resolveSwipeAction,
         getWrappedIndex,
         shouldSuppressClick,
         applyEdgeResistance,
-        resolveSnapIndex
+        resolveSnapIndex,
+        resolveScrubPosition
     };
 }));
