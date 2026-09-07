@@ -252,8 +252,8 @@
     "source": "gallery32.jpg",
     "main": "images/gallery/main/32.webp",
     "thumb": "images/gallery/thumb/32.webp",
-    "width": 3648,
-    "height": 5472
+    "width": 5472,
+    "height": 3648
   },
   {
     "index": 33,
@@ -284,8 +284,8 @@
     "source": "gallery36.jpg",
     "main": "images/gallery/main/36.webp",
     "thumb": "images/gallery/thumb/36.webp",
-    "width": 5472,
-    "height": 3648
+    "width": 3648,
+    "height": 5472
   },
   {
     "index": 37,
@@ -308,8 +308,8 @@
     "source": "gallery39.jpg",
     "main": "images/gallery/main/39.webp",
     "thumb": "images/gallery/thumb/39.webp",
-    "width": 3648,
-    "height": 5472
+    "width": 5472,
+    "height": 3648
   },
   {
     "index": 40,
@@ -332,16 +332,16 @@
     "source": "gallery42.jpg",
     "main": "images/gallery/main/42.webp",
     "thumb": "images/gallery/thumb/42.webp",
-    "width": 5472,
-    "height": 3648
+    "width": 3648,
+    "height": 5472
   },
   {
     "index": 43,
     "source": "gallery43.jpg",
     "main": "images/gallery/main/43.webp",
     "thumb": "images/gallery/thumb/43.webp",
-    "width": 3648,
-    "height": 5472
+    "width": 5472,
+    "height": 3648
   },
   {
     "index": 44,
@@ -356,8 +356,8 @@
     "source": "gallery45.jpg",
     "main": "images/gallery/main/45.webp",
     "thumb": "images/gallery/thumb/45.webp",
-    "width": 5472,
-    "height": 3648
+    "width": 3344,
+    "height": 5016
   },
   {
     "index": 46,
@@ -412,24 +412,24 @@
     "source": "gallery52.jpg",
     "main": "images/gallery/main/52.webp",
     "thumb": "images/gallery/thumb/52.webp",
-    "width": 3344,
-    "height": 5016
+    "width": 5016,
+    "height": 3344
   },
   {
     "index": 53,
     "source": "gallery53.jpg",
     "main": "images/gallery/main/53.webp",
     "thumb": "images/gallery/thumb/53.webp",
-    "width": 5016,
-    "height": 3344
+    "width": 3344,
+    "height": 5016
   },
   {
     "index": 54,
     "source": "gallery54.jpg",
     "main": "images/gallery/main/54.webp",
     "thumb": "images/gallery/thumb/54.webp",
-    "width": 3344,
-    "height": 5016
+    "width": 3200,
+    "height": 4000
   },
   {
     "index": 55,
@@ -444,14 +444,6 @@
     "source": "gallery56.jpg",
     "main": "images/gallery/main/56.webp",
     "thumb": "images/gallery/thumb/56.webp",
-    "width": 3200,
-    "height": 4000
-  },
-  {
-    "index": 57,
-    "source": "gallery57.jpg",
-    "main": "images/gallery/main/57.webp",
-    "thumb": "images/gallery/thumb/57.webp",
     "width": 3200,
     "height": 4000
   }
