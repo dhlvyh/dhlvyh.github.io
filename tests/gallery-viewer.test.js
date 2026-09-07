@@ -11,32 +11,13 @@ test("gallery-viewer exports initGallery", () => {
 
 test("initGallery is a no-op outside a browser environment (no window/document)", () => {
     assert.doesNotThrow(() => initGallery({
-        viewportSelector: "#gallery-main-viewport",
-        trackSelector: "#gallery-main-track",
-        thumbGridSelector: "#gallery-thumb-grid",
-        prevSelector: "#gallery-main-prev",
-        nextSelector: "#gallery-main-next"
+        viewportSelector: "#gallery-viewport",
+        trackSelector: "#gallery-track",
+        prevSelector: "#gallery-prev",
+        nextSelector: "#gallery-next",
+        counterSelector: "#gallery-counter",
+        progressFillSelector: "#gallery-progress-fill"
     }));
-});
-
-test("gallery-viewer notifies onThumbActivate only from the thumbnail click handler", () => {
-    const source = fs.readFileSync(path.resolve(__dirname, "../scripts/gallery-viewer.js"), "utf8");
-
-    const clickHandlerMatch = source.match(/thumbGrid\.addEventListener\("click", function \(event\) \{[\s\S]*?\}\);/);
-    assert.ok(clickHandlerMatch, "expected a thumbGrid click listener");
-    assert.match(clickHandlerMatch[0], /config\.onThumbActivate/);
-});
-
-test("gallery-viewer opens the lightbox before positioning the selected slide without an opening transition", () => {
-    const source = fs.readFileSync(path.resolve(__dirname, "../scripts/gallery-viewer.js"), "utf8");
-    const clickHandlerMatch = source.match(/thumbGrid\.addEventListener\("click", function \(event\) \{[\s\S]*?\}\);/);
-    assert.ok(clickHandlerMatch, "expected a thumbGrid click listener");
-
-    const handler = clickHandlerMatch[0];
-    assert.ok(
-        handler.indexOf("config.onThumbActivate") < handler.indexOf("goToIndex(index, false)"),
-        "expected the lightbox to be visible before positioning the selected slide without transition"
-    );
 });
 
 test("gallery-viewer updates the current photo counter when the active slide changes", () => {
@@ -48,32 +29,36 @@ test("gallery-viewer updates the current photo counter when the active slide cha
     assert.match(source, /updateCounter\(\);/);
 });
 
-test("gallery-viewer drives the main track through GalleryUtils snap/edge-resistance/pinch math", () => {
+test("gallery-viewer updates the progress fill scale when the active slide changes", () => {
     const source = fs.readFileSync(path.resolve(__dirname, "../scripts/gallery-viewer.js"), "utf8");
 
-    assert.match(source, /window\.GalleryUtils\.clampIndex/);
-    assert.match(source, /window\.GalleryUtils\.applyEdgeResistance/);
-    assert.match(source, /window\.GalleryUtils\.resolveSnapIndex/);
-    assert.match(source, /window\.GalleryUtils\.clampZoomScale/);
-    assert.match(source, /window\.GalleryUtils\.clampPanOffset/);
-    assert.match(source, /window\.GalleryUtils\.computePinchDistance/);
-    assert.match(source, /window\.GalleryUtils\.computePinchMidpointPercent/);
-    assert.match(source, /window\.GalleryUtils\.computeContainSize/);
+    assert.match(source, /config\.progressFillSelector/);
+    assert.match(source, /function updateProgress\(\)/);
+    assert.match(source, /\(activeIndex \+ 1\) \/ length/);
+    assert.match(source, /updateProgress\(\);/);
 });
 
-test("index.html wraps the gallery lightbox around a shared viewport/track pair", () => {
-    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+test("gallery-viewer wraps navigation past the first and last slide instead of stopping", () => {
+    const source = fs.readFileSync(path.resolve(__dirname, "../scripts/gallery-viewer.js"), "utf8");
 
-    assert.match(html, /class="gallery-lightbox"/);
-    assert.match(html, /class="gallery-main-viewport" id="gallery-lightbox-viewport"/);
-    assert.match(html, /class="gallery-main-track" id="gallery-lightbox-track"/);
-    assert.match(html, /class="gallery-thumb-grid"/);
+    assert.match(source, /getWrappedIndex\(activeIndex, "previous", length\)/);
+    assert.match(source, /getWrappedIndex\(activeIndex, "next", length\)/);
+    assert.match(source, /function isWrapJump\(/);
+    assert.doesNotMatch(source, /GalleryUtils\.clampIndex/);
+});
 
-    const lightboxIndex = html.indexOf('class="gallery-lightbox"');
-    const thumbIndex = html.indexOf('class="gallery-thumb-grid"');
+test("gallery-viewer drives the main track through snap and edge-resistance math only, no pinch/zoom", () => {
+    const source = fs.readFileSync(path.resolve(__dirname, "../scripts/gallery-viewer.js"), "utf8");
 
-    assert.ok(lightboxIndex !== -1 && thumbIndex !== -1 && lightboxIndex > thumbIndex,
-        "expected the thumbnail grid before the lightbox modal");
+    assert.match(source, /window\.GalleryUtils\.applyEdgeResistance/);
+    assert.match(source, /window\.GalleryUtils\.resolveSnapIndex/);
+    assert.doesNotMatch(source, /pinchState|zoomStates|clampZoomScale|clampPanOffset|computePinchDistance|computePinchMidpointPercent/);
+});
+
+test("gallery-viewer no longer references a thumbnail grid or lightbox activation callback", () => {
+    const source = fs.readFileSync(path.resolve(__dirname, "../scripts/gallery-viewer.js"), "utf8");
+
+    assert.doesNotMatch(source, /thumbGrid|onThumbActivate|thumbGridSelector/);
 });
 
 test("gallery-loader builds each slide with a blurred backdrop image and a contain-fit photo", () => {
