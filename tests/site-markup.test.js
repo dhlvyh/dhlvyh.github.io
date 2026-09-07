@@ -99,24 +99,23 @@ test("갤러리 원본 파일은 1부터 빈자리 없이 연속 번호를 사�
     assert.deepEqual(indices, expected);
 });
 
-test("index.html exposes the lightbox viewer and thumbnail grid mounts, populated at runtime", () => {
+test("index.html exposes the inline gallery viewport and track mounts, populated at runtime", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
-    assert.match(html, /id="gallery-lightbox-viewport"/);
-    assert.match(html, /id="gallery-lightbox-prev"/);
-    assert.match(html, /id="gallery-lightbox-next"/);
+    assert.match(html, /id="gallery-viewport"/);
+    assert.match(html, /id="gallery-prev"/);
+    assert.match(html, /id="gallery-next"/);
+    assert.match(html, /id="gallery-progress-fill"/);
+    assert.match(html, /id="gallery-counter"/);
 
-    // 슬라이드/썸네일은 더 이상 정적 마크업이 아니라 gallery-loader.js가
+    // 슬라이드는 더 이상 정적 마크업이 아니라 gallery-loader.js가
     // images/gallery/manifest.json을 읽어 런타임에 채운다 (사진 개수가 바뀌어도
     // index.html을 다시 손댈 필요가 없도록).
-    assert.match(html, /<div aria-label="웨딩 사진 갤러리" class="gallery-main-track" id="gallery-lightbox-track"><\/div>/);
-    assert.match(html, /<div aria-label="갤러리 사진 목록"[^>]+id="gallery-thumb-grid"><\/div>/);
+    assert.match(html, /<div aria-label="웨딩 사진 갤러리" class="gallery-main-track" id="gallery-track"><\/div>/);
     assert.doesNotMatch(html, /data-gallery-slide-index="\d+"/);
-    assert.doesNotMatch(html, /data-gallery-thumb-index="\d+"/);
 
-    assert.doesNotMatch(html, /id="gallery-viewer"/);
-    assert.doesNotMatch(html, /class="gallery-pager"/);
-    assert.doesNotMatch(html, /id="gallery-main-track"/);
+    assert.doesNotMatch(html, /gallery-thumb-grid|gallery-thumb-index/);
+    assert.doesNotMatch(html, /id="gallery-lightbox"/);
 });
 
 test("index.html titles the section 갤러리, not 포토 갤러리", () => {
@@ -124,24 +123,6 @@ test("index.html titles the section 갤러리, not 포토 갤러리", () => {
 
     assert.match(html, />갤러리<\/h2>/);
     assert.doesNotMatch(html, /포토 갤러리/);
-});
-
-test("index.html exposes a full-screen gallery lightbox modal", () => {
-    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
-
-    assert.match(html, /class="gallery-lightbox" id="gallery-lightbox" hidden/);
-    assert.match(html, /id="gallery-lightbox-close"/);
-    assert.match(html, /aria-live="polite"[^>]+class="gallery-lightbox-counter" id="gallery-lightbox-counter"/);
-    assert.match(html, /data-lightbox-close/);
-});
-
-test("gallery lightbox uses a white fixed frame and centered photo counter", () => {
-    const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
-
-    assert.match(css, /\.gallery-lightbox-backdrop\s*\{[\s\S]*?background:\s*#fff;/);
-    assert.match(css, /\.gallery-lightbox-panel\s*\{[\s\S]*?background:\s*#fff;/);
-    assert.match(css, /\.gallery-lightbox-panel \.gallery-main-slide\s*\{[\s\S]*?background:\s*#fff;/);
-    assert.match(css, /\.gallery-lightbox-counter\s*\{[\s\S]*?position:\s*absolute;[\s\S]*?bottom:\s*12px;[\s\S]*?left:\s*50%;[\s\S]*?transform:\s*translateX\(-50%\);/);
 });
 
 test("index.html includes the gallery helper scripts before main.js", () => {
@@ -620,38 +601,6 @@ test("countdown unit labels are consistently pluralised", () => {
     assert.deepEqual(labels, ["DAYS", "HOURS", "MIN", "SEC"]);
 });
 
-test("index.html mounts the pagination nav outside the thumbnail grid", () => {
-    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
-
-    assert.match(html, /id="gallery-pagination"[^>]*hidden/);
-    assert.match(html, /id="gallery-page-numbers"/);
-    assert.match(html, /data-page-action="first"/);
-    assert.match(html, /data-page-action="prev"/);
-    assert.match(html, /data-page-action="next"/);
-    assert.match(html, /data-page-action="last"/);
-
-    // 페이지네이션이 그리드 안에 들어가면 gallery-viewer의 children 인덱스가 밀린다
-    const gridTag = html.match(/<div[^>]*id="gallery-thumb-grid"[^>]*><\/div>/);
-    assert.ok(gridTag, "expected the thumb grid to stay an empty container");
-
-    const gridEnd = html.indexOf(gridTag[0]) + gridTag[0].length;
-    const paginationIndex = html.indexOf('id="gallery-pagination"');
-    assert.ok(paginationIndex > gridEnd, "expected the pagination nav to sit after the grid, not inside it");
-});
-
-test("index.html loads gallery-pagination.js before main.js", () => {
-    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
-
-    assert.match(html, /<script defer src="scripts\/gallery-pagination\.js"><\/script>/);
-    assert.doesNotMatch(html, /gallery-collapse\.js/);
-
-    const paginationIndex = html.indexOf("scripts/gallery-pagination.js");
-    const mainJsIndex = html.indexOf("scripts/main.js");
-
-    assert.ok(paginationIndex !== -1 && paginationIndex < mainJsIndex,
-        "expected gallery-pagination.js before main.js");
-});
-
 test("the invitation uses a flat white page and smaller type scale", () => {
     const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
 
@@ -682,7 +631,7 @@ test("content buttons use white rectangular surfaces without outlines", () => {
         return css.slice(start, end);
     }
 
-    for (const selector of [".couple-contact-open", ".account-accordion-toggle", ".gallery-page-nav,\n.gallery-page-number"]) {
+    for (const selector of [".couple-contact-open", ".account-accordion-toggle"]) {
         const block = cssBlock(selector);
         assert.match(block, /border:\s*0;/i, selector);
         assert.match(block, /border-radius:\s*4px;/i, selector);

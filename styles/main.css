@@ -1066,177 +1066,33 @@ body.is-contact-sheet-open {
     right: 12px;
 }
 
-.gallery-thumb-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 4px;
-    margin-top: 4px;
-}
-
-.gallery-thumb {
+.gallery-progress {
     position: relative;
-    aspect-ratio: 1 / 1;
-    padding: 0;
-    border: 0;
+    width: 100%;
+    height: 3px;
+    margin-top: 10px;
+    background: var(--ww-accent-soft);
     overflow: hidden;
-    background: var(--ww-paper-alt);
 }
 
-.gallery-thumb img {
+.gallery-progress-fill {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    pointer-events: none;
-    -webkit-user-drag: none;
-    user-select: none;
+    background: var(--ww-accent);
+    transform-origin: left center;
+    transform: scaleX(0);
+    transition: transform 200ms ease;
 }
 
-.gallery-thumb::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    box-shadow: inset 0 0 0 0 var(--ww-accent);
-    transition: box-shadow 0.15s ease;
-}
-
-.gallery-thumb.is-active::after {
-    box-shadow: inset 0 0 0 3px var(--ww-accent);
-}
-
-.gallery-pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.3rem;
-    margin-top: 1rem;
-    padding: 0 15px;
-}
-
-.gallery-pagination[hidden] {
-    display: none;
-}
-
-.gallery-page-nav,
-.gallery-page-number {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 32px;
-    height: 32px;
-    padding: 0 0.5rem;
-    border: 0;
-    border-radius: 4px;
-    background: #fff;
-    box-shadow: var(--ww-button-shadow);
-    color: var(--ww-accent);
-    font-size: 0.8rem;
-    font-weight: 600;
-    transition: background 0.2s ease;
-}
-
-.gallery-page-nav:hover,
-.gallery-page-nav:focus-visible,
-.gallery-page-number:hover,
-.gallery-page-number:focus-visible {
-    background: var(--ww-accent-soft);
-}
-
-.gallery-page-nav:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
-
-.gallery-page-number.is-active {
-    background: var(--ww-accent-soft);
-    color: var(--ww-accent-hover);
-}
-
-.gallery-page-numbers {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-}
-
-.gallery-page-ellipsis {
-    color: var(--ww-ink-muted);
-    padding: 0 0.15rem;
-}
-
-/* 라이트박스 — 썸네일 클릭 시 전체 사진을 스와이프로 볼 수 있는 풀스크린 모달 */
-.gallery-lightbox[hidden] {
-    display: none !important;
-}
-
-.gallery-lightbox {
-    position: fixed;
-    inset: 0;
-    max-width: var(--ww-frame-width);
-    margin: 0 auto;
-    z-index: 1200;
-}
-
-.gallery-lightbox-backdrop {
-    position: absolute;
-    inset: 0;
-    background: #fff;
-}
-
-.gallery-lightbox-panel {
-    position: absolute;
-    inset: 0;
-    background: #fff;
-    opacity: 0;
-    transition: opacity 0.25s ease;
-}
-
-.gallery-lightbox.is-open .gallery-lightbox-panel {
-    opacity: 1;
-}
-
-.gallery-lightbox-close {
-    position: absolute;
-    top: 12px;
-    right: 14px;
-    z-index: 2;
-    width: 44px;
-    height: 44px;
-    padding: 0;
-    border: 0;
-    background: none;
-    color: var(--ww-ink-muted);
-    font-size: 1.8rem;
-    line-height: 1;
-    cursor: pointer;
-}
-
-/* 라이트박스는 어두운 배경 위에서 바로 사진을 보여준다 — 인라인 뷰어의
-   크림색 블러 배경 트릭은 여기서는 쓰지 않는다 */
-.gallery-lightbox-panel .gallery-main-slide {
-    background: #fff;
-}
-
-.gallery-lightbox-panel .gallery-main-slide-backdrop {
-    display: none;
-}
-
-.gallery-lightbox-counter {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    z-index: 2;
-    margin: 0;
+.gallery-counter {
+    margin: 8px 0 0;
     color: var(--ww-ink-muted);
     font-family: "Dosis", sans-serif;
     font-size: 0.75rem;
     letter-spacing: 0.08em;
     line-height: 1;
-    transform: translateX(-50%);
-}
-
-body.is-gallery-lightbox-open {
-    overflow: hidden;
+    text-align: center;
 }
 
 .countdown-ticker {
@@ -1882,7 +1738,6 @@ body.is-gallery-lightbox-open {
     .gallery-main-track.is-animating,
     .nav-drawer-panel,
     .contact-sheet-panel,
-    .gallery-lightbox-panel,
     .account-accordion-icon {
         transition: none;
     }
