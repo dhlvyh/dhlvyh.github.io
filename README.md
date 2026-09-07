@@ -40,7 +40,12 @@ npm test           # node --test 기반 테스트 실행
 | 타임라인 | `images/timeline1.jpg` ~ `images/timeline7.jpg` | 7장 |
 | 마지막 인사 사진 | `images/end.jpg` | 1장 |
 | 히어로(첫 화면) 사진 | `images/main.jpg` | 1장 |
+| 카카오톡/OG 공유 카드 사진 | `images/share.jpg` | 1장 |
 | 두 사람 소개 인물사진 | `images/person1.jpg`(신랑), `images/person2.jpg`(신부) | 각 1장 |
+
+- `images/main.jpg`는 히어로(첫 화면) 전용이고, 카카오톡/OG 공유 카드는 `images/share.jpg`를
+  별도 원본으로 쓴다(예전에는 `main.jpg` 한 장으로 둘 다 만들었지만, 히어로에 어울리는
+  구도와 공유 카드(1200×630, 가로로 넓은 비율)에 어울리는 구도가 달라서 분리했다).
 
 - 갤러리는 `gallery{번호}.jpg` 형식의 파일을 `images/` 폴더에서 직접 스캔해서 찾는다.
   파일명은 `gallery1.jpg`부터 빈자리 없이 연속 번호로 관리한다. 사진을 추가하거나
@@ -58,9 +63,10 @@ npm run images
 무조건 덮어쓰고 다시 변환**하고, 현재 원본에 대응하지 않는 갤러리 WebP 결과물은
 자동으로 삭제한다. 사진을 교체·추가·삭제한 뒤에는 항상 다시 실행해야 한다.
 
-- `images/gallery/main/{번호}.webp` — 1280px, 메인 뷰어용
-- `images/gallery/thumb/{번호}.webp` — 260px, 썸네일 그리드용
-  (5열 그리드라 표시 폭이 최대 86px뿐이다. DPR 3을 감안해도 260이면 충분하다)
+- `images/gallery/main/{번호}.webp` — 1280px, 갤러리 슬라이더용
+- `images/gallery/thumb/{번호}.webp` — 260px. 예전 썸네일 그리드용이었으나 지금은
+  프런트엔드 어디에서도 참조하지 않는다(그리드 자체가 사라졌다). `manifest.json`에는
+  여전히 경로가 기록되고 빌드도 계속 만들어내지만, 실제로는 쓰이지 않는 산출물이다.
 - `images/opt/end.webp`, `images/opt/main.webp`, `images/opt/person1.webp`,
   `images/opt/person2.webp` — 1024px,
   카드·마지막 인사·히어로·인물 소개용
@@ -74,17 +80,17 @@ npm run images
 > WebP로 두면 링크를 공유했을 때 썸네일이 통째로 비어버린다.
 
 원본 `images/*.jpg`는 이 스크립트의 입력일 뿐 사이트가 직접 서빙하지 않는다.
-용량이 400MB에 달해 git 추적에서 제외돼 있으니(`.gitignore`), 새로 클론한
+용량이 수백 MB에 달해 git 추적에서 제외돼 있으니(`.gitignore`), 새로 클론한
 환경에서 사진을 다시 변환하려면 원본을 별도로 가져와야 한다.
 
 ### 3. 갤러리가 화면에 뿌려지는 방식
 
-`index.html`의 갤러리 영역(`#gallery-lightbox-track`, `#gallery-thumb-grid`)은 빈
-컨테이너만 갖고 있다. 페이지가 열리면 `scripts/main.js`가 `images/gallery/manifest.json`을
-fetch해서, `scripts/gallery-loader.js`의 `buildGallerySlidesMarkup`/`buildGalleryThumbsMarkup`
-함수로 슬라이드·썸네일 HTML을 만들어 그 컨테이너에 채워 넣은 뒤 갤러리 스와이프
-동작(`scripts/gallery-viewer.js`)을 초기화한다. 즉 **사진을 추가·삭제하고 갤러리 번호를
-연속으로 정리한 뒤 `npm run images`만 다시 실행하면 `index.html`은 손댈 필요가 없다.**
+`index.html`의 갤러리 영역은 빈 컨테이너(`#gallery-track`)만 갖고 있다. 페이지가 열리면
+`scripts/main.js`가 `images/gallery/manifest.json`을 fetch해서
+`scripts/gallery-loader.js`의 `buildGallerySlidesMarkup` 함수로 슬라이드 HTML을 만들어
+그 컨테이너에 채워 넣은 뒤, 풀블리드 슬라이더 동작(`scripts/gallery-viewer.js`)을
+초기화한다. 즉 **사진을 추가·삭제하고 갤러리 번호를 연속으로 정리한 뒤
+`npm run images`만 다시 실행하면 `index.html`은 손댈 필요가 없다.**
 타임라인 사진은 이 매니페스트와 별개로 `index.html`이
 `images/timeline/timeline1.webp`~`timeline7.webp`를 직접 참조한다.
 
@@ -92,24 +98,23 @@ fetch해서, `scripts/gallery-loader.js`의 `buildGallerySlidesMarkup`/`buildGal
 `images/gallery/main|thumb/*.webp`, `images/timeline/*.webp`가 실제로 커밋되어 있어야
 한다는 점에 유의한다.
 
-### 4. 썸네일 페이지네이션 + 라이트박스
+### 4. 갤러리 인터랙션 — 풀블리드 슬라이더
 
-썸네일은 4열 그리드로 표시되며, 사진이 **12장(4열×3행)을 넘으면** 첫
-페이지만 보이고 나머지는 하단 페이지네이션(« ‹ 1 2 3 … › »)으로 넘긴다.
-12장 이하면 페이지네이션 자체가 나타나지 않고 기존과 똑같이 전부 노출된다.
-페이지당 장수는 `scripts/gallery-pagination.js`의 `PER_PAGE` 한 줄이다.
+썸네일 그리드나 별도 라이트박스 없이, 사진 한 장이 처음부터 화면 폭 전체를 채우는
+단일 슬라이더 하나로 갤러리 전체를 구성한다(`#gallery-viewport` 안의 `#gallery-track`).
 
-썸네일을 누르면 풀스크린 라이트박스가 열리고, 그 안에서는 페이지 구분 없이
-전체 사진을 스와이프로 넘길 수 있다. 라이트박스에서 다른 페이지의 사진으로
-이동한 뒤 닫으면, 그 사진이 포함된 페이지로 그리드가 자동 전환된다.
+- 사진을 좌우로 드래그하거나 `#gallery-prev`/`#gallery-next` 버튼으로 넘긴다. 마지막
+  사진에서 다음으로 넘기면 트랜지션 없이 즉시 첫 사진으로 순환하고, 첫 사진에서
+  이전으로 넘기면 마지막 사진으로 순환한다(양쪽 다 막히는 느낌 없이 계속 넘어간다).
+- 사진 아래 진행바(`#gallery-progress`)를 클릭하거나 드래그하면, 누른 위치에 비례해
+  사진이 실시간으로 바뀐다(비디오 타임라인 스크럽과 동일). 손을 떼면 가장 가까운
+  사진으로 부드럽게 스냅한다. 진행바는 양 끝을 넘겨도 순환하지 않고 첫/마지막
+  사진에서 멈춘다.
+- `#gallery-counter`가 "N / 전체 장수"를 실시간으로 보여준다.
 
-다른 페이지의 썸네일은 `hidden`(= `display: none`)이라 `loading="lazy"`
-이미지가 아예 요청되지 않는다.
-
-> 페이지네이션은 반드시 `#gallery-thumb-grid` **바깥**에 있어야 한다.
-> `gallery-viewer.js`가 그리드의 자식 인덱스로 활성 썸네일을 추적해서,
-> 페이지 전환 버튼이 자식으로 섞이면 인덱스가 통째로 밀린다. 같은 이유로
-> 다른 페이지의 썸네일도 DOM에서 제거하지 않고 `hidden`만 건다.
+좌표·스냅 계산은 전부 `scripts/gallery-utils.js`의 순수 함수(`resolveSnapIndex`,
+`getWrappedIndex`, `resolveScrubPosition` 등)에 있고, DOM 배선은
+`scripts/gallery-viewer.js`의 `initGallery`가 담당한다.
 
 ## 텍스트·정보 배치
 
