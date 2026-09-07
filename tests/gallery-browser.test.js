@@ -51,14 +51,13 @@ async function launch() {
     return {browser, page};
 }
 
-test("gallery lightbox drag advances to the next slide and snaps into place", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
+test("gallery drag advances to the next slide and snaps into place", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
     const {browser, page} = await launch();
 
-    await page.locator('[data-gallery-thumb-index="0"]').click();
     await page.waitForTimeout(400);
 
-    const viewport = page.locator("#gallery-lightbox-viewport");
-    const track = page.locator("#gallery-lightbox-track");
+    const viewport = page.locator("#gallery-viewport");
+    const track = page.locator("#gallery-track");
     const box = await viewport.boundingBox();
 
     await page.mouse.move(box.x + box.width * 0.75, box.y + box.height / 2);
@@ -71,77 +70,46 @@ test("gallery lightbox drag advances to the next slide and snaps into place", {s
     const viewportWidth = await viewport.evaluate((node) => node.clientWidth);
 
     assert.equal(transform, "translateX(" + (-viewportWidth) + "px)");
-    assert.equal(
-        await page.locator('.gallery-thumb.is-active').getAttribute("data-gallery-thumb-index"),
-        "1"
-    );
+    assert.match(await page.locator("#gallery-counter").textContent(), /^2 \//);
 
     await browser.close();
 });
 
-test("clicking a thumbnail opens the lightbox at the matching slide without drift", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
+test("gallery nav buttons step through slides and wrap from the last slide back to the first", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
     const {browser, page} = await launch();
 
-    const viewport = page.locator("#gallery-lightbox-viewport");
-    const track = page.locator("#gallery-lightbox-track");
-
-    await page.locator('[data-gallery-thumb-index="10"]').click();
-    await page.waitForTimeout(400);
-
-    assert.ok(await page.locator("#gallery-lightbox").isVisible(), "expected the lightbox to open");
-
-    const viewportWidth = await viewport.evaluate((node) => node.clientWidth);
-    const transform = await track.evaluate((node) => node.style.transform);
-    assert.equal(transform, "translateX(" + (-10 * viewportWidth) + "px)");
-
-    const activeThumb = page.locator(".gallery-thumb.is-active");
-    assert.equal(await activeThumb.getAttribute("data-gallery-thumb-index"), "10");
-    assert.equal(await activeThumb.getAttribute("aria-current"), "true");
-
-    await browser.close();
-});
-
-test("gallery lightbox nav buttons step through slides and clamp at the last one", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
-    const {browser, page} = await launch();
-
-    await page.locator('[data-gallery-thumb-index="0"]').click();
     await page.waitForTimeout(400);
 
     const slideCount = await page.locator("[data-gallery-slide-index]").count();
 
-    for (let step = 0; step < slideCount - 1; step += 1) {
-        await page.locator("#gallery-lightbox-next").click();
+    for (let step = 0; step < slideCount; step += 1) {
+        await page.locator("#gallery-next").click();
         await page.waitForTimeout(120);
     }
 
-    assert.equal(
-        await page.locator(".gallery-thumb.is-active").getAttribute("data-gallery-thumb-index"),
-        String(slideCount - 1)
-    );
+    const track = page.locator("#gallery-track");
 
-    // 마지막 슬라이드에서 한 번 더 눌러도 더 진행하지 않고 그대로 멈춰야 한다
-    await page.locator("#gallery-lightbox-next").click();
-    await page.waitForTimeout(400);
-
-    assert.equal(
-        await page.locator(".gallery-thumb.is-active").getAttribute("data-gallery-thumb-index"),
-        String(slideCount - 1)
-    );
+    assert.equal(await track.evaluate((node) => node.style.transform), "translateX(0px)");
+    assert.equal(await page.locator("#gallery-counter").textContent(), "1 / " + slideCount);
 
     await browser.close();
 });
 
-test("lightbox track stays aligned to the active slide after a viewport resize", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
+test("gallery track stays aligned to the active slide after a viewport resize", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
     const {browser, page} = await launch();
 
-    await page.locator('[data-gallery-thumb-index="5"]').click();
     await page.waitForTimeout(400);
+
+    for (let step = 0; step < 5; step += 1) {
+        await page.locator("#gallery-next").click();
+        await page.waitForTimeout(120);
+    }
 
     await page.setViewportSize({width: 480, height: 900});
     await page.waitForTimeout(400);
 
-    const track = page.locator("#gallery-lightbox-track");
-    const viewport = page.locator("#gallery-lightbox-viewport");
+    const track = page.locator("#gallery-track");
+    const viewport = page.locator("#gallery-viewport");
     const transform = await track.evaluate((node) => node.style.transform);
     const viewportWidth = await viewport.evaluate((node) => node.clientWidth);
 
@@ -150,108 +118,26 @@ test("lightbox track stays aligned to the active slide after a viewport resize",
     await browser.close();
 });
 
-test("swiping the lightbox track updates the active thumbnail to match", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
+test("gallery progress bar and counter reflect the active slide", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
     const {browser, page} = await launch();
 
-    await page.locator('[data-gallery-thumb-index="3"]').click();
     await page.waitForTimeout(400);
 
-    const viewport = page.locator("#gallery-lightbox-viewport");
-    const box = await viewport.boundingBox();
+    const slideCount = await page.locator("[data-gallery-slide-index]").count();
 
-    await page.mouse.move(box.x + box.width * 0.8, box.y + box.height / 2);
-    await page.mouse.down();
-    await page.mouse.move(box.x + box.width * 0.15, box.y + box.height / 2, {steps: 8});
-    await page.mouse.up();
+    assert.equal(await page.locator("#gallery-counter").textContent(), "1 / " + slideCount);
+
+    await page.locator("#gallery-next").click();
     await page.waitForTimeout(400);
 
-    assert.equal(
-        await page.locator(".gallery-thumb.is-active").getAttribute("data-gallery-thumb-index"),
-        "4"
-    );
+    assert.equal(await page.locator("#gallery-counter").textContent(), "2 / " + slideCount);
 
-    await browser.close();
-});
-
-test("thumbnail grid paginates past 12 photos and page buttons navigate", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
-    const {browser, page} = await launch();
-
-    const total = await page.locator("[data-gallery-thumb-index]").count();
-    const perPage = 12;
-
-    // 이 테스트는 사진이 페이지당 장수를 넘는다는 전제 위에 있다
-    assert.ok(total > perPage, `expected more than ${perPage} photos, got ${total}`);
-
-    const visible = () => page.locator("[data-gallery-thumb-index]:visible").count();
-
-    assert.equal(await visible(), perPage);
-    await assert.doesNotReject(page.locator("#gallery-pagination").waitFor({state: "visible"}));
-    assert.equal(await page.locator('[data-page-action="first"]').isDisabled(), true);
-    assert.equal(await page.locator('[data-page-action="prev"]').isDisabled(), true);
-
-    await page.locator('[data-page-action="next"]').click();
-    await page.waitForTimeout(200);
-
-    assert.equal(await visible(), perPage);
-    assert.equal(
-        await page.locator('.gallery-page-number[data-page="1"]').getAttribute("aria-current"),
-        "page"
-    );
-
-    const pageCount = Math.ceil(total / perPage);
-    const lastPageCount = total - perPage * (pageCount - 1);
-
-    await page.locator('[data-page-action="last"]').click();
-    await page.waitForTimeout(200);
-
-    assert.equal(await visible(), lastPageCount);
-    assert.equal(await page.locator('[data-page-action="next"]').isDisabled(), true);
-
-    await page.locator('[data-page-action="first"]').click();
-    await page.waitForTimeout(200);
-    assert.equal(await visible(), perPage);
-
-    await browser.close();
-});
-
-test("swiping past the current page's photos switches the pagination to match", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
-    const {browser, page} = await launch();
-
-    await page.locator('[data-gallery-thumb-index="0"]').click();
-    await page.waitForTimeout(400);
-
-    // 첫 페이지(0~11) 밖인 12번 사진으로 이동시키면 페이지네이션이 2페이지로 자동 전환돼야 한다
-    await page.evaluate(() => {
-        for (let step = 0; step < 12; step += 1) {
-            document.querySelector("#gallery-lightbox-next").click();
-        }
+    const scaleX = await page.locator("#gallery-progress-fill").evaluate((node) => {
+        const match = getComputedStyle(node).transform.match(/matrix\(([^,]+),/);
+        return match ? Number(match[1]) : null;
     });
-    await page.waitForTimeout(400);
 
-    assert.equal(
-        await page.locator('.gallery-page-number[aria-current="page"]').getAttribute("data-page"),
-        "1"
-    );
-
-    const active = page.locator(".gallery-thumb.is-active");
-    assert.equal(await active.getAttribute("data-gallery-thumb-index"), "12");
-    assert.ok(await active.isVisible(), "active thumbnail must not stay hidden");
-
-    await browser.close();
-});
-
-test("thumbnails past the first page are never downloaded before pagination is used", {skip: hasPlaywright ? false : "playwright 미설치"}, async () => {
-    const {browser, page} = await launch();
-
-    await page.locator("#gallery-pagination").waitFor({state: "visible"});
-    await page.waitForTimeout(1200);
-
-    // hidden은 display:none이라 loading=lazy 이미지가 요청되지 않는다
-    const requested = await page.evaluate(() => performance
-        .getEntriesByType("resource")
-        .filter((entry) => entry.name.includes("/gallery/thumb/")).length);
-
-    assert.ok(requested <= 12, `expected at most 12 thumb requests before paging, got ${requested}`);
+    assert.ok(Math.abs(scaleX - 2 / slideCount) < 0.01, `expected progress fill scaleX near ${2 / slideCount}, got ${scaleX}`);
 
     await browser.close();
 });
