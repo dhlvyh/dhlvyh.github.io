@@ -212,7 +212,8 @@ function loadGallery() {
                 prevSelector: "#gallery-prev",
                 nextSelector: "#gallery-next",
                 counterSelector: "#gallery-counter",
-                progressFillSelector: "#gallery-progress-fill"
+                progressFillSelector: "#gallery-progress-fill",
+                progressSelector: "#gallery-progress"
             });
         })
         .catch(function () {

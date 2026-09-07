@@ -707,3 +707,22 @@ test("event details are de-emphasized and sit closer to the calendar", () => {
     assert.match(cssBlock(".event-venue"), /color:\s*var\(--ww-ink-muted\);/i);
     assert.match(cssBlock(".ww-wedding-event > .stack"), /gap:\s*0\.75rem;/i);
 });
+
+test("the gallery progress bar has a comfortable touch target and a release-only snap transition", () => {
+    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
+    const css = fs.readFileSync(path.resolve(__dirname, "../styles/main.css"), "utf8");
+
+    assert.match(html, /class="gallery-progress" id="gallery-progress"/);
+
+    function cssBlock(selector) {
+        const start = css.indexOf(selector + " {");
+        assert.notEqual(start, -1, `missing CSS block: ${selector}`);
+        const end = css.indexOf("}", start);
+        return css.slice(start, end);
+    }
+
+    assert.match(cssBlock(".gallery-progress"), /padding:\s*8px 0;/);
+    assert.match(cssBlock(".gallery-progress"), /touch-action:\s*none;/);
+    assert.doesNotMatch(cssBlock(".gallery-progress-fill"), /transition:/);
+    assert.match(cssBlock(".gallery-progress-fill.is-animating"), /transition:\s*transform 200ms ease;/);
+});

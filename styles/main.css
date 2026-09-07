@@ -1069,19 +1069,35 @@ body.is-contact-sheet-open {
 .gallery-progress {
     position: relative;
     width: 100%;
+    padding: 8px 0;
+    margin-top: 4px;
+    cursor: pointer;
+    touch-action: none;
+}
+
+.gallery-progress::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 8px;
     height: 3px;
-    margin-top: 10px;
     background: var(--ww-accent-soft);
-    overflow: hidden;
 }
 
 .gallery-progress-fill {
     display: block;
+    position: absolute;
+    left: 0;
+    top: 8px;
     width: 100%;
-    height: 100%;
+    height: 3px;
     background: var(--ww-accent);
     transform-origin: left center;
     transform: scaleX(0);
+}
+
+.gallery-progress-fill.is-animating {
     transition: transform 200ms ease;
 }
 
