@@ -48,7 +48,7 @@ const TIMELINE = [
 // attention 전략은 붉은 꽃에 반응해 머리를 자른다). 그래서 자르는 대신
 // 갤러리 뷰어와 같은 방식 — 흐린 배경 위에 전체 사진을 얹는다 — 을 쓴다.
 const SHARE = {
-    source: "main.jpg",
+    source: "share.jpg",
     out: "share.jpg",
     width: 1200,
     height: 630,
