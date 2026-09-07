@@ -25,6 +25,9 @@
         const progressFill = config.progressFillSelector
             ? document.querySelector(config.progressFillSelector)
             : null;
+        const progress = config.progressSelector
+            ? document.querySelector(config.progressSelector)
+            : null;
 
         if (!viewport || !track) {
             return;
@@ -39,6 +42,8 @@
 
         let activeIndex = 0;
         let dragState = null;
+        let scrubbing = false;
+        let scrubPosition = 0;
 
         function setTrackPosition(index, dragDeltaX, useTransition) {
             const slideWidth = viewport.clientWidth;
@@ -66,6 +71,7 @@
 
         function updateProgress() {
             if (progressFill) {
+                progressFill.classList.add("is-animating");
                 progressFill.style.transform = "scaleX(" + ((activeIndex + 1) / length) + ")";
             }
         }
@@ -155,11 +161,76 @@
             goToIndex(nextIndex, true);
         }
 
+        function applyScrubPosition(position) {
+            scrubPosition = position;
+
+            const slideWidth = viewport.clientWidth;
+
+            track.classList.remove("is-animating");
+            track.style.transform = "translateX(" + (-position * slideWidth) + "px)";
+
+            if (progressFill) {
+                progressFill.classList.remove("is-animating");
+                progressFill.style.transform = "scaleX(" + ((position + 1) / length) + ")";
+            }
+
+            if (counter) {
+                counter.textContent = (Math.round(position) + 1) + " / " + length;
+            }
+        }
+
+        function positionFromEvent(event) {
+            const rect = progress.getBoundingClientRect();
+            return window.GalleryUtils.resolveScrubPosition(event.clientX, rect.left, rect.width, length);
+        }
+
+        function beginScrub(event) {
+            if (length <= 1 || (event.button !== undefined && event.button !== 0)) {
+                return;
+            }
+
+            scrubbing = true;
+            applyScrubPosition(positionFromEvent(event));
+
+            if (progress.setPointerCapture && event.pointerId !== undefined) {
+                progress.setPointerCapture(event.pointerId);
+            }
+        }
+
+        function updateScrub(event) {
+            if (!scrubbing) {
+                return;
+            }
+
+            if (event.cancelable) {
+                event.preventDefault();
+            }
+
+            applyScrubPosition(positionFromEvent(event));
+        }
+
+        function endScrub() {
+            if (!scrubbing) {
+                return;
+            }
+
+            scrubbing = false;
+            goToIndex(Math.round(scrubPosition), true);
+        }
+
         track.addEventListener("pointerdown", beginDrag);
         track.addEventListener("pointermove", updateDrag);
         track.addEventListener("pointerup", endDrag);
         track.addEventListener("pointercancel", endDrag);
         track.addEventListener("pointerleave", endDrag);
+
+        if (progress) {
+            progress.addEventListener("pointerdown", beginScrub);
+            progress.addEventListener("pointermove", updateScrub);
+            progress.addEventListener("pointerup", endScrub);
+            progress.addEventListener("pointercancel", endScrub);
+            progress.addEventListener("pointerleave", endScrub);
+        }
 
         if (prev) {
             prev.addEventListener("click", function () {

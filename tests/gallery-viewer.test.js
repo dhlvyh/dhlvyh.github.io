@@ -61,6 +61,18 @@ test("gallery-viewer no longer references a thumbnail grid or lightbox activatio
     assert.doesNotMatch(source, /thumbGrid|onThumbActivate|thumbGridSelector/);
 });
 
+test("gallery-viewer scrubs the progress bar in real time and snaps to the nearest slide on release", () => {
+    const source = fs.readFileSync(path.resolve(__dirname, "../scripts/gallery-viewer.js"), "utf8");
+
+    assert.match(source, /config\.progressSelector/);
+    assert.match(source, /function applyScrubPosition\(/);
+    assert.match(source, /function beginScrub\(/);
+    assert.match(source, /function updateScrub\(/);
+    assert.match(source, /function endScrub\(/);
+    assert.match(source, /window\.GalleryUtils\.resolveScrubPosition/);
+    assert.match(source, /goToIndex\(Math\.round\(scrubPosition\), true\)/);
+});
+
 test("gallery-loader builds each slide with a blurred backdrop image and a contain-fit photo", () => {
     const {buildGallerySlidesMarkup} = require("../scripts/gallery-loader");
     const markup = buildGallerySlidesMarkup([
