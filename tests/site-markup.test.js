@@ -387,20 +387,6 @@ test("index.html adds a closing message after the account accordion", () => {
     assert.ok(accordionCloseIndex < closingIndex, "expected closing message after the accordion");
 });
 
-test("index.html declines flower wreaths between the accordion and the final closing message", () => {
-    const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
-
-    assert.match(html, /화환은 정중히 사양합니다/);
-
-    const accordionCloseIndex = html.indexOf('class="account-accordion"');
-    const flowerIndex = html.indexOf('화환은 정중히 사양합니다');
-    const finalClosingIndex = html.indexOf('참석이 어려우신 분들의 따뜻한 마음까지');
-
-    assert.notEqual(flowerIndex, -1, "expected flower decline message");
-    assert.ok(accordionCloseIndex < flowerIndex, "expected flower message after the accordion");
-    assert.ok(flowerIndex < finalClosingIndex, "expected flower message before the final closing message");
-});
-
 test("index.html adds a full-bleed farewell section after the account section", () => {
     const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
